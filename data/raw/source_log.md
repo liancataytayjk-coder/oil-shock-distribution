@@ -15,6 +15,7 @@ All files below were pulled on 2026-10-04.
 | `psa/cpi_b30_2018old_backcast_2012_2017.csv.gz` | `BIH/2018/0022M4ABOT4.px` | 2018=100 (backcast) | Jan 2012–Dec 2017, by commodity | |
 | `psa/cpi_b30_2018old_backcast_allitems_2000_2011.csv.gz` | `BIH/2018/0022M4ABOT5.px` | 2018=100 (backcast) | Jan 2000–Dec 2011, all items only | Sets the start of the distributional sample. |
 | `psa/cpi_b30_2012_*.csv.gz`, `psa/cpi_b30_2000_*.csv.gz` | `BIH/2012/0022M4AB301/303/305/311.px` | 2012=100, 2000=100 | 2000–2022 | Robustness; 2000-base has 38 old-classification groups. |
+| `psa/poverty_population_2018_2023.csv` | PSA OpenSTAT API, `DB/1F/FY/0031F3DF020.px` | % of population | 2018, 2021, 2023; region and province | Official poverty incidence among population. Pulled by `scripts/01b_download_poverty.py`. Footnote markers in labels. |
 | `wb/CMO-Historical-Data-Monthly.xlsx` | https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx | USD/bbl | 1960–Sep 2026 | World Bank Pink Sheet, updated 2 Oct 2026. Dubai, Brent. |
 | `wb/Global_Fuel_Prices_Database.xlsx` (+ methodology PDF) | https://datacatalogfiles.worldbank.org/ddh-published/0066829/DR0095290/Global_Fuel_Prices_Database.xlsx | LCU/litre | Dec 2015–Apr 2025 | Version April 2025. PH row: Manila RON 91. |
 | `bsp/pesodollar.xlsx` | https://www.bsp.gov.ph/Statistics/External/pesodollar.xlsx | PHP per USD, monthly average | 1945–Sep 2026 | |

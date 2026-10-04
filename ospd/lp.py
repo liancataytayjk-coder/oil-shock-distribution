@@ -18,7 +18,7 @@ from linearmodels.panel import PanelOLS
 from scipy import stats
 
 
-def _design(df, y, x, unit, time, h, p, controls, interact, cumulative, tz):
+def _design(df, y, x, unit, time, h, p, controls, interact, cumulative, tz, exog=()):
     g = df.groupby(unit, sort=False) if unit else None
 
     def shift(col, k):
@@ -42,6 +42,8 @@ def _design(df, y, x, unit, time, h, p, controls, interact, cumulative, tz):
         out[c] = df[c]
         for q in range(1, p + 1):
             out[f"{c}_l{q}"] = shift(c, q)
+    for c in exog:
+        out[c] = df[c]
     out["trend"] = df[time]
     return out
 
@@ -56,6 +58,8 @@ def local_projection(
     p: int = 12,
     controls: tuple[str, ...] = (),
     interact: tuple[str, ...] = (),
+    exog: tuple[str, ...] = (),
+    sample: pd.Series | None = None,
     cumulative: bool = False,
     tz: bool = True,
     trend: bool = True,
@@ -66,6 +70,9 @@ def local_projection(
 
     df must be sorted by unit then time with consecutive months (gaps as NaN).
     `time` is an integer month counter used for the trend and panel index.
+    controls enter with p lags; exog (e.g. dummies) enter contemporaneously only.
+    sample: boolean mask on df rows; observations outside it are dropped after
+    lags and leads are built, so pre-sample data still supply the lags.
     se: 'cluster' (by unit), 'robust', 'driscoll_kraay' (panels) or
     'newey_west' (single series, h + 1 lags).
     Returns one row per horizon and coefficient of interest ('shock' and each
@@ -74,13 +81,16 @@ def local_projection(
     z = stats.norm.ppf(0.5 + level / 2)
     rows = []
     for h in range(horizons + 1):
-        d = _design(df, y, x, unit, time, h, p, list(controls), list(interact), cumulative, tz)
+        d = _design(df, y, x, unit, time, h, p, list(controls), list(interact), cumulative, tz, list(exog))
+        if sample is not None:
+            d = d[sample.reindex(d.index).fillna(False).astype(bool)]
         if not trend:
             d = d.drop(columns="trend")
         if unit:
             d[unit] = df[unit]
         d = d.dropna()
         regs = [c for c in d.columns if c not in ("dep", unit)]
+        regs = [c for c in regs if d[c].nunique() > 1]  # drop dummies with no variation in sample
         if unit:
             idx = pd.MultiIndex.from_arrays([d[unit], df.loc[d.index, time]])
             mod = PanelOLS(d["dep"].set_axis(idx), d[regs].set_axis(idx).assign(const=1.0),

@@ -118,7 +118,7 @@ def build_macro():
     ph = wb[wb[2] == "PHL"]
     if not ph.empty:
         row = ph.iloc[0, 4:]
-        row.index = pd.to_datetime(cols.iloc[4:].values, errors="coerce")
+        row.index = pd.to_datetime(cols.iloc[4:].values, errors="coerce").to_period("M").to_timestamp()
         macro = macro.join(pd.to_numeric(row, errors="coerce").rename("wb_gasoline_php"), how="outer")
 
     macro = macro.loc["1994-01-01":].dropna(how="all")

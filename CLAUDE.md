@@ -42,6 +42,63 @@ projection design of Kpodar and Liu (2021), IMF WP/21/271
 | D6 | 2026-10-04 | Regions use the old geographic code (17 regions; Negros in VI/VII). Jan–Aug 2026 chains new-code monthly growth onto old-code levels; flagged `new_geo_ext` for VI, VII, XII, BARMM, whose boundaries changed. | Bottom-30% backcasts (2000–2017) exist only on the old code; old and new codes are identical for all other regions and nationally over 2018–2025. |
 | D7 | 2026-10-04 | Bottom-30% all-items CPI spliced at Jan 2012 and Jan 2018 on PSA's own 2018=100 backcasts; robustness adds dummies for those two months. | Mean abs. monthly change in the CPI ratio is 0.71 pp (Jan 2012) and 0.50 pp (Jan 2018) vs 0.25 pp overall. Largest ratio moves are the 2008 rice crisis (genuine). |
 
+| D8 | 2026-10-04 | Estimation plan for RQ1–RQ4, fixed before any Philippine estimate was run (see "Estimation plan" below). | Pre-specification. |
+| D9 | 2026-10-04 | Exploratory, added after the first run: RQ3b compares bottom-30% and all-income responses of food, housing, transport and restaurants (2013–2026, the span of bottom-30% component indices). Also fixed a bug: "food share" is w(01)/w(all items) within each region, not the region's food weight in the national basket. | The weights decomposition (same component prices for both baskets) gave a progressive gap (+0.010) while the direct estimate is regressive (−0.010), suggesting the baskets face different price changes within divisions. Labelled exploratory in all output. |
+
+## Estimation plan (pre-specified 2026-10-04)
+
+Common: p = 12, h = 0..12, linear trend, 90% bands. Shock dates t from Jan 2001
+(bottom-30% CPI starts Jan 2000, plus 12 lags) to the end of data (Aug 2026).
+National models use Newey–West (h + 1 lags); the regional panel uses region
+fixed effects and Driscoll–Kraay errors. Units: 100·Δln, so β is pp per 1 pp.
+Every model is reported per horizon and cumulatively (running-sum outcome).
+
+- **RQ1:** national Δln CPI_all on Δln fuel (07.2.2). Also Δln CPI_b30.
+- **RQ2:** national ΔD = Δln(CPI_all/CPI_b30) on Δln fuel. Positive = progressive
+  (H2a), negative = regressive (H2b). Judged on the cumulative response at
+  h = 6 and h = 12.
+- **RQ3:** national all-income Δln of each of the 13 COICOP divisions on Δln
+  fuel. Gap decomposition: cumulative response at h = 12 of division k ×
+  (w_all,k − w_b30,k)/100, national 2018 weights.
+- **RQ4:** 17-region panel of ΔD on the regional Δln fuel. Baseline pooled β,
+  then one interaction at a time with time-invariant group dummies:
+  high poverty (2018 poverty incidence among population above the 17-region
+  median); high food share (food weight in the region's 2018 all-income basket
+  above median); Mindanao (IX, X, XI, XII, XIII, BARMM); island regions
+  (MIMAROPA, VI, VII, VIII).
+- **Robustness:** (a) shock = Dubai crude in pesos; (b) controls Δln PHP/USD,
+  Δ policy rate, Δln FAO food index; (c) p = 6, 18; (d) excluding 2020 and
+  excluding 2026; (e) dummies for Jan 2012, Jan 2018; (f) asymmetry
+  (shock × 1[Δfuel > 0]); (g) paper's window, to Jun 2019; (h) shock =
+  gasoline 07.2.2.2 (2019–); (i) shock = World Bank Manila pump price
+  (2018–Mar 2025; the PH series starts Jan 2017); regional: (j) leave one region out, (k) drop flagged
+  2026 observations (D6), (l) national instead of regional shock.
+
+## Results (first full run, 2026-10-04; `output/tables/estimates.csv`, `output/figures/`)
+
+Cumulative responses to a 1 pp fuel price rise, 90% bands, Jan 2001–Aug 2026.
+
+- **RQ1:** CPI_all +0.044 on impact (SE 0.006), 0.087 at h = 6, 0.102 at h = 12;
+  bottom-30% CPI similar (0.095, 0.102). Larger than the paper's
+  developing-economy peak (0.018) and still rising at 12 months. Robust to all
+  checks; Dubai crude in pesos gives about half (0.030, 0.041), consistent with
+  the paper's crude-understates finding.
+- **RQ2:** national gap negative (regressive, H2b): −0.0155 (SE 0.010) at h = 6,
+  −0.0097 (0.011) at h = 12; significant at 10% only at h = 3, 4, 7, 8.
+  Regional panel: −0.021 (0.008) at h = 6, −0.017 (0.009) at h = 12, both
+  significant; leave-one-region-out range −0.020 to −0.023 at h = 6.
+- **Fragility:** sign holds in nearly all checks, but macro controls, gasoline
+  index (2019–) and World Bank pump price (2018–25) give ≈ 0. Exploratory split
+  (D9): regional −0.054 (0.020) in 2001–2012 vs −0.009 (0.006) in 2013–2026.
+- **RQ3:** largest pass-through in transport (0.37), housing/utilities (0.16),
+  food (0.07), restaurants (0.06); 10 of 13 divisions significantly positive at 10% (paper: 10 of 12 in developing economies). Weight-only
+  decomposition predicts a progressive gap (+0.010), opposite to the direct
+  estimate. RQ3b (exploratory, 2013–): bottom-30% housing/utilities responds more
+  (0.18 vs 0.14) and transport less (0.20 vs 0.30) than all-income.
+- **RQ4 (h = 12, extra effect vs other regions):** Mindanao −0.017 (0.009),
+  island −0.012 (0.009), high poverty −0.010 (0.008), high food share +0.010
+  (0.005). None survives a Bonferroni correction for four tests.
+
 ## Replication gate (pre-registered 2026-10-04, before any estimate was run)
 
 The Philippine analysis starts only if all three pass. Data: EU countries.
