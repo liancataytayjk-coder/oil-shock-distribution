@@ -133,8 +133,60 @@ def fig5(est):
     save(fig, "fig5_robustness")
 
 
+def fig6():
+    e1 = pd.read_csv(TAB / "e1_national_2026.csv", parse_dates=["date"])
+    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.2), sharey=True)
+    for ax, (series, title) in zip(axes, [("cpi_all", "All-income CPI"), ("cpi_b30", "Bottom-30% CPI")]):
+        q = e1[e1.series == series]
+        m = q.date.dt.strftime("%b")
+        ax.plot(m, q.actual, color=BLUE, linewidth=2, marker="o", markersize=3.5, label="Actual")
+        ax.fill_between(m, q.lo, q.hi, color=ORANGE, alpha=0.15, linewidth=0)
+        ax.plot(m, q.beta, color=ORANGE, linewidth=2, linestyle="--", marker="o", markersize=3.5,
+                label="Fuel-driven (pre-2026 model)")
+        ax.axhline(0, color=INK2, linewidth=0.8)
+        ax.set_title(title, loc="left", color=INK, fontsize=9)
+        ax.set_xlabel("2026")
+    axes[0].set_ylabel("Change since Dec 2025 (100 x log points)")
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.06))
+    fig.suptitle("Figure 6. The 2026 shock: actual price rise vs. fuel-driven rise predicted\n"
+                 "by a model estimated only on 2001-2025 data", x=0.02, ha="left", color=INK, fontsize=10)
+    fig.tight_layout()
+    save(fig, "fig6_2026_out_of_sample")
+
+
+def fig7():
+    e5 = pd.read_csv(TAB / "e5_decomposition_2026.csv", dtype={"coicop": str}).set_index("coicop")
+    parts = [("Rice and other cereals", e5.loc["01.1.1", "gap_pp"]),
+             ("Other food", e5.loc["01.1", "gap_pp"] - e5.loc["01.1.1", "gap_pp"]),
+             ("Passenger transport fares", e5.loc["07.3", "gap_pp"]),
+             ("Cooking and household fuels", e5.loc["04.5", "gap_pp"]),
+             ("Tobacco", e5.loc["02.3", "gap_pp"]),
+             ("Own-vehicle fuel", e5.loc["07.2", "gap_pp"]),
+             ("Housing rent", e5.loc["04.1", "gap_pp"])]
+    known = sum(v for _, v in parts)
+    parts.append(("All other items", e5.loc["0", "gap_pp"] - known))
+    parts = parts[::-1]
+    fig, ax = plt.subplots(figsize=(6.2, 3.4))
+    vals = [v for _, v in parts]
+    ax.barh([n for n, _ in parts], vals, color=[ORANGE if v > 0 else BLUE for v in vals], height=0.6)
+    for i, v in enumerate(vals):
+        ax.text(v + (0.03 if v >= 0 else -0.03), i, f"{v:+.2f}", va="center", ha="left" if v >= 0 else "right",
+                fontsize=8, color=INK2)
+    ax.axvline(0, color=INK2, linewidth=0.8)
+    ax.grid(axis="y", visible=False)
+    ax.set_xlim(min(vals) - 0.4, max(vals) + 0.4)
+    ax.set_xlabel(f"Contribution to the gap (pp); total gap = {e5.loc['0', 'gap_pp']:+.2f} pp\n"
+                  "positive: raised the bottom-30% CPI more than the all-income CPI")
+    ax.set_title("Figure 7. What made the poor's prices rise faster, Dec 2025-Aug 2026", loc="left",
+                 color=INK, fontsize=10)
+    save(fig, "fig7_2026_gap_decomposition")
+
+
 if __name__ == "__main__":
     est = pd.read_csv(TAB / "estimates.csv")
     for f in (fig1, fig2, fig3, fig4, fig5):
         f(est)
+    fig6()
+    fig7()
     print("figures written to", FIG)

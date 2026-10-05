@@ -45,6 +45,31 @@ projection design of Kpodar and Liu (2021), IMF WP/21/271
 | D8 | 2026-10-04 | Estimation plan for RQ1–RQ4, fixed before any Philippine estimate was run (see "Estimation plan" below). | Pre-specification. |
 | D9 | 2026-10-04 | Exploratory, added after the first run: RQ3b compares bottom-30% and all-income responses of food, housing, transport and restaurants (2013–2026, the span of bottom-30% component indices). Also fixed a bug: "food share" is w(01)/w(all items) within each region, not the region's food weight in the national basket. | The weights decomposition (same component prices for both baskets) gave a progressive gap (+0.010) while the direct estimate is regressive (−0.010), suggesting the baskets face different price changes within divisions. Labelled exploratory in all output. |
 
+| D10 | 2026-10-05 | 2026-episode and mechanism analyses, specified before estimation (after the main results were seen, so labelled "supplementary" not "pre-registered"): see "2026 episode plan" below. | Asked whether the study captures the 2026 shock; the main LPs use 2026 only at short horizons. |
+
+## 2026 episode plan (specified 2026-10-05, before estimation)
+
+- **E1 out-of-sample test:** re-estimate the baseline national LPs (CPI_all,
+  CPI_b30, ratio) on data ending Dec 2025 (no 2026 data enter estimation).
+  Fuel-driven change in ln P from Dec 2025 to month m (Jan–Aug 2026) =
+  Σ_{t=Jan}^{m} cumβ_{m−t} · Δln fuel_t. Compare with the actual change.
+- **E2 regional burden:** same with the 17-region panel LPs of CPI_all and
+  CPI_b30 (pooled β, pre-2026 sample), applied to each region's own 2026 fuel
+  path. Rank regions by the fuel-driven rise in the bottom-30% CPI by Aug 2026.
+- **E3 peso cost:** monthly poverty threshold for a family of five (2023 annual
+  per-capita threshold × 5 / 12, national and regional), carried to Dec 2025
+  with the bottom-30% CPI, times the E1/E2 fuel-driven rise = extra monthly
+  cost of a poverty-line family by Aug 2026.
+- **E4 mechanism:** national LPs (2013–2026, baseline spec) of bottom-30% and
+  all-income sub-indices 04.5 (electricity, gas, other fuels), 04.5.2 (LPG),
+  04.5.3 (kerosene/liquid fuels), 04.5.4 (solid fuels), 07.3 (passenger
+  transport services) and 01.1.1 (cereals); contribution = cumulative response
+  at h = 12 × basket weight.
+- **E5 (added after E1–E4 were run; descriptive, no model):** contribution of
+  each item group to the actual Dec 2025–Aug 2026 rise in each basket
+  (fixed-base Laspeyres with 2018 weights). Added because E1 leaves half of the
+  2026 rise and half of the gap unexplained.
+
 ## Estimation plan (pre-specified 2026-10-04)
 
 Common: p = 12, h = 0..12, linear trend, 90% bands. Shock dates t from Jan 2001

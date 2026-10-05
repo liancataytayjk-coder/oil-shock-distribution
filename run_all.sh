@@ -8,5 +8,6 @@ $PY scripts/02_clean_psa.py
 $PY scripts/03_build_panel.py
 $PY scripts/04_replicate.py
 $PY scripts/05_estimate.py
+$PY scripts/07_episode_2026.py
 $PY scripts/06_figures.py
 $PY -m pytest -q tests

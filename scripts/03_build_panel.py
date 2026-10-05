@@ -38,6 +38,9 @@ SERIES = {  # name: (basket, commodity code)
     "gasoline": ("all", "07.2.2.2"),  # 2018 onward only
     "diesel": ("all", "07.2.2.1"),
     "fuel_b30": ("b30", "07.2.2"),
+    **{f"{b}_{n}": (b, code) for b in ("all", "b30")
+       for n, code in [("e045", "04.5"), ("e0452", "04.5.2"), ("e0453", "04.5.3"), ("e0454", "04.5.4"),
+                       ("t073", "07.3"), ("f0111", "01.1.1")]},  # E4 mechanism series (D10)
     **{f"c{d:02d}": ("all", f"{d:02d}") for d in range(1, 14)},
     **{f"b30_c{d:02d}": ("b30", f"{d:02d}") for d in range(1, 14)},
 }
