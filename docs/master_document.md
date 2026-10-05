@@ -665,11 +665,189 @@ analyst report, to be checked against the official issuance before submission.
 
 *Source file: `docs/analysis_report.md`*
 
-**Analysis and Results Report** — Who Pays for Oil Shocks? — every analysis and every estimate
+**Analysis and Results Report** — Who Pays for Oil Shocks? — each analysis in one page: context, figure, interpretation
+
+
+## How to read this report
+
+Each analysis has four parts: **context and process** (why it was done and how), **the figure**, **what the figure shows**, and **what it means** in economic terms. All figures are drawn from the current run of `./run_all.sh`. The complete numerical tables behind every figure are in the *Statistical Annex* (`docs/statistical_annex.docx`).
+
+A few conventions are used throughout. Price changes are measured in log points, which for small changes equal percentage changes. A *response* is the change in a price index, in percentage points, for each 1% rise in fuel prices. The *gap* is ln(CPI all income ÷ CPI bottom 30%); when it falls, the poor's prices have risen more than the average household's. Shaded bands and error bars are 90% confidence intervals: if a band does not cross zero, the effect is statistically significant at the 10% level.
+
+## Part A. Checking the tools
+
+### A1. Does the estimator find the right answer when the answer is known?
+
+**Context and process.** Before using a statistical method on real data, it should be tested where the true answer is known. We generated artificial data for 20 "regions" over 400 months in which a shock raises a variable by 0.040 at once, 0.036 a month later and then fades. We then asked our local projection estimator, with the same settings used in the study, to recover that response.
+
+![Figure A1. Estimated versus true response in simulated data.](../output/figures/figr_simulation.png){width=75%}
+
+**What the figure shows.** The estimated response (solid line) lies almost on top of the true one (dashed line) at every horizon, and the true line stays inside the shaded 90% band.
+
+**What it means.** The estimator does what it is supposed to do. When we later find a particular response in Philippine data, it is not an artefact of the code. Five automated versions of this test run every time the analysis is rebuilt.
+
+### A2. Can we reproduce the reference study?
+
+**Context and process.** The study replicates Kpodar and Liu (2022). Before estimating anything for the Philippines, we required our code to reproduce their published European results, under pass/fail criteria written down in advance. We used EU consumer prices and EU pump prices with and without taxes for 2005–2019, and the Brent crude price, exactly as they did.
+
+![Figure A2. Response of EU inflation to fuel price shocks; grey markers are the reference study's values.](../output/figures/figr_eu_validation.png){width=80%}
+
+**What the figure shows.** A 1% rise in after-tax pump prices raises inflation by 0.057 pp in the same month (reference: 0.055), by much less for before-tax prices (0.024; reference 0.020) and crude oil (0.014; reference 0.015). All three effects disappear by the second month, as in the reference study.
+
+**What it means.** Our implementation reproduces the published results almost exactly, so the Philippine estimates rest on a validated method. The figure also teaches an economic lesson used later: what consumers pay at the pump moves inflation about three times as much as crude oil does, because pump prices include taxes and margins that move with the shock.
+
+## Part B. The data at a glance (Objective 1)
+
+### B1. Twenty-five years of inflation for the poor and for everyone
+
+**Context and process.** We took PSA's monthly consumer price index for all income households and for the bottom 30%, and the CPI sub-index for motor fuels, from 2001 to August 2026, and computed year-on-year inflation for each.
+
+![Figure B1. Inflation of all and bottom-30% households, the gap between them, and fuel prices, 2001–2026.](../output/figures/figd1_trends.png){width=95%}
+
+**What the figure shows.** Panel (a): the two inflation rates usually move together, but the poor's inflation (dashed line) spikes higher in 2008 and runs above the average in 2004–2006, 2018, 2022–2024 and 2026. Panel (b): grey areas, where the poor's inflation is higher, dominate the hatched ones. Panel (c): fuel prices swing far more than consumer prices, with peaks in 2008, 2022 and 2026.
+
+**What it means.** Since 2001 the poor's prices rose about 13.3 log points (roughly 14%) more than the average household's — their inflation was higher in 18 of 25 years. The biggest gaps coincide with fuel spikes (2008, 2026), which is why we ask whether fuel is a cause. But 2008 was also a rice crisis, so the picture alone cannot separate fuel from food; the model in Part C does.
+
+### B2. Does a fuel shock show up in prices right away?
+
+**Context and process.** We correlated each month's fuel price change with consumer price changes in the same month and in each of the following twelve months.
+
+![Figure B2. Correlation of this month's fuel price change with price changes k months later.](../output/figures/figr_crosscorr.png){width=95%}
+
+**What the figure shows.** Panel (a): fuel changes are strongly correlated with inflation in the same month (0.54 for all households) and the next, then again five to eight months later. Panel (b): the correlation with the gap is mostly negative.
+
+**What it means.** Fuel prices affect consumer prices in two waves: a fast, direct wave (fuel itself, fares) and a slower, indirect one (food and other goods whose costs rise). The negative correlations in panel (b) are a first hint that fuel increases are followed by faster price increases for the poor. Correlations do not control for other influences, which is the model's job.
+
+### B3. Where do the poor fall furthest behind?
+
+**Context and process.** For each of the 17 regions we computed average inflation for both groups over 2001–2025 and how far the gap moved over the period.
+
+![Figure B3. Average inflation by group and cumulative gap, by region, 2001–2025.](../output/figures/figd2_regional.png){width=95%}
+
+**What the figure shows.** Panel (a): in every region the poor's inflation (open square) is above the average (filled circle). Panel (b): the cumulative gap ranges from −4.2 in MIMAROPA to −16.0 in VII Central Visayas.
+
+**What it means.** The poor's relative price disadvantage is national, not regional. Surprisingly, it is smaller in the poorest regions (such as BARMM and Zamboanga). The reason is composition: where most households are poor, the "all income" basket is already close to the poor's basket, so the two indices move together. This matters for reading the regional results in C4.
+
+## Part C. What the model says (Objective 2)
+
+### C1. How much does a fuel shock raise prices?
+
+**Context and process.** We estimated the local projection model of Kpodar and Liu for the Philippines, 2001–2026: for each month after a fuel price change, a separate regression measures how much higher the price level is, controlling for a year of past inflation and past fuel changes.
+
+![Figure C1. Cumulative effect of a 1% fuel price increase on the price level.](../output/figures/fig1_rq1_passthrough.png){width=80%}
+
+**What the figure shows.** The price level rises 0.044 pp in the month of the shock and keeps rising to about 0.102 pp after a year, for both groups. The poor's response (dashed) is slightly above the average's in most months.
+
+**What it means.** A 10% rise in pump prices adds about 1.0% to the cost of living within a year. Only about half of the first month's effect comes from fuel itself; the rest is fuel's knock-on effect on other prices. The effect builds for a year rather than fading, so a fuel shock is not a "one-month" problem. Measured with crude oil prices instead, the effect would look less than half as large (0.041).
+
+### C2. Do the poor pay more?
+
+**Context and process.** The same model was estimated for the gap between the two price indices, nationally and for a panel of 17 regions that uses each region's own fuel prices. The cross-country study we replicate found the opposite sign: richer households' prices rise more.
+
+![Figure C2. Effect of a 1% fuel price increase on the gap: (a) national, (b) 17-region panel.](../output/figures/fig2_rq2_rq4_ratio.png){width=95%}
+
+**What the figure shows.** The gap falls below zero after the shock and stays there. In the regional panel (b) the band lies wholly below zero from the third month: −0.0214 after six months and −0.0173 after a year.
+
+**What it means.** In the Philippines, fuel shocks are *not* progressive: the poor's prices rise more than the average household's. The difference is modest — about 0.2 percentage points more after a 10% fuel shock — but it contradicts the cross-country finding that richer households bear more of the shock.
+
+### C3. Through which goods does the shock travel?
+
+**Context and process.** We estimated the model for each of the 13 CPI spending categories, and, from 2013, compared the same categories in the poor's index and the all-income index.
+
+![Figure C3. Effect after 12 months by spending category, with each group's budget share.](../output/figures/fig3_rq3_components.png){width=85%}
+
+![Figure C4. The same categories in the two indices, 2013–2026.](../output/figures/figr_rq3b.png){width=75%}
+
+**What the figures show.** Figure C3: transport prices respond most (0.370), then housing and utilities (0.158), food (0.072) and restaurants. Ten of thirteen categories respond. Figure C4: within the *same* category, the poor's utilities and food prices rise more than the average household's, while their transport prices rise less.
+
+**What it means.** If the poor simply bought more food and less transport but paid the same price changes, fuel shocks would hurt the better-off more, because transport responds most. The poor pay more because the particular things they buy within each category — cheaper food items, cooking fuels, utilities — rise more. Their transport spending is mostly regulated fares, which rise slowly. This is why studies that apply the same prices to everyone miss the effect.
+
+### C4. Does it depend on where you live?
+
+**Context and process.** In the regional panel, we tested whether the gap is larger in four groups of regions: high poverty, high food share, Mindanao and the island regions.
+
+![Figure C5. Additional effect on the gap in each group of regions, after 12 months.](../output/figures/fig4_rq4_groups.png){width=80%}
+
+**What the figure shows.** The extra effect is negative (a larger gap) for Mindanao, island and high-poverty regions, but most error bars cross zero. For high food-share regions it is positive.
+
+**What it means.** The evidence for regional differences is weak: the directions fit the idea that remote regions suffer more, but none of the differences survives a correction for testing four groups at once. The food-share result reflects the composition effect of B3, not a genuine advantage for food-dependent regions.
+
+### C5. How solid is the result?
+
+**Context and process.** We re-estimated the six-month gap under every pre-planned alternative: crude oil instead of pump prices, more or fewer lags, dropping 2020 or 2026, controlling for the exchange rate and interest rates, and others. We also split the sample in time.
+
+![Figure C6. The six-month gap under alternative specifications.](../output/figures/fig5_robustness.png){width=85%}
+
+**What the figure shows.** Almost every estimate lies to the left of zero. Three move close to zero: adding macro controls and the two alternative fuel series that only start in 2018–2019. The time split (open squares) shows a large gap in 2001–2012 (−0.0541) and a small one since 2013 (−0.0091).
+
+**What it means.** The direction of the result is robust; its size is not. The poor bore a clearly larger share of fuel shocks in the 2000s, when the 2008 food-and-fuel crisis hit, and a smaller, statistically uncertain share since. Policy conclusions should rest on the direction, not a precise number.
+
+## Part D. The 2026 shock and what to do about it (Objective 3)
+
+### D1. Did the past predict 2026?
+
+**Context and process.** We estimated the model using only data up to December 2025, then fed in the fuel price increases actually observed in 2026, and compared the predicted, fuel-driven price rise with what actually happened.
+
+![Figure D1. Actual price rise in 2026 versus the fuel-driven rise predicted from 2001–2025 data.](../output/figures/fig6_2026_out_of_sample.png){width=95%}
+
+**What the figure shows.** The model predicts the timing of the jump in March–April, but the actual rise (solid) is about twice the fuel-driven part (dashed): by August, 2.55 of 4.81 points for all households and 3.13 of 5.98 for the poor. When fuel prices eased in May–June, the model expected prices to fall back; they did not.
+
+**What it means.** Past relationships still hold — fuel explains about half of the 2026 surge and correctly predicts that the poor pay more — but half came from elsewhere: the weaker peso and, above all, food. Prices that do not fall when fuel does mean relief should not be withdrawn as soon as pump prices ease.
+
+### D2. What did 2026 cost a poor family, and where?
+
+**Context and process.** We applied the pre-2026 model to each region's own fuel prices, and converted the fuel-driven price rise into pesos for a family of five living at the official poverty line.
+
+![Figure D2. 2026 price rise for the poor by region, and the fuel-driven extra monthly cost for a poverty-line family.](../output/figures/figr_e2_regional.png){width=95%}
+
+**What the figure shows.** Panel (a): actual price rises for the poor (light bars) were largest in Davao, BARMM, Western Visayas, Caraga and Zamboanga, but the fuel-driven part (black) is similar everywhere. Panel (b): the fuel-driven extra cost ranges from PHP 390 to PHP 633 a month, PHP 467 nationally.
+
+**What it means.** Fuel alone added about PHP 467 a month to the cost of a poverty-line family's basket, and all price increases about PHP 907. Because the regions hit hardest were not the ones with the largest fuel price increases, relief should be allocated using each region's poor-household price index, not its pump prices.
+
+### D3. Which fuels matter for the poor?
+
+**Context and process.** We compared how much each group spends on LPG, kerosene, charcoal and wood, fares and rice, and how much each price responds to fuel shocks.
+
+![Figure D3. Budget shares and price responses of household fuels, fares and rice.](../output/figures/figr_e4_mechanism.png){width=95%}
+
+**What the figure shows.** Panel (a): the poor spend about the same share on LPG as everyone else, far more on charcoal and wood, and twice as much on rice. Panel (b): LPG and kerosene prices respond strongly to fuel shocks and equally for both groups; charcoal, wood, rice and the poor's fares barely respond.
+
+**What it means.** Suspending the excise tax on LPG, as the government did in 2026, helps the poor and the non-poor in proportion: it is not targeted. Kerosene relief is better targeted but small. The fuel the poor rely on most — charcoal and wood — is untouched by oil prices and by fuel tax relief.
+
+### D4. What made the poor's prices rise faster in 2026?
+
+**Context and process.** We split the difference between the two indices' price rises from December 2025 to August 2026 into the contribution of each spending item, using each basket's fixed weights. This is accounting, not a model.
+
+![Figure D4. Contribution of each item to the poor's extra price rise, Dec 2025–Aug 2026.](../output/figures/fig7_2026_gap_decomposition.png){width=85%}
+
+**What the figure shows.** Of a +1.24 pp gap, rice and other cereals contributed +1.67 pp. Fares and household fuels added a little. Fuel for private vehicles and rents worked the other way (hatched bars): those costs rose more for better-off households.
+
+**What it means.** In 2026 the poor's extra burden came mostly through rice. Rice weighs twice as much in their budget, and its price rose sharply, linked to fertilizer and freight costs from the conflict and to rice import policy. A response to an oil shock that looks only at pump prices misses the channel that hurt the poor most.
+
+## Summary
+
+| Question | Answer | Figure |
+|---|---|---|
+| Is the method sound? | Yes: it recovers known answers and reproduces the reference study | A1, A2 |
+| Have the poor faced higher inflation? | Yes: 13.3 log points more since 2001, in every region | B1, B3 |
+| How much do fuel shocks raise prices? | About 1% for a 10% fuel rise, within a year | C1 |
+| Do the poor pay more? | Yes, modestly; strongest in 2001–2012 | C2, C6 |
+| Why? | Within-category price differences, not spending shares | C3, C4 |
+| Does region matter? | Weak evidence only | C5 |
+| Did the past predict 2026? | Half of the surge, and the right direction | D1 |
+| Cost of 2026 for a poor family | About PHP 467 a month from fuel; PHP 907 from all prices | D2 |
+| Which relief is targeted? | Transfers sized to the poor's prices; not gasoline/diesel or LPG tax cuts | D3 |
+| What drove the poor's 2026 burden? | Rice | D4 |
+
+# Appendix E2. Statistical annex (every estimate in full)
+
+*Source file: `docs/statistical_annex.md`*
+
+**Statistical Annex** — Who Pays for Oil Shocks? — every analysis and every estimate in full
 
 ## 1. How to read this report
 
-This report lists every analysis carried out in the study and every estimate it produced, in the order the
+This annex lists every analysis carried out in the study and every estimate it produced, in the order the
 analyses were run. It is generated from the output tables, so its numbers always match the current run of
 `./run_all.sh`.
 
@@ -4294,12 +4472,144 @@ def figw0():
     save(fig, "figw0_framework")
 
 
+# ---------------------------------------------------------------- analysis-report figures (figr_*)
+
+def figr_simulation():
+    """Validation: estimator recovers a known impulse response from simulated data."""
+    import sys
+    sys.path.insert(0, str(ROOT))
+    from ospd.lp import local_projection
+    from tests.test_lp import simulate, true_irf
+    df = simulate(20, 400)
+    r = local_projection(df, "y", "x", time="t", unit="unit", horizons=8, p=12, se="driscoll_kraay")
+    r = r[r.term == "shock"]
+    fig, ax = plt.subplots(figsize=(5.2, 3.0))
+    ax.fill_between(r.h, r.lo, r.hi, color=LIGHT, linewidth=0)
+    ax.plot(r.h, r.beta, label="Estimated (90% band shaded)", **A)
+    ax.plot(range(9), true_irf(8), label="True response", **B)
+    zero(ax)
+    ax.set_xlabel("Months after the shock")
+    ax.set_ylabel("Response to a unit shock")
+    ax.legend(loc="upper right")
+    save(fig, "figr_simulation")
+
+
+def figr_eu_validation():
+    """Validation: EU responses to after-tax, before-tax and crude prices vs. reference values."""
+    rep = pd.read_csv(TAB / "replication_eu_ph.csv")
+    fig, ax = plt.subplots(figsize=(5.4, 3.2))
+    styles = [("G1 after tax [cluster]", "After-tax pump price", A, 0.055),
+              ("G2 before tax + tax control [cluster]", "Before-tax pump price", B, 0.020),
+              ("G2 Brent in euro [cluster]", "Brent crude",
+               dict(color=BLACK, linestyle=":", marker="^", markersize=3.8, markerfacecolor="white"), 0.015)]
+    for spec, lab, st, ref in styles:
+        q = rep[rep.spec == spec].sort_values("h")
+        ax.plot(q.h, q.beta, label=lab, **st)
+        ax.plot([-0.25], [ref], marker=st["marker"], color=BLACK, markersize=6, markerfacecolor=MID, linestyle="")
+    zero(ax)
+    ax.set_xticks(range(7))
+    ax.set_xlabel("Months after the shock (grey markers at left: Kpodar–Liu values at month 0)")
+    ax.set_ylabel("Response of monthly inflation (pp per 1%)")
+    ax.legend(loc="upper right")
+    save(fig, "figr_eu_validation")
+
+
+def figr_crosscorr():
+    cc = pd.read_csv(TAB / "desc_crosscorr.csv")
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.8), sharey=True)
+    axes[0].bar(cc.lag - 0.2, cc["CPI, all income"], width=0.4, color=BLACK, label="All income")
+    axes[0].bar(cc.lag + 0.2, cc["CPI, bottom 30%"], width=0.4, color="white", edgecolor=BLACK, hatch="////",
+                linewidth=0.6, label="Bottom 30%")
+    axes[0].legend(loc="upper right")
+    axes[0].set_title("(a) Fuel change and later inflation", loc="left", fontsize=9)
+    axes[1].bar(cc.lag, cc["Gap: ln(CPI all/CPI b30)"], width=0.6, color=MID, edgecolor=BLACK, linewidth=0.6)
+    axes[1].set_title("(b) Fuel change and later change in the gap", loc="left", fontsize=9)
+    for ax in axes:
+        zero(ax)
+        ax.set_xlabel("Months later (k)")
+        ax.set_xticks(range(0, 13, 2))
+    axes[0].set_ylabel("Correlation")
+    fig.tight_layout()
+    save(fig, "figr_crosscorr")
+
+
+def figr_rq3b(est):
+    rows = [("c01", "Food"), ("c04", "Housing, utilities"), ("c07", "Transport"), ("c11", "Restaurants")]
+    get = lambda spec, y: est[(est.rq == "RQ3b") & (est.spec == spec) & (est.outcome == y) & est.cumulative  # noqa: E731
+                              & (est.h == 12) & (est.term == "shock")].iloc[0]
+    fig, ax = plt.subplots(figsize=(5.4, 3.0))
+    for i, (c, lab) in enumerate(rows):
+        a, b = get("2013- all-income", f"d_{c}"), get("2013- bottom 30%", f"d_b30_{c}")
+        ax.barh(i + 0.2, a.beta, height=0.38, color=BLACK, label="All income" if i == 0 else None)
+        ax.barh(i - 0.2, b.beta, height=0.38, color="white", edgecolor=BLACK, hatch="////", linewidth=0.6,
+                label="Bottom 30%" if i == 0 else None)
+        for y, v in ((i + 0.2, a.beta), (i - 0.2, b.beta)):
+            ax.text(v + 0.005, y, f"{v:.2f}", va="center", fontsize=7.5)
+    ax.set_yticks(range(len(rows)), [r[1] for r in rows])
+    zero(ax, horizontal=False)
+    ax.set_xlabel("Cumulative response after 12 months (pp per 1% fuel), 2013–2026")
+    ax.legend(loc="lower right")
+    save(fig, "figr_rq3b")
+
+
+def figr_e2_regional():
+    e2 = pd.read_csv(TAB / "e2_regional_2026.csv")
+    e2 = e2[e2.region != "PH"].sort_values("actual_b30")
+    names = {"NCR": "NCR", "CAR": "CAR", "R01": "I", "R02": "II", "R03": "III", "R04A": "IV-A", "R04B": "MIMAROPA",
+             "R05": "V", "R06": "VI", "R07": "VII", "R08": "VIII", "R09": "IX", "R10": "X", "R11": "XI",
+             "R12": "XII", "R13": "XIII", "BARMM": "BARMM"}
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 4.0), sharey=True, gridspec_kw={"width_ratios": [1.4, 1]})
+    y = range(len(e2))
+    axes[0].barh(list(y), e2.actual_b30, height=0.7, color=LIGHT, edgecolor=BLACK, linewidth=0.6,
+                 label="Actual rise")
+    axes[0].barh(list(y), e2.fuel_driven_b30, height=0.35, color=BLACK, label="Fuel-driven part (model)")
+    axes[0].set_yticks(list(y), [names[r] for r in e2.region])
+    axes[0].set_xlabel("Bottom-30% CPI, Dec 2025–Aug 2026\n(100 × log points)")
+    axes[0].set_title("(a) Price rise for the poor", loc="left", fontsize=9)
+    axes[1].barh(list(y), e2.extra_cost_php_month, height=0.6, color=MID, edgecolor=BLACK, linewidth=0.6)
+    for i, v in enumerate(e2.extra_cost_php_month):
+        axes[1].text(v + 8, i, f"{v:.0f}", va="center", fontsize=7.5)
+    axes[1].set_xlim(0, e2.extra_cost_php_month.max() * 1.2)
+    axes[1].set_xlabel("PHP per month, poverty-line\nfamily of five (fuel-driven)")
+    axes[1].set_title("(b) Fuel-driven extra cost", loc="left", fontsize=9)
+    h, l = axes[0].get_legend_handles_labels()
+    fig.tight_layout()
+    fig.legend(h, l, loc="lower center", ncol=2, bbox_to_anchor=(0.35, -0.07))
+    save(fig, "figr_e2_regional")
+
+
+def figr_e4_mechanism():
+    e4 = pd.read_csv(TAB / "e4_mechanism.csv")
+    e4 = e4[e4.h == 12]
+    items = [("e0452", "LPG"), ("e0453", "Kerosene"), ("e0454", "Charcoal, wood"), ("t073", "Transport fares"),
+             ("f0111", "Rice, cereals")]
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.0), sharey=True)
+    for i, (it, lab) in enumerate(items):
+        for ax, col in zip(axes, ["weight", "beta"]):
+            a = e4[(e4["item"] == it) & (e4.basket == "all")][col].iloc[0]
+            b = e4[(e4["item"] == it) & (e4.basket == "b30")][col].iloc[0]
+            ax.barh(i + 0.2, a, height=0.38, color=BLACK, label="All income" if i == 0 else None)
+            ax.barh(i - 0.2, b, height=0.38, color="white", edgecolor=BLACK, hatch="////", linewidth=0.6,
+                    label="Bottom 30%" if i == 0 else None)
+    axes[0].set_yticks(range(len(items)), [x[1] for x in items])
+    axes[0].set_xlabel("Share of the basket (%)")
+    axes[0].set_title("(a) How much each group buys", loc="left", fontsize=9)
+    axes[1].set_xlabel("Price response after 12 months\n(pp per 1% fuel)")
+    axes[1].set_title("(b) How much its price responds", loc="left", fontsize=9)
+    zero(axes[1], horizontal=False)
+    axes[0].legend(loc="lower right")
+    fig.tight_layout()
+    save(fig, "figr_e4_mechanism")
+
+
 if __name__ == "__main__":
     est = pd.read_csv(TAB / "estimates.csv")
     for f in (fig1, fig2, fig3, fig4, fig5):
         f(est)
-    for f in (fig6, fig7, figd1, figd2, figw0):
+    for f in (fig6, fig7, figd1, figd2, figw0, figr_simulation, figr_eu_validation, figr_crosscorr,
+              figr_e2_regional, figr_e4_mechanism):
         f()
+    figr_rq3b(est)
     print("figures written to", FIG)
 
 ```
@@ -5051,11 +5361,17 @@ if __name__ == "__main__":
 ## scripts/10_analysis_report.py
 
 ```python
-"""Build the Analysis and Results Report: every analysis and every estimate.
+"""Build the Analysis and Results Report and its Statistical Annex.
 
-Generated entirely from output/tables, so it always matches the current run.
-Writes docs/analysis_report.md and docs/analysis_report.docx.
+analysis_report: one page per analysis (context, figure, interpretation), rendered
+from docs/analysis_report_template.md with the paper numbers.
+statistical_annex: every estimate in full tables, generated from output/tables.
+Writes docs/analysis_report.md/.docx and docs/statistical_annex.md/.docx.
 """
+
+import json
+
+import jinja2
 
 from pathlib import Path
 
@@ -5109,11 +5425,11 @@ def main():
     est = pd.read_csv(TAB / "estimates.csv")
     out = []
     a = out.append
-    a("---\ntitle: \"Analysis and Results Report\"\nsubtitle: \"Who Pays for Oil Shocks? — every analysis and every estimate\"\n"
+    a("---\ntitle: \"Statistical Annex\"\nsubtitle: \"Who Pays for Oil Shocks? — every analysis and every estimate in full\"\n"
       "date: \"Generated by scripts/10_analysis_report.py from output/tables\"\n---\n")
     a("""# 1. How to read this report
 
-This report lists every analysis carried out in the study and every estimate it produced, in the order the
+This annex lists every analysis carried out in the study and every estimate it produced, in the order the
 analyses were run. It is generated from the output tables, so its numbers always match the current run of
 `./run_all.sh`.
 
@@ -5246,9 +5562,18 @@ run of `./run_all.sh`.
         a(f"| output/tables/{f.name} | {DESCR.get(f.stem, '')} |\n")
 
     text = "".join(out)
-    (DOCS / "analysis_report.md").write_text(text)
-    pypandoc.convert_text(text, "docx", format="markdown", outputfile=str(DOCS / "analysis_report.docx"),
+    (DOCS / "statistical_annex.md").write_text(text)
+    pypandoc.convert_text(text, "docx", format="markdown", outputfile=str(DOCS / "statistical_annex.docx"),
                           extra_args=[f"--resource-path={DOCS}:{ROOT}", "--toc", "--toc-depth=2"])
+    print("wrote docs/statistical_annex.md and .docx")
+
+    n = json.loads((TAB / "paper_numbers.json").read_text())
+    env = jinja2.Environment(loader=jinja2.FileSystemLoader(DOCS), undefined=jinja2.StrictUndefined,
+                             comment_start_string="<#--", comment_end_string="--#>")
+    report = env.get_template("analysis_report_template.md").render(n=n)
+    (DOCS / "analysis_report.md").write_text(report)
+    pypandoc.convert_text(report, "docx", format="markdown", outputfile=str(DOCS / "analysis_report.docx"),
+                          extra_args=[f"--resource-path={DOCS}:{ROOT}", "--toc", "--toc-depth=1"])
     print("wrote docs/analysis_report.md and .docx")
 
 
@@ -5305,6 +5630,7 @@ APPENDICES = [
     ("C", "Data source log", "data/raw/source_log.md"),
     ("D", "2026 policy context with sources", "paper/policy_context_2026.md"),
     ("E", "Analysis and results report", "docs/analysis_report.md"),
+    ("E2", "Statistical annex (every estimate in full)", "docs/statistical_annex.md"),
     ("F", "Working paper", "paper/working_paper.md"),
     ("G", "Journal manuscript (IMRAD)", "paper/manuscript.md"),
     ("H", "Submission checklist", "paper/SUBMISSION_CHECKLIST.md"),
@@ -5446,6 +5772,7 @@ def test_interaction_detects_group_difference():
 # Appendix K. Version history (git log)
 
 ```text
+6fcc84e 2026-10-05 Add working paper, analysis report, master document, descriptive analysis and black-and-white figures
 221ea28 2026-10-05 Add IMRAD manuscript generated from output tables, verified references and submission checklist
 4683d86 2026-10-05 Add 2026 episode analyses (out-of-sample test, regional burden, peso cost, mechanism, gap decomposition)
 37ca522 2026-10-04 Estimate RQ1-RQ4 with robustness checks and figures

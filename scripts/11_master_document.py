@@ -22,6 +22,7 @@ APPENDICES = [
     ("C", "Data source log", "data/raw/source_log.md"),
     ("D", "2026 policy context with sources", "paper/policy_context_2026.md"),
     ("E", "Analysis and results report", "docs/analysis_report.md"),
+    ("E2", "Statistical annex (every estimate in full)", "docs/statistical_annex.md"),
     ("F", "Working paper", "paper/working_paper.md"),
     ("G", "Journal manuscript (IMRAD)", "paper/manuscript.md"),
     ("H", "Submission checklist", "paper/SUBMISSION_CHECKLIST.md"),

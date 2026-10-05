@@ -283,10 +283,142 @@ def figw0():
     save(fig, "figw0_framework")
 
 
+# ---------------------------------------------------------------- analysis-report figures (figr_*)
+
+def figr_simulation():
+    """Validation: estimator recovers a known impulse response from simulated data."""
+    import sys
+    sys.path.insert(0, str(ROOT))
+    from ospd.lp import local_projection
+    from tests.test_lp import simulate, true_irf
+    df = simulate(20, 400)
+    r = local_projection(df, "y", "x", time="t", unit="unit", horizons=8, p=12, se="driscoll_kraay")
+    r = r[r.term == "shock"]
+    fig, ax = plt.subplots(figsize=(5.2, 3.0))
+    ax.fill_between(r.h, r.lo, r.hi, color=LIGHT, linewidth=0)
+    ax.plot(r.h, r.beta, label="Estimated (90% band shaded)", **A)
+    ax.plot(range(9), true_irf(8), label="True response", **B)
+    zero(ax)
+    ax.set_xlabel("Months after the shock")
+    ax.set_ylabel("Response to a unit shock")
+    ax.legend(loc="upper right")
+    save(fig, "figr_simulation")
+
+
+def figr_eu_validation():
+    """Validation: EU responses to after-tax, before-tax and crude prices vs. reference values."""
+    rep = pd.read_csv(TAB / "replication_eu_ph.csv")
+    fig, ax = plt.subplots(figsize=(5.4, 3.2))
+    styles = [("G1 after tax [cluster]", "After-tax pump price", A, 0.055),
+              ("G2 before tax + tax control [cluster]", "Before-tax pump price", B, 0.020),
+              ("G2 Brent in euro [cluster]", "Brent crude",
+               dict(color=BLACK, linestyle=":", marker="^", markersize=3.8, markerfacecolor="white"), 0.015)]
+    for spec, lab, st, ref in styles:
+        q = rep[rep.spec == spec].sort_values("h")
+        ax.plot(q.h, q.beta, label=lab, **st)
+        ax.plot([-0.25], [ref], marker=st["marker"], color=BLACK, markersize=6, markerfacecolor=MID, linestyle="")
+    zero(ax)
+    ax.set_xticks(range(7))
+    ax.set_xlabel("Months after the shock (grey markers at left: Kpodar–Liu values at month 0)")
+    ax.set_ylabel("Response of monthly inflation (pp per 1%)")
+    ax.legend(loc="upper right")
+    save(fig, "figr_eu_validation")
+
+
+def figr_crosscorr():
+    cc = pd.read_csv(TAB / "desc_crosscorr.csv")
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.8), sharey=True)
+    axes[0].bar(cc.lag - 0.2, cc["CPI, all income"], width=0.4, color=BLACK, label="All income")
+    axes[0].bar(cc.lag + 0.2, cc["CPI, bottom 30%"], width=0.4, color="white", edgecolor=BLACK, hatch="////",
+                linewidth=0.6, label="Bottom 30%")
+    axes[0].legend(loc="upper right")
+    axes[0].set_title("(a) Fuel change and later inflation", loc="left", fontsize=9)
+    axes[1].bar(cc.lag, cc["Gap: ln(CPI all/CPI b30)"], width=0.6, color=MID, edgecolor=BLACK, linewidth=0.6)
+    axes[1].set_title("(b) Fuel change and later change in the gap", loc="left", fontsize=9)
+    for ax in axes:
+        zero(ax)
+        ax.set_xlabel("Months later (k)")
+        ax.set_xticks(range(0, 13, 2))
+    axes[0].set_ylabel("Correlation")
+    fig.tight_layout()
+    save(fig, "figr_crosscorr")
+
+
+def figr_rq3b(est):
+    rows = [("c01", "Food"), ("c04", "Housing, utilities"), ("c07", "Transport"), ("c11", "Restaurants")]
+    get = lambda spec, y: est[(est.rq == "RQ3b") & (est.spec == spec) & (est.outcome == y) & est.cumulative  # noqa: E731
+                              & (est.h == 12) & (est.term == "shock")].iloc[0]
+    fig, ax = plt.subplots(figsize=(5.4, 3.0))
+    for i, (c, lab) in enumerate(rows):
+        a, b = get("2013- all-income", f"d_{c}"), get("2013- bottom 30%", f"d_b30_{c}")
+        ax.barh(i + 0.2, a.beta, height=0.38, color=BLACK, label="All income" if i == 0 else None)
+        ax.barh(i - 0.2, b.beta, height=0.38, color="white", edgecolor=BLACK, hatch="////", linewidth=0.6,
+                label="Bottom 30%" if i == 0 else None)
+        for y, v in ((i + 0.2, a.beta), (i - 0.2, b.beta)):
+            ax.text(v + 0.005, y, f"{v:.2f}", va="center", fontsize=7.5)
+    ax.set_yticks(range(len(rows)), [r[1] for r in rows])
+    zero(ax, horizontal=False)
+    ax.set_xlabel("Cumulative response after 12 months (pp per 1% fuel), 2013–2026")
+    ax.legend(loc="lower right")
+    save(fig, "figr_rq3b")
+
+
+def figr_e2_regional():
+    e2 = pd.read_csv(TAB / "e2_regional_2026.csv")
+    e2 = e2[e2.region != "PH"].sort_values("actual_b30")
+    names = {"NCR": "NCR", "CAR": "CAR", "R01": "I", "R02": "II", "R03": "III", "R04A": "IV-A", "R04B": "MIMAROPA",
+             "R05": "V", "R06": "VI", "R07": "VII", "R08": "VIII", "R09": "IX", "R10": "X", "R11": "XI",
+             "R12": "XII", "R13": "XIII", "BARMM": "BARMM"}
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 4.0), sharey=True, gridspec_kw={"width_ratios": [1.4, 1]})
+    y = range(len(e2))
+    axes[0].barh(list(y), e2.actual_b30, height=0.7, color=LIGHT, edgecolor=BLACK, linewidth=0.6,
+                 label="Actual rise")
+    axes[0].barh(list(y), e2.fuel_driven_b30, height=0.35, color=BLACK, label="Fuel-driven part (model)")
+    axes[0].set_yticks(list(y), [names[r] for r in e2.region])
+    axes[0].set_xlabel("Bottom-30% CPI, Dec 2025–Aug 2026\n(100 × log points)")
+    axes[0].set_title("(a) Price rise for the poor", loc="left", fontsize=9)
+    axes[1].barh(list(y), e2.extra_cost_php_month, height=0.6, color=MID, edgecolor=BLACK, linewidth=0.6)
+    for i, v in enumerate(e2.extra_cost_php_month):
+        axes[1].text(v + 8, i, f"{v:.0f}", va="center", fontsize=7.5)
+    axes[1].set_xlim(0, e2.extra_cost_php_month.max() * 1.2)
+    axes[1].set_xlabel("PHP per month, poverty-line\nfamily of five (fuel-driven)")
+    axes[1].set_title("(b) Fuel-driven extra cost", loc="left", fontsize=9)
+    h, l = axes[0].get_legend_handles_labels()
+    fig.tight_layout()
+    fig.legend(h, l, loc="lower center", ncol=2, bbox_to_anchor=(0.35, -0.07))
+    save(fig, "figr_e2_regional")
+
+
+def figr_e4_mechanism():
+    e4 = pd.read_csv(TAB / "e4_mechanism.csv")
+    e4 = e4[e4.h == 12]
+    items = [("e0452", "LPG"), ("e0453", "Kerosene"), ("e0454", "Charcoal, wood"), ("t073", "Transport fares"),
+             ("f0111", "Rice, cereals")]
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.0), sharey=True)
+    for i, (it, lab) in enumerate(items):
+        for ax, col in zip(axes, ["weight", "beta"]):
+            a = e4[(e4["item"] == it) & (e4.basket == "all")][col].iloc[0]
+            b = e4[(e4["item"] == it) & (e4.basket == "b30")][col].iloc[0]
+            ax.barh(i + 0.2, a, height=0.38, color=BLACK, label="All income" if i == 0 else None)
+            ax.barh(i - 0.2, b, height=0.38, color="white", edgecolor=BLACK, hatch="////", linewidth=0.6,
+                    label="Bottom 30%" if i == 0 else None)
+    axes[0].set_yticks(range(len(items)), [x[1] for x in items])
+    axes[0].set_xlabel("Share of the basket (%)")
+    axes[0].set_title("(a) How much each group buys", loc="left", fontsize=9)
+    axes[1].set_xlabel("Price response after 12 months\n(pp per 1% fuel)")
+    axes[1].set_title("(b) How much its price responds", loc="left", fontsize=9)
+    zero(axes[1], horizontal=False)
+    axes[0].legend(loc="lower right")
+    fig.tight_layout()
+    save(fig, "figr_e4_mechanism")
+
+
 if __name__ == "__main__":
     est = pd.read_csv(TAB / "estimates.csv")
     for f in (fig1, fig2, fig3, fig4, fig5):
         f(est)
-    for f in (fig6, fig7, figd1, figd2, figw0):
+    for f in (fig6, fig7, figd1, figd2, figw0, figr_simulation, figr_eu_validation, figr_crosscorr,
+              figr_e2_regional, figr_e4_mechanism):
         f()
+    figr_rq3b(est)
     print("figures written to", FIG)
