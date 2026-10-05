@@ -195,17 +195,121 @@ def main():
     n["poverty_min"], n["poverty_max"] = f(groups.poverty_2018.min(), 1), f(groups.poverty_2018.max(), 1)
 
     tables = make_tables(est, g, groups, e2, e4, f, stars)
+    descriptive(n, tables, f)
     (TAB / "paper_numbers.json").write_text(json.dumps(n, indent=1, ensure_ascii=False))
 
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(PAPER), undefined=jinja2.StrictUndefined,
                              keep_trailing_newline=True,
                              comment_start_string="<#--", comment_end_string="--#>")  # pandoc uses {#refs}
-    text = env.get_template("manuscript_template.md").render(n=n, t=tables)
-    (PAPER / "manuscript.md").write_text(text)
-    pypandoc.convert_file(str(PAPER / "manuscript.md"), "docx", outputfile=str(PAPER / "manuscript.docx"),
-                          extra_args=["--citeproc", f"--bibliography={PAPER / 'references.bib'}",
-                                      f"--resource-path={PAPER}:{ROOT}", "--metadata=link-citations:true"])
-    print("wrote paper/manuscript.md and paper/manuscript.docx;", len(n), "numbers")
+    for name, toc in [("manuscript", False), ("working_paper", True)]:
+        if not (PAPER / f"{name}_template.md").exists():
+            continue
+        text = env.get_template(f"{name}_template.md").render(n=n, t=tables)
+        (PAPER / f"{name}.md").write_text(text)
+        args = ["--citeproc", f"--bibliography={PAPER / 'references.bib'}",
+                f"--resource-path={PAPER}:{ROOT}", "--metadata=link-citations:true"]
+        if toc:
+            args += ["--toc", "--toc-depth=2"]
+        pypandoc.convert_file(str(PAPER / f"{name}.md"), "docx", outputfile=str(PAPER / f"{name}.docx"),
+                              extra_args=args)
+        print(f"wrote paper/{name}.md and .docx")
+    print(len(n), "numbers")
+
+
+def descriptive(n, t, f):
+    """Numbers and tables for working paper Objective 1 (scripts/09_descriptive.py)."""
+    sm = pd.read_csv(TAB / "desc_summary.csv")
+    an = pd.read_csv(TAB / "desc_annual.csv").set_index("year")
+    ep = pd.read_csv(TAB / "desc_episodes.csv")
+    cc = pd.read_csv(TAB / "desc_crosscorr.csv").set_index("lag")
+    rg = pd.read_csv(TAB / "desc_regional.csv").set_index("region")
+    adf = pd.read_csv(TAB / "desc_adf.csv")
+    full = sm[sm.period.str.startswith("2001–2026")].set_index("variable")
+    keys = {"Fuel index (07.2.2)": "fuel", "CPI, all income": "all", "CPI, bottom 30%": "b30",
+            "Gap: ln(CPI all/CPI b30)": "gap"}
+    for v, k in keys.items():
+        n[f"d_{k}_mean_ann"], n[f"d_{k}_sd"] = f(full.loc[v, "annualised_mean"], 2), f(full.loc[v, "sd"], 3)
+        n[f"d_{k}_min"], n[f"d_{k}_max"] = f(full.loc[v, "min"], 2), f(full.loc[v, "max"], 2)
+    for p in sm.period.unique():
+        k = {"2001–2026 (full)": "full", "2001–2012": "p1", "2013–2019": "p2", "2020–2025": "p3",
+             "2026 (Jan–Aug)": "p4"}[p]
+        q = sm[sm.period == p].set_index("variable")
+        for v, kk in keys.items():
+            n[f"d_{kk}_{k}_ann"] = f(q.loc[v, "annualised_mean"], 2)
+    n["d_years_b30_higher"] = int((an.loc[:2025, "yoy_gap"] > 0).sum())
+    n["d_years_total"] = int(len(an.loc[:2025]))
+    n["d_2008_b30"], n["d_2008_all"] = f(an.loc[2008, "yoy_cpi_b30"], 1), f(an.loc[2008, "yoy_cpi_all"], 1)
+    n["d_2008_gap"] = f(an.loc[2008, "yoy_gap"], 1)
+    n["d_2025_gap"] = f(an.loc[2025, "yoy_gap"], 1)
+    n["d_2022_fuel"] = f(an.loc[2022, "yoy_fuel"], 1)
+    n["d_n_episodes"] = len(ep)
+    n["d_episodes_b30_higher"] = int((ep.mean_gap_b30_minus_all > 0).sum())
+    n["d_cc0_all"], n["d_cc0_b30"], n["d_cc0_gap"] = (f(cc.loc[0, "CPI, all income"], 2), f(cc.loc[0, "CPI, bottom 30%"], 2),
+                                                      f(cc.loc[0, "Gap: ln(CPI all/CPI b30)"], 2))
+    n["d_cc1_all"], n["d_cc6_all"] = f(cc.loc[1, "CPI, all income"], 2), f(cc.loc[6, "CPI, all income"], 2)
+    r17 = rg.drop(index="PH")
+    n["d_cum_gap_ph"] = f(rg.loc["PH", "cum_gap_2001_2025"], 1)
+    n["d_cum_gap_min"], n["d_cum_gap_max"] = f(r17.cum_gap_2001_2025.max(), 1), f(r17.cum_gap_2001_2025.min(), 1)
+    n["d_cum_gap_min_reg"] = REGION_NAMES[r17.cum_gap_2001_2025.idxmax()]
+    n["d_cum_gap_max_reg"] = REGION_NAMES[r17.cum_gap_2001_2025.idxmin()]
+    rep = pd.read_csv(TAB / "replication_eu_ph.csv")
+    tg = pd.read_csv(ROOT / "replication" / "kpodar_liu_2021_targets.csv")
+    fig7 = {"G1 after tax [cluster]": "0.055", "G2 before tax + tax control [cluster]": "0.020",
+            "G2 Brent in euro [cluster]": "0.015"}
+    rows = ["| Test | Shock | h = 0 | h = 1 | h = 2 | h = 3 | h = 4 | h = 5 | h = 6 | Reference value at h = 0 |",
+            "|---|---|---|---|---|---|---|---|---|---|"]
+    labels = {"G1 after tax [cluster]": ("G1", "Pump price after tax, EU 2005–2019"),
+              "G2 before tax + tax control [cluster]": ("G2", "Pump price before tax (+ tax control)"),
+              "G2 Brent in euro [cluster]": ("G2", "Brent crude in euro"),
+              "G3 HICP fuels CP0722 [cluster]": ("G3", "HICP fuels and lubricants, EU 2000–2019"),
+              "PH alone, fuel index [newey_west]": ("Indicative", "Philippines, fuel index 2000–2019")}
+    for spec, (gname, lab) in labels.items():
+        q = rep[rep.spec == spec].set_index("h")
+        cells = [f"{f(q.loc[h, 'beta'])}{stars(q.loc[h, 'beta'], q.loc[h, 'se'])}" for h in range(7)]
+        ref = fig7.get(spec, "0.044 (advanced) / 0.018 (developing)" if gname == "G3" or gname == "Indicative" else "")
+        rows.append(f"| {gname} | {lab} | " + " | ".join(cells) + f" | {ref} |")
+    t["replication"] = "\n".join(rows)
+    n["d_corr_pov_gap"] = f(r17[["poverty_2018", "cum_gap_2001_2025"]].corr().iloc[0, 1], 2)
+    n["d_corr_food_gap"] = f(r17[["food_share_2018", "cum_gap_2001_2025"]].corr().iloc[0, 1], 2)
+    n["d_infl_all_ph"], n["d_infl_b30_ph"] = f(rg.loc["PH", "infl_all_2001_2025"], 2), f(rg.loc["PH", "infl_b30_2001_2025"], 2)
+    lv = adf[adf.form == "level"]
+    n["d_adf_level_pmin"] = f(lv.p_value.min(), 2)
+    n["d_adf_diff_pmax"] = f(adf[adf.form != "level"].p_value.max(), 3)
+
+    rows = ["| Period | Variable | N | Mean (monthly, pp) | Annualised mean | SD | Min | Max |",
+            "|---|---|---|---|---|---|---|---|"]
+    for _, r in sm.iterrows():
+        rows.append(f"| {r.period} | {r.variable} | {r.n} | {f(r['mean'])} | {f(r.annualised_mean, 2)} | "
+                    f"{f(r.sd)} | {f(r['min'], 2)} | {f(r['max'], 2)} |")
+    t["d_summary"] = "\n".join(rows)
+    rows = ["| Year | Inflation, all income (%) | Inflation, bottom 30% (%) | Gap, b30 − all (pp) | Fuel index (% y/y) |",
+            "|---|---|---|---|---|"]
+    for y, r in an.iterrows():
+        rows.append(f"| {y}{'*' if y == 2026 else ''} | {f(r.yoy_cpi_all, 2)} | {f(r.yoy_cpi_b30, 2)} | "
+                    f"{f(r.yoy_gap, 2, sign=True)} | {f(r.yoy_fuel, 1)} |")
+    t["d_annual"] = "\n".join(rows)
+    rows = ["| Episode | Months | Peak fuel rise (% y/y) | Inflation, all (%) | Inflation, b30 (%) | Gap, b30 − all (pp) |",
+            "|---|---|---|---|---|---|"]
+    for _, r in ep.iterrows():
+        rows.append(f"| {r.start} to {r.end} | {r.months} | {f(r.peak_fuel_yoy, 1)} | {f(r.mean_infl_all, 2)} | "
+                    f"{f(r.mean_infl_b30, 2)} | {f(r.mean_gap_b30_minus_all, 2, sign=True)} |")
+    t["d_episodes"] = "\n".join(rows)
+    rows = ["| Lag k (months) | Corr(Δfuel_t, Δln CPI all_t+k) | Corr(Δfuel_t, Δln CPI b30_t+k) | Corr(Δfuel_t, ΔGap_t+k) |",
+            "|---|---|---|---|"]
+    for k, r in cc.iterrows():
+        rows.append(f"| {k} | {f(r.iloc[0], 3)} | {f(r.iloc[1], 3)} | {f(r.iloc[2], 3)} |")
+    t["d_crosscorr"] = "\n".join(rows)
+    rows = ["| Region | Poverty 2018 (%) | Food share 2018 (%) | Inflation all, 2001–2025 (%) | Inflation b30, 2001–2025 (%) | Cumulative gap 2001–2025 (×100) | Fuel volatility (SD, pp/month) | Inflation b30, Aug 2026 (% y/y) |",
+            "|---|---|---|---|---|---|---|---|"]
+    for reg, r in rg.iterrows():
+        rows.append(f"| {REGION_NAMES[reg]} | {f(r.poverty_2018, 1)} | {f(r.food_share_2018, 1)} | {f(r.infl_all_2001_2025, 2)} | "
+                    f"{f(r.infl_b30_2001_2025, 2)} | {f(r.cum_gap_2001_2025, 1)} | {f(r.fuel_sd_monthly, 2)} | "
+                    f"{f(r.infl_b30_aug2026_yoy, 1)} |")
+    t["d_regional"] = "\n".join(rows)
+    rows = ["| Series | Form | ADF statistic | p-value | Lags | N |", "|---|---|---|---|---|---|"]
+    for _, r in adf.iterrows():
+        rows.append(f"| {r.series} | {r.form} | {f(r.adf_stat, 2)} | {f(r.p_value, 3)} | {r.lags} | {r.nobs} |")
+    t["d_adf"] = "\n".join(rows)
 
 
 def make_tables(est, g, groups, e2, e4, f, stars):

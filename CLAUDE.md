@@ -44,6 +44,7 @@ projection design of Kpodar and Liu (2021), IMF WP/21/271
 | D8 | 2026-10-04 | Estimation plan for RQ1–RQ4, fixed before any Philippine estimate was run (see "Estimation plan" below). | Pre-specification. |
 | D9 | 2026-10-04 | Exploratory, added after the first run: RQ3b compares bottom-30% and all-income responses of food, housing, transport and restaurants (2013–2026, the span of bottom-30% component indices). Also fixed a bug: "food share" is w(01)/w(all items) within each region, not the region's food weight in the national basket. | The weights decomposition (same component prices for both baskets) gave a progressive gap (+0.010) while the direct estimate is regressive (−0.010), suggesting the baskets face different price changes within divisions. Labelled exploratory in all output. |
 | D10 | 2026-10-05 | 2026-episode and mechanism analyses, specified before estimation (after the main results were seen, so labelled "supplementary" not "pre-registered"): see "2026 episode plan" below. | Asked whether the study captures the 2026 shock; the main LPs use 2026 only at short horizons. |
+| D11 | 2026-10-06 | Descriptive statistics and trend analysis (working paper Objective 1): summary statistics by sub-period, annual inflation, fuel-shock episodes (runs of ≥ 3 months with fuel ≥ +15% y/y), cross-correlations, regional summaries, ADF unit-root tests. Figures switched to black and white without in-image titles. | Requested for the working paper's three-objective structure; descriptive only, no inference beyond ADF. Journals print in greyscale and caption figures in the text. |
 
 ## 2026 episode plan (specified 2026-10-05, before estimation)
 
@@ -137,6 +138,14 @@ Cumulative responses to a 1 pp fuel price rise, 90% bands, Jan 2001–Aug 2026.
   respond; b30 fares historically barely respond (0.01 vs 0.07); cereals ≈ 0.
 - **E5:** of the +1.24 pp b30–all gap, cereals +1.67, fares +0.15, household
   fuels +0.13; own-vehicle fuel −0.38, rent −0.23.
+
+## Documents (2026-10-06)
+
+- `paper/working_paper_template.md` → working paper (Ch. 1–6, three objectives: descriptive, estimation, policy).
+- `scripts/10_analysis_report.py` → `docs/analysis_report.md/.docx` (every estimate, generated).
+- `docs/master_narrative_template.md` + `scripts/11_master_document.py` → `docs/master_document.md/.docx`
+  (process narrative + all documents + all code). Update the narrative when the process changes.
+- Figures are black and white without in-image titles; captions live in the documents.
 
 ## Manuscript
 

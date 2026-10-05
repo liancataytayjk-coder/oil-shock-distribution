@@ -1,6 +1,10 @@
-"""Draw the paper figures from output/tables/estimates.csv.
+"""Draw all figures in black and white for journal print.
 
-Writes PNG (200 dpi) and PDF versions to output/figures/.
+Conventions: no colour; series told apart by line style and marker shape;
+confidence bands as light grey fill (first series) or dotted bound lines
+(second series); bars with grey fill or hatching; serif font; no titles inside
+the image (captions belong in the document). Each figure is written as 300-dpi
+PNG and TIFF, and vector PDF, to output/figures/.
 """
 
 from pathlib import Path
@@ -15,27 +19,37 @@ ROOT = Path(__file__).resolve().parents[1]
 TAB = ROOT / "output" / "tables"
 FIG = ROOT / "output" / "figures"
 
-BLUE, ORANGE = "#2a78d6", "#eb6834"  # categorical slots 1-2 (dataviz reference palette)
-INK, INK2, GRID = "#0b0b0b", "#52514e", "#e4e3df"
+BLACK, DARK, MID, LIGHT = "0.0", "0.25", "0.55", "0.85"
 plt.rcParams.update({
-    "font.family": "DejaVu Sans", "font.size": 9, "axes.edgecolor": INK2, "axes.labelcolor": INK2,
-    "xtick.color": INK2, "ytick.color": INK2, "axes.spines.top": False, "axes.spines.right": False,
-    "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.6, "axes.axisbelow": True,
-    "legend.frameon": False, "figure.dpi": 100,
+    "font.family": "DejaVu Serif", "font.size": 9, "axes.edgecolor": BLACK, "axes.labelcolor": BLACK,
+    "xtick.color": BLACK, "ytick.color": BLACK, "axes.spines.top": False, "axes.spines.right": False,
+    "axes.grid": False, "legend.frameon": False, "figure.dpi": 100, "hatch.linewidth": 0.6,
+    "lines.linewidth": 1.4,
 })
+A = dict(color=BLACK, linestyle="-", marker="o", markersize=3.5, markerfacecolor=BLACK)        # series 1
+B = dict(color=BLACK, linestyle="--", marker="s", markersize=3.5, markerfacecolor="white")     # series 2
 
 
 def save(fig, name):
     FIG.mkdir(parents=True, exist_ok=True)
-    fig.savefig(FIG / f"{name}.png", dpi=200, bbox_inches="tight")
+    fig.savefig(FIG / f"{name}.png", dpi=300, bbox_inches="tight")
+    fig.savefig(FIG / f"{name}.tiff", dpi=300, bbox_inches="tight", pil_kwargs={"compression": "tiff_lzw"})
     fig.savefig(FIG / f"{name}.pdf", bbox_inches="tight", metadata={"CreationDate": None})  # byte-stable reruns
     plt.close(fig)
 
 
-def irf(ax, q, color, label=None):
-    ax.fill_between(q.h, q.lo, q.hi, color=color, alpha=0.15, linewidth=0)
-    ax.plot(q.h, q.beta, color=color, linewidth=2, marker="o", markersize=3.5, label=label)
-    ax.axhline(0, color=INK2, linewidth=0.8)
+def zero(ax, horizontal=True):
+    (ax.axhline if horizontal else ax.axvline)(0, color=BLACK, linewidth=0.6)
+
+
+def irf(ax, q, style, label=None, band="fill"):
+    if band == "fill":
+        ax.fill_between(q.h, q.lo, q.hi, color=LIGHT, linewidth=0)
+    else:
+        ax.plot(q.h, q.lo, color=BLACK, linestyle=":", linewidth=0.8, marker=None)
+        ax.plot(q.h, q.hi, color=BLACK, linestyle=":", linewidth=0.8, marker=None)
+    ax.plot(q.h, q.beta, label=label, **style)
+    zero(ax)
     ax.set_xticks(range(0, 13, 2))
     ax.set_xlabel("Months after the shock")
 
@@ -47,27 +61,22 @@ def pick(est, rq, spec, outcome, cum=True, term="shock"):
 
 
 def fig1(est):
-    fig, ax = plt.subplots(figsize=(5.2, 3.4))
-    a = pick(est, "RQ1", "baseline", "d_cpi_all")
-    b = pick(est, "RQ1", "baseline", "d_cpi_b30")
-    irf(ax, a, BLUE, "All-income CPI")
-    irf(ax, b, ORANGE, "Bottom-30% CPI")
-    ax.set_ylabel("Cumulative response (pp per 1 pp fuel)")
+    fig, ax = plt.subplots(figsize=(5.2, 3.3))
+    irf(ax, pick(est, "RQ1", "baseline", "d_cpi_all"), A, "All-income CPI (90% band shaded)")
+    irf(ax, pick(est, "RQ1", "baseline", "d_cpi_b30"), B, "Bottom-30% CPI (90% band dotted)", band="lines")
+    ax.set_ylabel("Cumulative response (pp per 1% fuel)")
     ax.legend(loc="lower right")
-    ax.set_title("Figure 1. Pass-through of fuel prices to the price level", loc="left", color=INK, fontsize=10)
     save(fig, "fig1_rq1_passthrough")
 
 
 def fig2(est):
-    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.2), sharey=True)
-    for ax, (rq, spec, title) in zip(axes, [("RQ2", "baseline", "National"),
-                                            ("RQ4", "pooled", "17-region panel")]):
-        irf(ax, pick(est, rq, spec, "d_ratio"), BLUE)
-        ax.set_title(title, loc="left", color=INK, fontsize=9)
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.1), sharey=True)
+    for ax, (rq, spec, title) in zip(axes, [("RQ2", "baseline", "(a) National"),
+                                            ("RQ4", "pooled", "(b) 17-region panel")]):
+        irf(ax, pick(est, rq, spec, "d_ratio"), A)
+        ax.set_title(title, loc="left", fontsize=9)
     axes[0].set_ylabel("Cumulative response of\nln(CPI all / CPI bottom 30%)")
-    axes[0].annotate("Below 0: prices of the bottom 30% rise more", xy=(0.2, -0.038), fontsize=8, color=INK2)
-    fig.suptitle("Figure 2. Distributional effect of a 1 pp fuel price increase", x=0.02, ha="left",
-                 color=INK, fontsize=10)
+    axes[0].annotate("Below 0: prices of the bottom 30% rise more", xy=(0.2, -0.038), fontsize=8)
     fig.tight_layout()
     save(fig, "fig2_rq2_rq4_ratio")
 
@@ -78,79 +87,75 @@ def fig3(est):
     dec = dec[dec.coicop != "12"].sort_values("beta")
     fig, ax = plt.subplots(figsize=(6.4, 4.2))
     y = range(len(dec))
-    ax.errorbar(dec.beta, y, xerr=1.645 * dec.se, fmt="o", color=BLUE, ecolor=BLUE, elinewidth=1.5,
-                markersize=5, capsize=0)
+    ax.errorbar(dec.beta, y, xerr=1.645 * dec.se, fmt="o", color=BLACK, ecolor=BLACK, elinewidth=1.0,
+                markersize=4.5, capsize=2)
     ax.set_yticks(list(y), [f"{d}  ({w:.0f}% / {b:.0f}%)" for d, w, b in zip(dec.division, dec.w_all, dec.w_b30)])
-    ax.axvline(0, color=INK2, linewidth=0.8)
-    ax.grid(axis="y", visible=False)
-    ax.set_xlabel("Cumulative response after 12 months (pp per 1 pp fuel), 90% CI")
-    ax.set_title("Figure 3. Pass-through by CPI division\n(basket weight: all-income / bottom 30%)",
-                 loc="left", color=INK, fontsize=10)
+    zero(ax, horizontal=False)
+    ax.set_xlabel("Cumulative response after 12 months (pp per 1% fuel), 90% CI\n"
+                  "Labels: basket weight, all income / bottom 30%")
     save(fig, "fig3_rq3_components")
 
 
-def forest(ax, rows, title):
+def forest(ax, rows):
+    """rows: (label, beta, se, supplementary?)"""
     rows = rows[::-1]
-    y = range(len(rows))
-    ax.errorbar([r[1] for r in rows], y, xerr=[1.645 * r[2] for r in rows], fmt="o", color=BLUE,
-                ecolor=BLUE, elinewidth=1.5, markersize=5, capsize=0)
-    ax.set_yticks(list(y), [r[0] for r in rows])
-    ax.axvline(0, color=INK2, linewidth=0.8)
-    ax.grid(axis="y", visible=False)
-    ax.set_title(title, loc="left", color=INK, fontsize=9)
+    for i, (lab, b, s, supp) in enumerate(rows):
+        ax.errorbar(b, i, xerr=1.645 * s, fmt="s" if supp else "o", color=BLACK, ecolor=BLACK,
+                    elinewidth=1.0, markersize=4.5, capsize=2, markerfacecolor="white" if supp else BLACK)
+    ax.set_yticks(range(len(rows)), [r[0] for r in rows])
+    zero(ax, horizontal=False)
 
 
 def fig4(est):
     c = est[est.cumulative & (est.h == 12)]
-    rows = [("Pooled (all regions)", *c[(c.rq == "RQ4") & (c.spec == "pooled")][["beta", "se"]].iloc[0])]
+    rows = [("Pooled (all regions)", *c[(c.rq == "RQ4") & (c.spec == "pooled")][["beta", "se"]].iloc[0], False)]
     for g, lab in [("high_poverty", "High poverty"), ("high_food", "High food share"),
                    ("mindanao", "Mindanao"), ("island", "Island regions")]:
         r = c[(c.spec == f"x {g}") & (c.term == f"shock_x_{g}")][["beta", "se"]].iloc[0]
-        rows.append((f"{lab}: extra effect", *r))
-    fig, ax = plt.subplots(figsize=(6.0, 3.0))
-    forest(ax, rows, "Figure 4. Regional differences in the gap, 12 months (90% CI)")
-    ax.set_xlabel("Cumulative response of ln(CPI all / CPI bottom 30%)")
+        rows.append((f"{lab}: extra effect", *r, False))
+    fig, ax = plt.subplots(figsize=(6.0, 2.8))
+    forest(ax, rows)
+    ax.set_xlabel("Cumulative response of ln(CPI all / CPI bottom 30%) after 12 months, 90% CI")
     save(fig, "fig4_rq4_groups")
 
 
 def fig5(est):
     c = est[est.cumulative & (est.h == 6) & (est.term == "shock") & (est.outcome == "d_ratio")]
-    get = lambda rq, spec: c[(c.rq == rq) & (c.spec == spec)][["beta", "se"]].iloc[0]  # noqa: E731
-    rows = [("Baseline, national", *get("RQ2", "baseline")), ("Baseline, regional panel", *get("RQ4", "pooled"))]
+    get = lambda rq, spec: tuple(c[(c.rq == rq) & (c.spec == spec)][["beta", "se"]].iloc[0])  # noqa: E731
+    rows = [("Baseline, national", *get("RQ2", "baseline"), False),
+            ("Baseline, regional panel", *get("RQ4", "pooled"), False)]
     for spec, lab in [("a dubai crude php", "Dubai crude in pesos"), ("b macro controls", "FX, policy rate, FAO"),
                       ("c p=6", "6 lags"), ("c p=18", "18 lags"), ("d excl 2020", "Excluding 2020"),
-                      ("d excl 2026", "Excluding 2026"), ("e splice dummies", "Base-change dummies"),
-                      ("g to Jun 2019", "Paper's window (to Jun 2019)"),
-                      ("h gasoline 07.2.2.2", "Gasoline index, 2019-"), ("i WB pump price", "World Bank pump price, 2018-25")]:
-        rows.append((lab, *get("ROB", spec)))
-    for spec, lab in [("national excl 2008", "Excluding 2008, national*"),
-                      ("regional excl 2008", "Excluding 2008, regional*"),
-                      ("regional 2001-2012", "Regional, 2001-2012*"), ("regional 2013-", "Regional, 2013-2026*")]:
-        rows.append((lab, *get("RQ3b", spec)))
-    fig, ax = plt.subplots(figsize=(6.4, 5.4))
-    forest(ax, rows, "Figure 5. Robustness of the distributional effect, 6 months (90% CI)")
-    ax.set_xlabel("Cumulative response of ln(CPI all / CPI bottom 30%)\n* exploratory, added after the first run")
+                      ("d excl 2026", "Shock dates to Dec 2025"), ("e splice dummies", "Base-change dummies"),
+                      ("g to Jun 2019", "Reference study's window"),
+                      ("h gasoline 07.2.2.2", "Gasoline index, 2019–"), ("i WB pump price", "World Bank pump price, 2018–25")]:
+        rows.append((lab, *get("ROB", spec), False))
+    for spec, lab in [("national excl 2008", "Excluding 2008, national"),
+                      ("regional excl 2008", "Excluding 2008, regional"),
+                      ("regional 2001-2012", "Regional, 2001–2012"), ("regional 2013-", "Regional, 2013–2026")]:
+        rows.append((lab, *get("RQ3b", spec), True))
+    fig, ax = plt.subplots(figsize=(6.4, 5.2))
+    forest(ax, rows)
+    ax.set_xlabel("Cumulative response of ln(CPI all / CPI bottom 30%) after 6 months, 90% CI\n"
+                  "Open squares: supplementary analyses specified after the first results")
     save(fig, "fig5_robustness")
 
 
 def fig6():
     e1 = pd.read_csv(TAB / "e1_national_2026.csv", parse_dates=["date"])
-    fig, axes = plt.subplots(1, 2, figsize=(7.4, 3.2), sharey=True)
-    for ax, (series, title) in zip(axes, [("cpi_all", "All-income CPI"), ("cpi_b30", "Bottom-30% CPI")]):
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.1), sharey=True)
+    for ax, (series, title) in zip(axes, [("cpi_all", "(a) All-income CPI"), ("cpi_b30", "(b) Bottom-30% CPI")]):
         q = e1[e1.series == series]
         m = q.date.dt.strftime("%b")
-        ax.plot(m, q.actual, color=BLUE, linewidth=2, marker="o", markersize=3.5, label="Actual")
-        ax.fill_between(m, q.lo, q.hi, color=ORANGE, alpha=0.15, linewidth=0)
-        ax.plot(m, q.beta, color=ORANGE, linewidth=2, linestyle="--", marker="o", markersize=3.5,
-                label="Fuel-driven (pre-2026 model)")
-        ax.axhline(0, color=INK2, linewidth=0.8)
-        ax.set_title(title, loc="left", color=INK, fontsize=9)
+        ax.fill_between(m, q.lo, q.hi, color=LIGHT, linewidth=0)
+        ax.plot(m, q.actual, label="Actual", **A)
+        ax.plot(m, q.beta, label="Fuel-driven, model estimated on 2001–2025 (range shaded)", **B)
+        zero(ax)
+        ax.set_title(title, loc="left", fontsize=9)
         ax.set_xlabel("2026")
-    axes[0].set_ylabel("Change since Dec 2025 (100 x log points)")
+    axes[0].set_ylabel("Change since Dec 2025 (100 × log points)")
     h, l = axes[0].get_legend_handles_labels()
-    fig.legend(h, l, loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.06))
-    fig.suptitle("Figure 6. The 2026 shock: actual price rise vs. fuel-driven rise predicted\n"
-                 "by a model estimated only on 2001-2025 data", x=0.02, ha="left", color=INK, fontsize=10)
+    fig.legend(h, l, loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.07))
     fig.tight_layout()
     save(fig, "fig6_2026_out_of_sample")
 
@@ -164,29 +169,124 @@ def fig7():
              ("Tobacco", e5.loc["02.3", "gap_pp"]),
              ("Own-vehicle fuel", e5.loc["07.2", "gap_pp"]),
              ("Housing rent", e5.loc["04.1", "gap_pp"])]
-    known = sum(v for _, v in parts)
-    parts.append(("All other items", e5.loc["0", "gap_pp"] - known))
+    parts.append(("All other items", e5.loc["0", "gap_pp"] - sum(v for _, v in parts)))
     parts = parts[::-1]
-    fig, ax = plt.subplots(figsize=(6.2, 3.4))
     vals = [v for _, v in parts]
-    ax.barh([n for n, _ in parts], vals, color=[ORANGE if v > 0 else BLUE for v in vals], height=0.6)
+    fig, ax = plt.subplots(figsize=(6.2, 3.3))
     for i, v in enumerate(vals):
+        ax.barh(i, v, height=0.6, color=MID if v > 0 else "white", edgecolor=BLACK, linewidth=0.7,
+                hatch=None if v > 0 else "////")
         ax.text(v + (0.03 if v >= 0 else -0.03), i, f"{v:+.2f}", va="center", ha="left" if v >= 0 else "right",
-                fontsize=8, color=INK2)
-    ax.axvline(0, color=INK2, linewidth=0.8)
-    ax.grid(axis="y", visible=False)
-    ax.set_xlim(min(vals) - 0.4, max(vals) + 0.4)
+                fontsize=8)
+    ax.set_yticks(range(len(parts)), [n for n, _ in parts])
+    zero(ax, horizontal=False)
+    ax.set_xlim(min(vals) - 0.45, max(vals) + 0.45)
     ax.set_xlabel(f"Contribution to the gap (pp); total gap = {e5.loc['0', 'gap_pp']:+.2f} pp\n"
-                  "positive: raised the bottom-30% CPI more than the all-income CPI")
-    ax.set_title("Figure 7. What made the poor's prices rise faster, Dec 2025-Aug 2026", loc="left",
-                 color=INK, fontsize=10)
+                  "Grey: raised the bottom-30% CPI more; hatched: raised the all-income CPI more")
     save(fig, "fig7_2026_gap_decomposition")
+
+
+def figd1():
+    """Objective 1: year-on-year inflation, both groups, and fuel prices, 2001-2026."""
+    d = pd.read_csv(TAB / "desc_yoy_national.csv", parse_dates=["date"]).set_index("date")
+    fig, axes = plt.subplots(3, 1, figsize=(7.0, 6.4), sharex=True, gridspec_kw={"height_ratios": [2, 1.2, 1.2]})
+    axes[0].plot(d.index, d.yoy_cpi_all, color=BLACK, linestyle="-", linewidth=1.1, label="All income households")
+    axes[0].plot(d.index, d.yoy_cpi_b30, color=BLACK, linestyle="--", linewidth=1.1, label="Bottom 30% households")
+    axes[0].set_ylabel("Inflation, % y/y")
+    axes[0].legend(loc="upper right")
+    axes[0].set_title("(a) Headline inflation", loc="left", fontsize=9)
+    g = d.yoy_gap
+    axes[1].fill_between(d.index, 0, g.where(g > 0, 0), color=MID, linewidth=0, label="Bottom 30% higher")
+    axes[1].fill_between(d.index, 0, g.where(g < 0, 0), facecolor="white", edgecolor=BLACK, hatch="////",
+                         linewidth=0, label="All income higher")
+    zero(axes[1])
+    axes[1].set_ylabel("pp")
+    axes[1].legend(loc="upper right", ncol=2)
+    axes[1].set_title("(b) Inflation gap: bottom 30% minus all income", loc="left", fontsize=9)
+    axes[2].plot(d.index, d.yoy_fuel, color=BLACK, linewidth=1.0)
+    zero(axes[2])
+    axes[2].set_ylabel("% y/y")
+    axes[2].set_title("(c) Retail fuel index (CPI 07.2.2)", loc="left", fontsize=9)
+    fig.tight_layout()
+    save(fig, "figd1_trends")
+
+
+def figd2():
+    """Objective 1: regional averages, 2001-2025, and cumulative gap."""
+    r = pd.read_csv(TAB / "desc_regional.csv")
+    r = r[r.region != "PH"].sort_values("cum_gap_2001_2025")
+    names = {"NCR": "NCR", "CAR": "CAR", "R01": "I", "R02": "II", "R03": "III", "R04A": "IV-A", "R04B": "MIMAROPA",
+             "R05": "V", "R06": "VI", "R07": "VII", "R08": "VIII", "R09": "IX", "R10": "X", "R11": "XI",
+             "R12": "XII", "R13": "XIII", "BARMM": "BARMM"}
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 4.2), sharey=True)
+    y = range(len(r))
+    axes[0].plot(r.infl_all_2001_2025, y, "o", color=BLACK, markersize=4.5, label="All income")
+    axes[0].plot(r.infl_b30_2001_2025, y, "s", color=BLACK, markerfacecolor="white", markersize=4.5, label="Bottom 30%")
+    for i, (a, b) in enumerate(zip(r.infl_all_2001_2025, r.infl_b30_2001_2025)):
+        axes[0].plot([a, b], [i, i], color=MID, linewidth=0.8)
+    axes[0].set_yticks(list(y), [names[x] for x in r.region])
+    axes[0].set_xlabel("Average inflation 2001–2025, % y/y")
+    axes[0].set_title("(a) Average inflation", loc="left", fontsize=9)
+    axes[1].barh(list(y), r.cum_gap_2001_2025, color=MID, edgecolor=BLACK, linewidth=0.6, height=0.6)
+    zero(axes[1], horizontal=False)
+    axes[1].set_xlabel("Change in ln(CPI all/CPI b30), Dec 2000–Dec 2025\n(× 100; negative: poor's prices rose more)")
+    axes[1].set_title("(b) Cumulative gap", loc="left", fontsize=9)
+    h, l = axes[0].get_legend_handles_labels()
+    fig.tight_layout()
+    fig.legend(h, l, loc="lower center", ncol=2, bbox_to_anchor=(0.3, -0.06))
+    save(fig, "figd2_regional")
+
+
+def figw0():
+    """Working paper conceptual framework: top-to-bottom flow, policy on the left, moderators on the right."""
+    from matplotlib.patches import FancyBboxPatch
+    fig, ax = plt.subplots(figsize=(7.0, 6.2))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
+    ax.axis("off")
+
+    def box(cx, cy, w, h, text, shade="white"):
+        ax.add_patch(FancyBboxPatch((cx - w / 2, cy - h / 2), w, h, boxstyle="round,pad=0.6", facecolor=shade,
+                                    edgecolor=BLACK, linewidth=0.8))
+        ax.text(cx, cy, text, ha="center", va="center", fontsize=7, linespacing=1.3)
+
+    def arrow(x0, y0, x1, y1, dashed=False):
+        ax.annotate("", xy=(x1, y1), xytext=(x0, y0),
+                    arrowprops=dict(arrowstyle="-|>", color=BLACK, lw=0.8, linestyle="--" if dashed else "-",
+                                    shrinkA=0, shrinkB=0))
+
+    # main column (x = 50)
+    box(50, 92, 46, 7, "World oil price (Dubai crude) × peso–dollar rate", LIGHT)
+    box(50, 78, 46, 8, "Retail fuel price\n(pump price including excise, VAT and margins)", LIGHT)
+    box(50, 59, 46, 18, "Transmission channels\n\nDirect: motor fuel, LPG, kerosene\n"
+                        "Indirect: fares, food, utilities\nSecond round: wages, expectations")
+    box(34, 36, 24, 8, "CPI, all income\nhouseholds")
+    box(66, 36, 24, 8, "CPI, bottom 30%\nhouseholds")
+    box(50, 16, 48, 10, "Distributional gap = ln(CPI all / CPI b30)\nbelow 0: the poor pay more", LIGHT)
+    arrow(50, 87.4, 50, 82.6)
+    arrow(50, 73.4, 50, 68.6)
+    arrow(40, 49.4, 34, 40.6)
+    arrow(60, 49.4, 66, 40.6)
+    arrow(34, 31.4, 44, 21.6)
+    arrow(66, 31.4, 56, 21.6)
+    # policy (left) and moderators (right)
+    box(12, 70, 20, 22, "Policy instruments\n\nExcise relief\nFuel subsidies\nFare regulation\n"
+                        "Cash transfers\nPolicy rate")
+    arrow(22.6, 76, 26.4, 78, dashed=True)
+    arrow(22.6, 64, 26.4, 59, dashed=True)
+    arrow(12, 58.4, 25.2, 17, dashed=True)
+    ax.text(2, 40, "transfers\noffset the\nburden", fontsize=7, style="italic")
+    box(88, 57, 21, 29, "Moderators\n\nBasket weights\n\nWithin-category\nprice differences\n\nRegion: poverty,\nfood share,\ndistance")
+    arrow(88, 41.4, 78.6, 37)
+    ax.text(2, 3, "Solid arrows: transmission of the shock. Dashed arrows: points where policy can intervene.",
+            fontsize=7.5)
+    save(fig, "figw0_framework")
 
 
 if __name__ == "__main__":
     est = pd.read_csv(TAB / "estimates.csv")
     for f in (fig1, fig2, fig3, fig4, fig5):
         f(est)
-    fig6()
-    fig7()
+    for f in (fig6, fig7, figd1, figd2, figw0):
+        f()
     print("figures written to", FIG)

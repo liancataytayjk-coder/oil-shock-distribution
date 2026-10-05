@@ -9,6 +9,9 @@ $PY scripts/03_build_panel.py
 $PY scripts/04_replicate.py
 $PY scripts/05_estimate.py
 $PY scripts/07_episode_2026.py
+$PY scripts/09_descriptive.py
 $PY scripts/06_figures.py
 $PY scripts/08_paper.py
+$PY scripts/10_analysis_report.py
 $PY -m pytest -q tests
+$PY scripts/11_master_document.py
