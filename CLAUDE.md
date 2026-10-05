@@ -41,10 +41,8 @@ projection design of Kpodar and Liu (2021), IMF WP/21/271
 | D5 | 2026-10-04 | Shock = PSA CPI sub-index 07.2.2 "Fuels and lubricants for personal transport" (all-income, 2018=100), national and by region, Jan 1994–Aug 2026. Robustness: 07.2.2.2 gasoline (2018–), World Bank Manila RON91 pump price (Dec 2015–Apr 2025), Dubai crude in pesos. | The Kpodar–Abdallah fuel database is not public; the World Bank database stops Apr 2025 and has no regions. Monthly changes in 07.2.2 correlate 0.87 with the World Bank pump price and 0.99 with 07.2.2.2 over 2016–2025. |
 | D6 | 2026-10-04 | Regions use the old geographic code (17 regions; Negros in VI/VII). Jan–Aug 2026 chains new-code monthly growth onto old-code levels; flagged `new_geo_ext` for VI, VII, XII, BARMM, whose boundaries changed. | Bottom-30% backcasts (2000–2017) exist only on the old code; old and new codes are identical for all other regions and nationally over 2018–2025. |
 | D7 | 2026-10-04 | Bottom-30% all-items CPI spliced at Jan 2012 and Jan 2018 on PSA's own 2018=100 backcasts; robustness adds dummies for those two months. | Mean abs. monthly change in the CPI ratio is 0.71 pp (Jan 2012) and 0.50 pp (Jan 2018) vs 0.25 pp overall. Largest ratio moves are the 2008 rice crisis (genuine). |
-
 | D8 | 2026-10-04 | Estimation plan for RQ1–RQ4, fixed before any Philippine estimate was run (see "Estimation plan" below). | Pre-specification. |
 | D9 | 2026-10-04 | Exploratory, added after the first run: RQ3b compares bottom-30% and all-income responses of food, housing, transport and restaurants (2013–2026, the span of bottom-30% component indices). Also fixed a bug: "food share" is w(01)/w(all items) within each region, not the region's food weight in the national basket. | The weights decomposition (same component prices for both baskets) gave a progressive gap (+0.010) while the direct estimate is regressive (−0.010), suggesting the baskets face different price changes within divisions. Labelled exploratory in all output. |
-
 | D10 | 2026-10-05 | 2026-episode and mechanism analyses, specified before estimation (after the main results were seen, so labelled "supplementary" not "pre-registered"): see "2026 episode plan" below. | Asked whether the study captures the 2026 shock; the main LPs use 2026 only at short horizons. |
 
 ## 2026 episode plan (specified 2026-10-05, before estimation)
@@ -123,6 +121,29 @@ Cumulative responses to a 1 pp fuel price rise, 90% bands, Jan 2001–Aug 2026.
 - **RQ4 (h = 12, extra effect vs other regions):** Mindanao −0.017 (0.009),
   island −0.012 (0.009), high poverty −0.010 (0.008), high food share +0.010
   (0.005). None survives a Bonferroni correction for four tests.
+
+## 2026 episode results (2026-10-05; `output/tables/e*_*.csv`, Figures 6–7)
+
+- **E1:** a model estimated to Dec 2025 attributes 2.55 (all) and 3.13 (b30) log
+  points of the Dec 2025–Aug 2026 rise to fuel, about half of the actual 4.81 and
+  5.98; it predicts −0.65 of the −1.18 actual gap. Prices did not fall when fuel
+  eased in May–June.
+- **E2/E3:** fuel-driven b30 rise 2.6–3.7 across regions; PHP 467/month for a
+  poverty-line family of five nationally (390–633 by region); total price-driven
+  cost PHP 907. Actual b30 rise highest in Davao, BARMM, VI, Caraga, Zamboanga;
+  fuel explains 72% in NCR–IV-A but 44% in Mindanao.
+- **E4:** LPG responds equally in both baskets (0.73) with equal weights (1.3%);
+  kerosene responds strongly but weight 0.27%; solid fuels (4.0% of b30) do not
+  respond; b30 fares historically barely respond (0.01 vs 0.07); cereals ≈ 0.
+- **E5:** of the +1.24 pp b30–all gap, cereals +1.67, fares +0.15, household
+  fuels +0.13; own-vehicle fuel −0.38, rent −0.23.
+
+## Manuscript
+
+`paper/manuscript_template.md` (Jinja2) → `scripts/08_paper.py` → `paper/manuscript.md`
+and `.docx`. All numbers come from `output/tables/`; never edit the .md/.docx by
+hand. Sourced 2026 policy facts: `paper/policy_context_2026.md`. Remaining work:
+`paper/SUBMISSION_CHECKLIST.md`.
 
 ## Replication gate (pre-registered 2026-10-04, before any estimate was run)
 

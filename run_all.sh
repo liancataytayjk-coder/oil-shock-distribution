@@ -10,4 +10,5 @@ $PY scripts/04_replicate.py
 $PY scripts/05_estimate.py
 $PY scripts/07_episode_2026.py
 $PY scripts/06_figures.py
+$PY scripts/08_paper.py
 $PY -m pytest -q tests

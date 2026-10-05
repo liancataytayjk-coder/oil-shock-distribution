@@ -65,8 +65,11 @@ def poverty_thresholds():
     pov = pov[lab.str.match(r"^\.\.[^.]") | lab.str.startswith("PHILIPPINES")].copy()
     pov["region"] = pov.iloc[:, 0].str.replace(r"(\s+([0-9]+|[a-z]+[0-9]*)/,?)+\s*$", "", regex=True).str.replace(
         r"\s+r\d.*$", "", regex=True).map(region_code)
-    col = "Annual Per Capita Poverty Threshold (in PhP) 2023"
-    return pd.to_numeric(pov.set_index("region")[col], errors="coerce")
+    pov = pov.set_index("region")
+    return pd.DataFrame({
+        "threshold_2023": pd.to_numeric(pov["Annual Per Capita Poverty Threshold (in PhP) 2023"], errors="coerce"),
+        "poverty_2018": pd.to_numeric(pov["Poverty Incidence among Population (%) 2018"], errors="coerce"),
+    })
 
 
 def main():
@@ -110,9 +113,10 @@ def main():
         fa = fuel_driven(irf_all if r != "PH" else cum_irf(nat, "d_cpi_all"), f).loc[MONTHS_2026[-1]]
         fb = fuel_driven(irf_b30 if r != "PH" else cum_irf(nat, "d_cpi_b30"), f).loc[MONTHS_2026[-1]]
         cpi23 = s.cpi_b30.loc["2023-01-01":"2023-12-01"].mean()
-        monthly_thr = thr.get(r, np.nan) * 5 / 12 * s.cpi_b30.loc[CUTOFF] / cpi23
+        monthly_thr = thr.threshold_2023.get(r, np.nan) * 5 / 12 * s.cpi_b30.loc[CUTOFF] / cpi23
         out.append({
             "region": r,
+            "poverty_2018": thr.poverty_2018.get(r, np.nan),
             "fuel_change_pct": 100 * np.log(s.fuel.loc[MONTHS_2026[-1]] / s.fuel.loc[CUTOFF]),
             "fuel_peak_pct": 100 * np.log(s.fuel.loc[MONTHS_2026].max() / s.fuel.loc[CUTOFF]),
             "fuel_driven_all": fa.beta, "fuel_driven_b30": fb.beta,

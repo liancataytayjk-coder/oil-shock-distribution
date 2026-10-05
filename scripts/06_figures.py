@@ -28,7 +28,7 @@ plt.rcParams.update({
 def save(fig, name):
     FIG.mkdir(parents=True, exist_ok=True)
     fig.savefig(FIG / f"{name}.png", dpi=200, bbox_inches="tight")
-    fig.savefig(FIG / f"{name}.pdf", bbox_inches="tight")
+    fig.savefig(FIG / f"{name}.pdf", bbox_inches="tight", metadata={"CreationDate": None})  # byte-stable reruns
     plt.close(fig)
 
 
