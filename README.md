@@ -8,6 +8,8 @@ Replication package: raw data, code, results, figures and documents.
 | File | Contents |
 |---|---|
 | `docs/master_document.docx` | **Start here.** The full record of data collection, analysis and interpretation, with every other document and all code as appendices |
+| `docs/capstone_proposal_FA2.docx` | FA2 capstone proposal, built by `node scripts/12_capstone_proposal.js` |
+| `docs/session_handoff.Rmd` | Context and must-upload list for starting a new Claude Code session |
 | `docs/analysis_report.docx` | Every analysis and every estimate |
 | `paper/working_paper.docx` | Working paper, Chapters 1–6 (three objectives) |
 | `paper/manuscript.docx` | Journal manuscript, IMRAD (*Asian Economic Journal*) |

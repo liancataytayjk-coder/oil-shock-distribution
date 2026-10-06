@@ -1,0 +1,289 @@
+---
+title: "Session handoff: Who Pays for Oil Shocks?"
+subtitle: "Context for a new Claude Code session"
+date: "2026-10-06"
+output:
+  html_document:
+    toc: true
+  word_document:
+    toc: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# 0. Read this first (instructions for the new Claude session)
+
+You are continuing a project that an earlier Claude Code session built. Everything
+it produced is in the GitHub repository
+`liancataytayjk-coder/oil-shock-distribution`, on the branch
+**`claude/bold-hamilton-0ixcim`**. The repository's default branch is `Portfolio`,
+which does **not** contain this work.
+
+1. Check out the work branch, or merge it into the branch you were given:
+
+   ```bash
+   git fetch origin claude/bold-hamilton-0ixcim
+   git checkout claude/bold-hamilton-0ixcim   # or: git merge origin/claude/bold-hamilton-0ixcim
+   ```
+
+2. Read `CLAUDE.md` (project brief, decisions D1–D11, pre-registered plans and
+   results) and then this file. Read `README.md` for the file map.
+3. Rebuild the environment and check that everything still runs:
+
+   ```bash
+   python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt
+   ./run_all.sh            # rebuilds data/processed, output/, paper/, docs/
+   node scripts/12_capstone_proposal.js   # FA2 proposal (needs the npm package docx)
+   ```
+
+   LibreOffice may fail in the cloud container; preview `.docx` files by
+   converting them to HTML with pandoc and printing with Playwright Chromium
+   (`/opt/pw-browsers/chromium`).
+4. Follow the rules in section 3 below. Do not re-estimate or change any
+   specification without recording it in the decisions log in `CLAUDE.md`.
+
+# 1. How to start a new session (for the user)
+
+A Claude Code session on the web cannot be "reset" in place. You start a fresh one:
+
+1. Go to **claude.ai/code** and click **New session**.
+2. Select the repository `liancataytayjk-coder/oil-shock-distribution` and the
+   same environment (network access set to **Full**, so PSA and World Bank downloads work).
+3. If the branch picker is shown, choose `claude/bold-hamilton-0ixcim`.
+   Otherwise the session starts on `Portfolio`; the first message below tells
+   Claude to switch.
+4. Upload the files in section 2 that are not in the repository.
+5. Send this first message:
+
+   > Read `docs/session_handoff.Rmd` on branch `claude/bold-hamilton-0ixcim` and
+   > `CLAUDE.md`, check out that branch, run `./run_all.sh` to confirm everything
+   > rebuilds, then wait for my next instruction.
+
+The old session stays available in your session list if you need to look back at it.
+
+# 2. Must-upload list
+
+Everything the analysis needs is already in the repository, including all raw
+data (`data/raw/`, about 39 MB, logged in `data/raw/source_log.md`). Upload only
+the items that are **not** in the repository.
+
+| # | File | In the repo? | Why it is needed |
+|---|------|--------------|------------------|
+| 1 | Kpodar & Liu (2021), IMF WP/21/271, PDF | **No** (copyright) | Reference paper; the targets are already in `replication/kpodar_liu_2021_targets.csv`, but the PDF is needed to check wording and figures |
+| 2 | Working-paper formatting template (PDF or DOCX) | **No**: it never arrived in the first session | Required before the working paper is reformatted |
+| 3 | Reference-style guide or sample ("the basis for the reference") | **No**: never arrived | Needed to restyle the reference lists |
+| 4 | Course syllabus or rubric for FA2 and later outputs | No | So documents match the grading criteria |
+| 5 | Group member names, adviser name, and any adviser comments | No | Fill the placeholders `[Name 1]`, `[Name 2]`, `[Name 3]` in the proposal |
+| 6 | Concept note | Yes (`docs/concept_note.md`) | Upload only if it has changed |
+
+If an upload does not appear as a file card in the chat, commit the file to the
+repository instead (for example `docs/templates/`) and tell Claude its path.
+
+# 3. Standing rules
+
+- Push only to `claude/bold-hamilton-0ixcim`, or to the branch the new session is
+  assigned after merging this one into it. Do not open a pull request unless asked.
+- Do not put model names in commits or documents.
+- `data/raw/` is untouched downloads only, each logged in `source_log.md`.
+- `data/processed/`, `output/`, `paper/*.md|.docx` and `docs/*.md|.docx` are
+  written by scripts. Edit the **templates** (`paper/*_template.md`,
+  `docs/*_template.md`, `scripts/12_capstone_proposal.js`), never the outputs.
+- Every specification choice goes in the decisions log in `CLAUDE.md` with its
+  evidence. No Philippine estimate without the replication gate (passed 2026-10-04).
+- Figures: black and white, serif, no titles inside the image; captions live in
+  the documents.
+- **Writing style the user asked for:** as simple as possible; define every term
+  the first time; avoid the "curse of knowledge"; keep the technical terms and
+  use them consistently; prefer paragraphs to bullets and tables (keep tables only
+  for things like variable lists).
+
+# 4. The study in one page
+
+**Question.** When retail fuel prices rise, do poor Filipino households (bottom
+30%) face larger price increases than all households, and does this differ by
+region? Target journal: *Asian Economic Journal*. The design copies the local
+projections of Kpodar and Liu (2022, *Energy Economics* 108:105909).
+
+**Notation.** Here *t* is the month, *r* the region and *k* the spending
+category. Group *A* is all income households and group *B* the bottom 30%.
+
+- Fuel shock: $f_t = 100\,\Delta \ln F_t$, where $F$ is PSA CPI sub-index 07.2.2.
+- Inflation: $\pi^g_t = 100\,\Delta\ln P^g_t$.
+- Gap: $D_t = 100\ln(P^A_t/P^B_t)$, so $\Delta D_t = \pi^A_t-\pi^B_t$. A
+  negative change in the gap means the shock is regressive.
+- Pass-through: $\beta_h$. Cumulative pass-through: $B_h=\sum_{j\le h}\beta_j$.
+
+**Model (one regression per horizon $h=0,\dots,12$).**
+$$\pi_{t+h}=\alpha_h+\beta_h f_t+\sum_{q=1}^{12}\gamma_q\pi_{t-q}+\sum_{q=1}^{12}\lambda_q f_{t-q}+\sum_{l=1}^{h-1}\rho_l f_{t+l}+\delta_h t+\varepsilon_{t+h}$$
+
+The terms are as follows:
+
+- the third sum holds the Teulings–Zubanov leads;
+- the data are not seasonally adjusted;
+- national models use Newey–West standard errors with $h+1$ lags;
+- the regional panel has region fixed effects and Driscoll–Kraay standard errors;
+- bands are 90%.
+
+The estimator is in `ospd/lp.py`.
+
+**Theory used in the FA2 proposal.**
+
+- Cost-push pricing, from the Leontief input–output price model (Miller & Blair, 2009): $\pi_k\approx\phi_k f$.
+- Cost-of-living index: $\pi^g\approx\sum_k w^g_k\pi_k=\Phi^g f$.
+- Gap decomposition into a weights effect and a within-category effect.
+- Deaton (1989): the welfare cost of a price rise is the budget-share-weighted price change.
+- Oil-specific theory:
+  - Kilian (2008): direct and indirect channels;
+  - Blanchard & Galí (2010): second-round effects;
+  - Arze del Granado, Coady & Gillingham (2012): fuel price incidence.
+
+# 5. Data facts (answers to questions the user asked)
+
+**Regional monthly data.** All three main series are monthly, by region, and
+come from PSA OpenSTAT:
+
+| Series | Coverage |
+| --- | --- |
+| Retail fuel index 07.2.2 | 1994–Aug 2026, all 17 regions |
+| All-income CPI | 1994–Aug 2026, all 17 regions |
+| Bottom-30% CPI, all items | 2000–Aug 2026, all 17 regions |
+| Bottom-30% CPI, by commodity | 2012–Aug 2026, all 17 regions |
+
+All are on the 2018 = 100 basis, using PSA's own backcasts. Gasoline alone
+(07.2.2.2) exists only from 2018. No official regional *peso-per-litre* pump
+price series is available for this span. The World Bank series is Manila only,
+2017–Apr 2025.
+
+**Regions that change over time (decision D6).** PSA publishes two codings:
+
+- the old 17-region code, in which Negros is split between Regions VI and VII;
+- the new code, in which the Negros Island Region (NIR) is separate, following its 2024 re-creation.
+
+The backcasts exist only on the old code, so the panel uses the old 17 regions
+throughout. The two codings are identical for all other regions and nationally
+over 2018–2025.
+
+For Jan–Aug 2026, only new-code data exist. We chain the new-code monthly growth
+onto the old-code levels and flag those months `new_geo_ext` for VI, VII, XII and
+BARMM; robustness check (k) drops them.
+
+BARMM: PSA publishes one unbroken series. Whether the pre-2019 values use the
+ARMM or the BARMM boundary (Cotabato City) is still unconfirmed (open question).
+Leave-one-region-out covers it.
+
+**Who made the "all income" and "bottom 30%" categories?** PSA did. Both CPIs
+are official PSA statistics:
+
+- *CPI for All Income Households* is the headline CPI.
+- *CPI for the Bottom 30% Income Households* uses the expenditure weights of
+  households in the poorest 30% of the per-capita income distribution in the
+  Family Income and Expenditure Survey.
+
+Only the **inflation gap** $D$ is our construction: the log ratio of the two
+official indices.
+
+**Who made the region groups?** We did. They were pre-specified on 2026-10-04,
+before any estimate (decision D8), from PSA data. The rules are listed below;
+the group membership is in `output/tables/region_groups.csv`.
+
+| Group | Rule | Regions |
+| --- | --- | --- |
+| High poverty | 2018 poverty incidence above the 17-region median | V, VIII, IX, X, XI, XII, XIII, BARMM |
+| High food share | Food weight in the region's 2018 all-income basket above the median | II, MIMAROPA, V, VIII, IX, XII, XIII, BARMM |
+| Mindanao | Geography | IX, X, XI, XII, XIII, BARMM |
+| Island regions | Geography | MIMAROPA, VI, VII, VIII |
+
+These are analytical choices, not PSA categories, and the paper must say so.
+
+**What proxies the oil shock?** The main shock in every model, 2001–2026
+including 2026, is the monthly log change of **PSA CPI 07.2.2, "Fuels and
+lubricants for personal transport"**, national and by region (decision D5).
+
+Over 2016–2025 its monthly changes correlate 0.87 with the World Bank Manila
+RON91 pump price and 0.99 with 07.2.2.2 gasoline.
+
+Robustness shocks:
+
+- **Dubai crude in pesos:** World Bank Pink Sheet × BSP peso–dollar rate.
+- **Gasoline 07.2.2.2:** from 2019.
+- **World Bank Manila pump price:** 2018–Mar 2025.
+- **National instead of regional 07.2.2:** in the panel.
+
+For the 2026 episode (E1–E3), the models are estimated to Dec 2025. They are then
+fed the actual Jan–Aug 2026 path of 07.2.2, national or regional.
+
+The EU validation uses the Weekly Oil Bulletin pump prices, before and after tax,
+and Brent in euro.
+
+# 6. Results so far (all in `output/tables/`; numbers are generated, not typed)
+
+**RQ1.** Cumulative pass-through to the all-income CPI is 0.044 on impact, 0.087
+at 6 months and 0.102 at 12 months. The bottom-30% CPI is similar. With crude oil
+as the shock it is about 40% as large.
+
+**RQ2.** The national gap is regressive:
+
+- −0.0155 at $h=6$, −0.0097 at $h=12$; significant only at some horizons.
+- The regional panel gives −0.021 at $h=6$ and −0.017 at $h=12$, both significant.
+- The effect is weaker after 2013.
+- It is about zero with macro controls, with the gasoline index, and with the World Bank pump price.
+
+**RQ3.** Pass-through is largest in transport (0.37), housing and utilities
+(0.16) and food (0.07). The weights alone predict a *progressive* gap (+0.010),
+so the regressive result comes from within-category price differences.
+
+**RQ4.** The interaction for Mindanao is −0.017, for island regions −0.012 and
+for high poverty −0.010. None survives a Bonferroni correction.
+
+**2026 episode.** A model estimated to Dec 2025 explains about half of the actual
+Dec 2025–Aug 2026 rise: 2.55 of 4.81 log points (all income) and 3.13 of 5.98
+(bottom 30%). The fuel-driven cost to a poverty-line family of five is PHP
+467/month nationally, PHP 390–633 by region. Cereals explain most of the 2026
+gap.
+
+**Replication gate.** It passed:
+
+| Shock | Ours | Paper |
+| --- | --- | --- |
+| After tax | 0.057 | 0.055 |
+| Before tax | 0.024 | 0.020 |
+| Brent | 0.014 | 0.015 |
+
+# 7. File map
+
+| What | Where | Built by |
+|------|-------|----------|
+| Project brief, decisions, results | `CLAUDE.md` | hand |
+| Estimator | `ospd/lp.py` | hand (tests in `tests/`) |
+| Download, clean, panel | `scripts/01*`, `02`, `03` | — |
+| Replication gate | `scripts/04_replicate.py` | — |
+| RQ1–RQ4 and robustness | `scripts/05_estimate.py` | — |
+| Figures | `scripts/06_figures.py` → `output/figures/` | — |
+| 2026 episode E1–E5 | `scripts/07_episode_2026.py` | — |
+| Journal manuscript and working paper | `paper/*_template.md` → `scripts/08_paper.py` | `.md` + `.docx` |
+| Descriptive statistics | `scripts/09_descriptive.py` | — |
+| Analysis report and statistical annex | `docs/analysis_report_template.md` → `scripts/10_analysis_report.py` | `.md` + `.docx` |
+| Master document | `docs/master_narrative_template.md` → `scripts/11_master_document.py` | `.md` + `.docx` |
+| FA2 capstone proposal | `scripts/12_capstone_proposal.js` | `docs/capstone_proposal_FA2.docx` |
+| 2026 policy facts with sources | `paper/policy_context_2026.md` | hand |
+| References (Crossref-checked) | `paper/references.bib` | hand |
+| Remaining submission work | `paper/SUBMISSION_CHECKLIST.md` | hand |
+
+# 8. Open items
+
+The following items are still open:
+
+1. **Working paper formatting.** Waiting for the template (upload item 2). The
+   fallback proposed was IMF-working-paper style without IMF branding; the user
+   has not confirmed it.
+2. **Reference style.** Waiting for upload item 3.
+3. **FA2 proposal.** Fill the group names. Check the length in Word: the
+   estimate is about 9 pages and the limit is 10.
+4. **CLAUDE.md open questions:**
+   - ratio change versus level as the distribution outcome;
+   - the clustering wording;
+   - BARMM boundary history.
+5. **`paper/SUBMISSION_CHECKLIST.md`:** the remaining journal tasks, including
+   the flagged references (Wihardja–Pradana, Pagaduan, Armas).

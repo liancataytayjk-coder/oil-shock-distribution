@@ -146,6 +146,9 @@ Cumulative responses to a 1 pp fuel price rise, 90% bands, Jan 2001–Aug 2026.
 - `docs/master_narrative_template.md` + `scripts/11_master_document.py` → `docs/master_document.md/.docx`
   (process narrative + all documents + all code). Update the narrative when the process changes.
 - Figures are black and white without in-image titles; captions live in the documents.
+- `scripts/12_capstone_proposal.js` (docx-js) → `docs/capstone_proposal_FA2.docx` (FA2, ≤ 10 pages; key terms with notation, theoretical framework, paragraph workplan).
+- `docs/session_handoff.Rmd`: context and must-upload list for a new session. Keep it current.
+- User style: as simple as possible, define every term on first use, paragraphs over bullets/tables.
 
 ## Manuscript
 
