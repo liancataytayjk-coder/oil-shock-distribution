@@ -149,6 +149,7 @@ Cumulative responses to a 1 pp fuel price rise, 90% bands, Jan 2001–Aug 2026.
 - `scripts/12_capstone_proposal.js` (docx-js) → `docs/capstone_proposal_FA2.docx` (FA2, ≤ 10 pages; key terms with notation, theoretical framework, paragraph workplan).
 - `docs/session_handoff.Rmd`: context and must-upload list for a new session. Keep it current.
 - User style: as simple as possible, define every term on first use, paragraphs over bullets/tables.
+- `.claude/skills/empirical-econ-study/`: reusable skill for the whole workflow (research → data → validation → estimation → figures → writing → delivery); packaged copy in `deliverables/empirical-econ-study.skill`.
 
 ## Manuscript
 

@@ -267,6 +267,7 @@ gap.
 | Analysis report and statistical annex | `docs/analysis_report_template.md` → `scripts/10_analysis_report.py` | `.md` + `.docx` |
 | Master document | `docs/master_narrative_template.md` → `scripts/11_master_document.py` | `.md` + `.docx` |
 | FA2 capstone proposal | `scripts/12_capstone_proposal.js` | `docs/capstone_proposal_FA2.docx` |
+| Workflow skill (research to writing) | `.claude/skills/empirical-econ-study/` | hand |
 | 2026 policy facts with sources | `paper/policy_context_2026.md` | hand |
 | References (Crossref-checked) | `paper/references.bib` | hand |
 | Remaining submission work | `paper/SUBMISSION_CHECKLIST.md` | hand |
