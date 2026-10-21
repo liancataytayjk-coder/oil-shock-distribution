@@ -9,6 +9,7 @@ Replication package: raw data, code, results, figures and documents.
 |---|---|
 | `docs/master_document.docx` | **Start here.** The full record of data collection, analysis and interpretation, with every other document and all code as appendices |
 | `docs/capstone_proposal_FA2.docx` | FA2 capstone proposal, built by `node scripts/12_capstone_proposal.js` |
+| `submissions/` | Course files to hand in: FA2 proposal, SA3 capstone paper and SA3 deck (.docx/.pptx and .pdf) |
 | `docs/session_handoff.Rmd` | Context and must-upload list for starting a new Claude Code session |
 | `docs/analysis_report.docx` | Every analysis and every estimate |
 | `paper/working_paper.docx` | Working paper, Chapters 1–6 (three objectives) |

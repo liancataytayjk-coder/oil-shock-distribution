@@ -149,6 +149,13 @@ Cumulative responses to a 1 pp fuel price rise, 90% bands, Jan 2001–Aug 2026.
 - `scripts/12_capstone_proposal.js` (docx-js) → `docs/capstone_proposal_FA2.docx` (FA2, ≤ 10 pages; key terms with notation, theoretical framework, paragraph workplan).
 - `docs/session_handoff.Rmd`: context and must-upload list for a new session. Keep it current.
 - User style: as simple as possible, define every term on first use, paragraphs over bullets/tables.
+- **Course submissions (2026-10-21):** `submissions/` holds the files to hand in, in the house style (Times New Roman,
+  black and white, three-line tables; tools vendored in `tools/lian_style/`): `FA2_Capstone_Proposal.docx/.pdf`
+  (8 pages, single-spaced), `SA3_Capstone_Paper.docx/.pdf` (the working paper text with a group byline and
+  Appendix A, the data appendix `paper/data_appendix.md`: source links S1–S15 and a figure/table → source →
+  script → output map), `SA3_Presentation.pptx/.pdf` (19 slides, `scripts/13_presentation.py`, numbers from
+  `paper_numbers.json`). Built by `scripts/14_submissions.py` (needs LibreOffice Writer/Impress). Placeholders:
+  group members [Name 2], [Name 3]; AI-use disclosure in Section 4.6.
 - `.claude/skills/empirical-econ-study/`: reusable skill for the whole workflow (research → data → validation → estimation → figures → writing → delivery); packaged copy in `deliverables/empirical-econ-study.skill`.
 
 ## Manuscript

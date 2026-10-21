@@ -15,3 +15,7 @@ $PY scripts/08_paper.py
 $PY scripts/10_analysis_report.py
 $PY -m pytest -q tests
 $PY scripts/11_master_document.py
+# Course submissions (house style + PDFs): FA2 proposal, SA3 paper and deck
+if command -v node >/dev/null; then node scripts/12_capstone_proposal.js; fi
+$PY scripts/13_presentation.py
+if command -v soffice >/dev/null; then $PY scripts/14_submissions.py; else echo "LibreOffice not found: skipping PDFs"; fi

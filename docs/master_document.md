@@ -553,6 +553,10 @@ Cumulative responses to a 1 pp fuel price rise, 90% bands, Jan 2001–Aug 2026.
 - `docs/master_narrative_template.md` + `scripts/11_master_document.py` → `docs/master_document.md/.docx`
   (process narrative + all documents + all code). Update the narrative when the process changes.
 - Figures are black and white without in-image titles; captions live in the documents.
+- `scripts/12_capstone_proposal.js` (docx-js) → `docs/capstone_proposal_FA2.docx` (FA2, ≤ 10 pages; key terms with notation, theoretical framework, paragraph workplan).
+- `docs/session_handoff.Rmd`: context and must-upload list for a new session. Keep it current.
+- User style: as simple as possible, define every term on first use, paragraphs over bullets/tables.
+- `.claude/skills/empirical-econ-study/`: reusable skill for the whole workflow (research → data → validation → estimation → figures → writing → delivery); packaged copy in `deliverables/empirical-econ-study.skill`.
 
 ### Manuscript
 
@@ -1750,9 +1754,6 @@ E1 columns: beta = fuel-driven change (100 × log points since Dec 2025); lo/hi 
 **Abstract.** This working paper asks whether poor Filipino households pay more than others when fuel prices rise, and whether the answer depends on where they live. It uses the Philippine Statistics Authority's monthly consumer price index (CPI) for all income households and for the bottom 30% income households, for the country and 17 regions, from 2001 to August 2026, together with the CPI sub-index for retail motor fuels. The paper pursues three objectives. Objective 1 describes the trends: since 2001, bottom-30% prices have risen 13.3 log points more than all-income prices, the poor's inflation exceeded the average in 6 of 9 fuel-shock episodes, and in August 2026 it stood at 8.2% against 6.2%. Objective 2 estimates the local projection model of Kpodar and Liu (2022), validated by reproducing their EU benchmark: a 1% rise in fuel prices raises the price level by 0.044 pp within the month and 0.102 pp after a year, and the poor's prices rise 0.0214 pp more after six months in the regional panel — the opposite of the cross-country finding — with the gap concentrated in 2001–2012. Objective 3 draws policy implications from the 2026 shock: a model estimated on data to 2025 explains about half of the 2026 price surge; the fuel-driven extra cost for a poverty-line family of five is about PHP 467 a month; and rice accounted for most of the poor's excess inflation. Excise relief on LPG is distribution-neutral, cuts in gasoline and diesel taxes would mainly help the better-off, and transfers sized to the poor's own price index, together with attention to rice and fares, are the better-targeted response.
 
 
-**Keywords:** oil price shock; inflation inequality; fuel price pass-through; local projections; bottom 30% CPI; regional inflation; Philippines
-
-**JEL classification:** E31, Q41, I32, D31, R12
 
 ## Chapter 1. Introduction
 
@@ -1868,16 +1869,16 @@ $$
 \Delta \ln y_{t+h} = \alpha_h + \sum_{q=1}^{12} \gamma_{1q}\, \Delta \ln y_{t-q} + \sum_{q=1}^{12} \gamma_{2q}\, \Delta \ln F_{t-q} + \beta_h\, \Delta \ln F_{t} + \sum_{l=1}^{h-1} \gamma_{3l}\, \Delta \ln F_{t+l} + \delta_h\, t + \varepsilon_{t+h}
 $$
 
-- **Left-hand side.** Δln y_{t+h} is the change in the log price index in month *t + h*, multiplied by 100 (approximately the monthly inflation rate in percent). The model is written in changes because the levels of prices are non-stationary (Section 5.1.6).
-- **Lags of the outcome**, Δln y_{t−1}, …, Δln y_{t−12}, absorb the persistence of inflation and, because the data are not seasonally adjusted, its seasonal pattern: the coefficient on the lag that falls in the same calendar month a year earlier picks up seasonality.
-- **Lags of the fuel price**, Δln F_{t−1}, …, Δln F_{t−12}, remove the part of today's inflation that is a delayed effect of past fuel shocks.
-- **The shock**, Δln F_t, today's percentage change in the fuel index. Its coefficient β_h is the quantity of interest: the change in inflation in month *t + h* per 1% change in fuel prices in month *t*.
-- **The Teulings–Zubanov terms**, the fuel price changes in months *t + 1*, …, *t + h − 1*. Fuel prices are persistent: a shock today is often followed by further increases. Without these terms, β_h would mix the effect of today's shock with the effect of the later shocks it predicts. Including them isolates the effect of a one-time shock [@teulings_zubanov_2014]. Following the reference study's tables, there are none at *h* = 0 and *h* = 1.
-- **A linear trend** *t* and a constant α_h. In the regional panel the constant is replaced by region fixed effects.
+- **Left-hand side.** Δln y~t+h~ is the change in the log price index in month *t + h*, multiplied by 100 (approximately the monthly inflation rate in percent). The model is written in changes because the levels of prices are non-stationary (Section 5.1.6).
+- **Lags of the outcome**, Δln y~t−1~, …, Δln y~t−12~, absorb the persistence of inflation and, because the data are not seasonally adjusted, its seasonal pattern: the coefficient on the lag that falls in the same calendar month a year earlier picks up seasonality.
+- **Lags of the fuel price**, Δln F~t−1~, …, Δln F~t−12~, remove the part of today's inflation that is a delayed effect of past fuel shocks.
+- **The shock**, Δln F~t~, today's percentage change in the fuel index. Its coefficient β~h~ is the quantity of interest: the change in inflation in month *t + h* per 1% change in fuel prices in month *t*.
+- **The Teulings–Zubanov terms**, the fuel price changes in months *t + 1*, …, *t + h − 1*. Fuel prices are persistent: a shock today is often followed by further increases. Without these terms, β~h~ would mix the effect of today's shock with the effect of the later shocks it predicts. Including them isolates the effect of a one-time shock [@teulings_zubanov_2014]. Following the reference study's tables, there are none at *h* = 0 and *h* = 1.
+- **A linear trend** *t* and a constant α~h~. In the regional panel the constant is replaced by region fixed effects.
 
 ### 3.4 From monthly effects to the price level
 
-β_h is an effect on *inflation in one month*. Policy questions are usually about the *price level*: how much higher are prices after a year? The answer is the cumulative response, β_0 + β_1 + … + β_h. To obtain it with a correct standard error, we re-estimate the model with the cumulative change Σ_{j=0}^{h} Δln y_{t+j} = ln y_{t+h} − ln y_{t−1} on the left-hand side.
+β~h~ is an effect on *inflation in one month*. Policy questions are usually about the *price level*: how much higher are prices after a year? The answer is the cumulative response, β~0~ + β~1~ + … + β~h~. To obtain it with a correct standard error, we re-estimate the model with the cumulative change Σ~j=0~^h^ Δln y~t+j~ = ln y~t+h~ − ln y~t−1~ on the left-hand side.
 
 *Worked example.* With the estimates of Chapter 5, the cumulative response of the all-income CPI after twelve months is 0.102. A 10% increase in fuel prices therefore raises the price level by 10 × 0.102 ≈ 1.0% after a year. For the distributional gap D = ln(CPI all/CPI b30), a cumulative response of −0.0214 after six months means that a 10% fuel increase lowers D by 0.2 log points: the poor's price level ends up 0.2% higher, relative to the average household's, than before the shock.
 
@@ -1887,7 +1888,7 @@ Because the outcome at horizon *h* overlaps with the outcomes of nearby months, 
 
 ### 3.6 The panel version and group differences
 
-For 17 regions *r*, the model is estimated jointly with region fixed effects u_r, using each region's own fuel index and outcome. To test whether a group of regions *G* (for example, Mindanao) responds differently, we add the interaction Δln F_{r,t} × G_r. Its coefficient θ_h is the *additional* response in group *G*; the coefficient on Δln F_{r,t} is then the response outside *G*. Because G_r does not change over time, its own effect is absorbed by the fixed effects.
+For 17 regions *r*, the model is estimated jointly with region fixed effects u~r~, using each region's own fuel index and outcome. To test whether a group of regions *G* (for example, Mindanao) responds differently, we add the interaction Δln F~r,t~ × G~r~. Its coefficient θ~h~ is the *additional* response in group *G*; the coefficient on Δln F~r,t~ is then the response outside *G*. Because G~r~ does not change over time, its own effect is absorbed by the fixed effects.
 
 ### 3.7 Checking the implementation
 
@@ -1899,15 +1900,15 @@ The full code is in the replication package (`ospd/lp.py` for the estimator, `sc
 
 **Step 1. Arrange the data.** One row per region and month, sorted by region and then date, with a complete monthly calendar (missing months as blank rows, so that "lag 1" is always the previous calendar month). Compute 100 × Δln of each price index and of the fuel index, and an integer month counter *t* for the trend.
 
-**Step 2. Build the regressors for horizon *h*.** Within each region, shift the outcome forward by *h* months to obtain y_{t+h}; shift the outcome and the fuel change backward by 1 to 12 months to obtain the lags; shift the fuel change forward by 1 to *h* − 1 months to obtain the Teulings–Zubanov terms.
+**Step 2. Build the regressors for horizon *h*.** Within each region, shift the outcome forward by *h* months to obtain y~t+h~; shift the outcome and the fuel change backward by 1 to 12 months to obtain the lags; shift the fuel change forward by 1 to *h* − 1 months to obtain the Teulings–Zubanov terms.
 
 **Step 3. Restrict the sample** to shock dates in the estimation window *after* building the lags, so that earlier data still supply the lags of the first observations, and drop rows with any missing value.
 
-**Step 4. Estimate by OLS** (with region fixed effects in the panel) and keep the coefficient on Δln F_t and its standard error.
+**Step 4. Estimate by OLS** (with region fixed effects in the panel) and keep the coefficient on Δln F~t~ and its standard error.
 
 **Step 5. Repeat for *h* = 0, …, 12**, and again with the cumulative outcome.
 
-**Step 6. Plot** β_h against *h* with the 90% band β_h ± 1.645 × s.e.
+**Step 6. Plot** β~h~ against *h* with the 90% band β~h~ ± 1.645 × s.e.
 
 A minimal version of steps 2–4 for one horizon of the national model, written in Python with *pandas* and *statsmodels*, is:
 
@@ -1945,7 +1946,7 @@ which returns one row per horizon with the coefficient, its standard error, the 
 - *Sample restriction before lagging.* Restricting the sample first throws away the data needed for the lags of the first observations.
 - *Splices and base changes.* Joining series with different bases can create artificial jumps; check the months where series are joined (Section 4.2.3).
 - *Seasonality.* With non-seasonally-adjusted data, twelve lags are needed; fewer lags leave seasonality in the errors.
-- *Reading per-horizon coefficients as level effects.* β_h is an effect on monthly inflation, not on the price level; report cumulative responses for level questions.
+- *Reading per-horizon coefficients as level effects.* β~h~ is an effect on monthly inflation, not on the price level; report cumulative responses for level questions.
 - *Multiple testing.* Testing many groups or horizons makes some "significant" results likely by chance; report how many tests were run and correct for them.
 
 ## Chapter 4. Methodology
@@ -2008,7 +2009,7 @@ The local projection model of Chapter 3 is estimated with *p* = 12 lags, horizon
 
 #### 4.3.3 Objective 3: policy implications
 
-- **Out-of-sample test of the 2026 shock.** The cumulative responses are re-estimated on data ending in December 2025 and applied to the observed 2026 fuel path: the fuel-driven change in the price level between December 2025 and month *m* is Σ_s β^{cum}_{m−s} Δln F_s, summed over the 2026 months up to *m*. This is compared with the actual change.
+- **Out-of-sample test of the 2026 shock.** The cumulative responses are re-estimated on data ending in December 2025 and applied to the observed 2026 fuel path: the fuel-driven change in the price level between December 2025 and month *m* is Σ~s~ β^cum^~m−s~ Δln F~s~, summed over the 2026 months up to *m*. This is compared with the actual change.
 - **Regional burden and peso cost.** The pooled regional responses are applied to each region's fuel path. The fuel-driven rise in the bottom-30% CPI is converted to pesos for a family of five living at the official poverty line (the 2023 regional per-capita poverty threshold × 5 / 12, carried to December 2025 with the regional bottom-30% CPI).
 - **Mechanism.** National responses (2013–2026) of the bottom-30% and all-income sub-indices for electricity, gas and other fuels, LPG, kerosene, solid fuels, passenger transport services and cereals, with their weights in each basket.
 - **Decomposition of the 2026 gap.** The actual December 2025–August 2026 change in each index is split into item contributions using the fixed 2018 weights (descriptive, no model).
@@ -2016,7 +2017,7 @@ The local projection model of Chapter 3 is estimated with *p* = 12 lags, horizon
 
 ### 4.4 Validation
 
-*Simulation.* Panels and time series are generated from y_t = 0.4 y_{t−1} + 0.04 x_t + 0.02 x_{t−1} + 0.01 x_{t−2} + e_t, whose impulse response is known. The estimator recovers it within 0.006 at every horizon with Newey–West, clustered and Driscoll–Kraay errors, recovers the cumulative response, and detects a known group difference.
+*Simulation.* Panels and time series are generated from y~t~ = 0.4 y~t−1~ + 0.04 x~t~ + 0.02 x~t−1~ + 0.01 x~t−2~ + e~t~, whose impulse response is known. The estimator recovers it within 0.006 at every horizon with Newey–West, clustered and Driscoll–Kraay errors, recovers the cumulative response, and detects a known group difference.
 
 *Replication gate.* Before any Philippine estimate, the estimator had to reproduce three results of @kpodar_liu_2022 on EU data (harmonised CPIs and Weekly Oil Bulletin pump prices, 2005–June 2019), under criteria written in advance: an impact response to after-tax gasoline prices between 0.035 and 0.075 (reference 0.055), near zero from the second month; a larger response to after-tax than to before-tax prices and to crude oil; and the advanced-economy shape with the EU fuels index.
 
@@ -2425,9 +2426,111 @@ The results qualify the policy conclusion usually drawn from the cross-country e
 ## References
 
 
-## Appendix A. Reproducing the study
+## Appendix A. Data appendix
 
-The replication package contains the raw data with a source log, the code for every step, the decision log recording when each specification was fixed, the output tables, the figures and this document. Running `./run_all.sh` in a Python 3.11 environment with the packages in `requirements.txt` regenerates all of them; `./run_all.sh --download` first downloads the PSA tables again. A separate *Analysis and Results Report* lists every estimate, and the *Master Document* describes the whole process of data collection, analysis and interpretation.
+This appendix gives everything needed to reproduce each figure and table in this paper. Section A.1 explains how to rebuild the results. Section A.2 lists every data source with its link. Section A.3 maps each figure and table to its sources, the script that computes it and the output file it is drawn from.
+
+### A.1 How to reproduce the results
+
+All data are public, and all processing is done by scripts. Nothing is copied or typed by hand. The replication package contains the raw files exactly as downloaded, with a source log; the code; the decision log; and the output tables and figures. The repository is <https://github.com/liancataytayjk-coder/oil-shock-distribution>, branch `claude/bold-hamilton-0ixcim`, also supplied as a zip file with this paper.
+
+The package needs Python 3.11 and the packages listed in `requirements.txt`. With these installed, the command `./run_all.sh` rebuilds everything from the stored raw files. In order, it cleans the data, builds the national and regional panel, runs the EU replication test, estimates the models, runs the 2026 analysis and the descriptive statistics, draws the figures, writes the documents and runs the automated tests.
+To download fresh copies of the PSA tables first, run `./run_all.sh --download`.
+
+Each raw file is listed in `data/raw/source_log.md` with its URL, download date, base year and coverage. All files were downloaded on 4 October 2026.
+
+PSA OpenSTAT tables are read through the PxWeb interface, using the table addresses below. Opening an address in a browser returns the table's description. The script `scripts/01_download_psa.py` sends the query that returns the data, one geography at a time. The same tables can be viewed by hand on the OpenSTAT website (<https://openstat.psa.gov.ph>), under *Economic Indices → Prices → Consumer Price Index*.
+
+### A.2 Data sources
+
+**S1. PSA, CPI for all income households, 2018 = 100, old geographic code (17 regions).** We use this source for all items and all commodity groups, national and regional; the fuel price index, sub-index 07.2.2 (fuels and lubricants for personal transport equipment); and the basket weights.
+The tables are listed below.
+
+*Backcast, Jan 1994–Dec 2017:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018/0012M4ACP15.px>
+
+*Jan 2018–Dec 2025:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018/0012M4ACP09.px>
+
+*2018 weights:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018/0012M4ACP12.px>
+
+**S2. PSA, CPI for all income households, 2018 = 100, new geographic code (Negros Island Region separate).** We use this source for the January–August 2026 months, chained onto S1 (decision D6); the gasoline sub-index 07.2.2.2; and the 2018 weights used in the 2026 decomposition.
+The tables are listed below.
+
+*Jan 2018–Aug 2026:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP22.px>
+
+*Backcast, 1994–2017:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP28.px>
+
+*Weights:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/CPI/2018NEW/0012M4ACP25.px>
+
+**S3. PSA, CPI for the bottom 30% income households, 2018 = 100, old geographic code.** The tables are listed below.
+
+*All-items backcast, Jan 2000–Dec 2011:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/BIH/2018/0022M4ABOT5.px>
+
+*Commodity-group backcast, Jan 2012–Dec 2017:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/BIH/2018/0022M4ABOT4.px>
+
+*Jan 2018–Dec 2025:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/BIH/2018/0022M4ABOT1.px>
+
+*2018 weights:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/BIH/2018/0022M4ABOT3.px>
+
+**S4. PSA, CPI for the bottom 30% income households, 2018 = 100, new geographic code.** We use this source for the January–August 2026 months, chained onto S3, and for the weights used in the 2026 decomposition. The tables are listed below.
+
+*Jan 2018–Aug 2026:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/BIH/2018NEW/0022M4ABIR1.px>
+
+*Weights:* <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/2M/PI/BIH/2018NEW/0022M4ABIR3.px>
+
+**S5. PSA, official poverty statistics by region, 2018, 2021 and 2023.** We use poverty incidence among the population and the annual per-capita poverty threshold. Table: <https://openstat.psa.gov.ph/PXWeb/api/v1/en/DB/1F/FY/0031F3DF020.px>.
+
+**S6. World Bank, Commodity Price Data (Pink Sheet), monthly.** We use Dubai and Brent crude oil prices in US dollars per barrel. File: <https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/CMO-Historical-Data-Monthly.xlsx>.
+
+**S7. World Bank, Global Fuel Prices Database (April 2025 version).** We use the Philippine row, the Manila regular gasoline (RON 91) pump price in pesos per litre. File: <https://datacatalogfiles.worldbank.org/ddh-published/0066829/DR0095290/Global_Fuel_Prices_Database.xlsx>.
+
+**S8. Bangko Sentral ng Pilipinas, peso–dollar exchange rate, monthly average.** File: <https://www.bsp.gov.ph/Statistics/External/pesodollar.xlsx>.
+
+**S9. Bank for International Settlements, central bank policy rates, Philippines.** Data: <https://stats.bis.org/api/v1/data/WS_CBPOL/M.PH?format=csv>.
+
+**S10. FAO Food Price Index, nominal, 2014–2016 = 100.** File: <https://www.fao.org/media/docs/worldfoodsituationlibraries/wfs-library/food_price_indices_data.csv>.
+
+**S11. Eurostat, harmonised index of consumer prices (HICP), all items and fuels and lubricants (CP0722), 2015 = 100.** Data: <https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/prc_hicp_midx/M.I15.CP00+CP0722.?format=TSV>.
+
+**S12. European Commission, Weekly Oil Bulletin, price history with and without taxes.** File: <https://energy.ec.europa.eu/document/download/906e60ca-8b6a-44e7-8589-652854d2fd3f_en?filename=Weekly_Oil_Bulletin_Prices_History_maticni_4web.xlsx>.
+
+**S13. Eurostat, euro–dollar exchange rate, monthly average.** We use it to convert Brent crude to euros. Data: <https://ec.europa.eu/eurostat/api/dissemination/sdmx/2.1/data/ert_bil_eur_m/M.AVG.NAC.USD?format=TSV>.
+
+**S14. Reference coefficients.** These are the published estimates of Kpodar and Liu (2021, IMF Working Paper WP/21/271), typed from the paper's figures and annex tables into `replication/kpodar_liu_2021_targets.csv`. Paper: <https://www.imf.org/en/publications/wp/issues/2021/11/12/the-distributional-implications-of-the-impact-of-fuel-price-increases-on-inflation-506822>.
+
+**S15. 2026 policy facts.** These are the laws, executive orders and agency issuances cited in Chapter 5. Each one is listed with its source link and verification status in `paper/policy_context_2026.md`.
+
+### A.3 Sources, scripts and output files for each figure and table
+
+Scripts are in `scripts/`, output tables in `output/tables/` and figures in `output/figures/`. Every script after the first two reads the processed files written by `02_clean_psa.py` and `03_build_panel.py`. The figures are written by `06_figures.py`, and the tables are inserted into this document by `08_paper.py`.
+
+**Table A1. Sources, scripts and output files**
+
+| Item | Content | Sources | Computed by | Output file |
+|---|---|---|---|---|
+| Figure 1 | Conceptual framework | — | 06_figures.py | figw0_framework.png |
+| Table 1 | Data sources and variables | S1–S13 | — | — |
+| Table 2 | Summary statistics | S1–S4 | 09_descriptive.py | desc_summary.csv |
+| Figure 2 | Inflation trends and the gap | S1–S4 | 09_descriptive.py | desc_yoy_national.csv; figd1_trends.png |
+| Table 3 | Annual inflation | S1–S4 | 09_descriptive.py | desc_annual.csv |
+| Table 4 | Fuel-shock episodes | S1–S4 | 09_descriptive.py | desc_episodes.csv |
+| Table 5 | Cross-correlations | S1–S4 | 09_descriptive.py | desc_crosscorr.csv |
+| Figure 3 | Regional inflation and gap | S1–S5 | 09_descriptive.py | desc_regional.csv; figd2_regional.png |
+| Table 6 | Regional summary | S1–S5 | 09_descriptive.py | desc_regional.csv |
+| Table 7 | Unit-root tests | S1–S4 | 09_descriptive.py | desc_adf.csv |
+| Table 8 | Validation against the reference study | S1, S3, S6, S11–S14 | 04_replicate.py | replication_eu_ph.csv; replication_gate.csv |
+| Figure 4, Table 9 | Pass-through to the price level and the gap | S1–S4 | 05_estimate.py | estimates.csv; fig1_rq1_passthrough.png |
+| Figure 5 | Response of the gap, national and panel | S1–S4 | 05_estimate.py | estimates.csv; fig2_rq2_rq4_ratio.png |
+| Figure 6, Table 10 | Pass-through by CPI division | S1, S3 | 05_estimate.py | estimates.csv; rq3_gap_decomposition.csv; fig3_rq3_components.png |
+| Figure 7, Table 11 | Regional groups | S1–S5 | 05_estimate.py | estimates.csv; region_groups.csv; fig4_rq4_groups.png |
+| Figure 8, Table 12 | Robustness | S1–S10 | 05_estimate.py | estimates.csv; fig5_robustness.png |
+| Figure 9 | 2026: actual and predicted | S1–S4 | 07_episode_2026.py | e1_national_2026.csv; fig6_2026_out_of_sample.png |
+| Table 13 | 2026 by region; peso cost | S1–S5 | 07_episode_2026.py | e2_regional_2026.csv |
+| Figure 10 | 2026 gap by item | S2, S4 | 07_episode_2026.py | e5_decomposition_2026.csv; fig7_2026_gap_decomposition.png |
+| Table 14 | Household fuels, fares, cereals | S1, S3 | 07_episode_2026.py | e4_mechanism.csv |
+| Table 15 | Policy instruments | S15; Tables 9–14 | — | — |
+
+*Notes:* S1–S4 enter as the national and regional all-income CPI, the bottom-30% CPI and the fuel index (07.2.2), spliced and chained by `03_build_panel.py` (decisions D6 and D7). Robustness (Table 12) also uses S6 and S8 (Dubai crude in pesos), S7 (pump price), S9 (policy rate) and S10 (world food prices). Every number in the text comes from `output/tables/paper_numbers.json`, which `08_paper.py` writes from the files above.
+
 
 # Appendix G. Journal manuscript (IMRAD)
 
@@ -3248,6 +3351,10 @@ $PY scripts/08_paper.py
 $PY scripts/10_analysis_report.py
 $PY -m pytest -q tests
 $PY scripts/11_master_document.py
+# Course submissions (house style + PDFs): FA2 proposal, SA3 paper and deck
+if command -v node >/dev/null; then node scripts/12_capstone_proposal.js; fi
+$PY scripts/13_presentation.py
+if command -v soffice >/dev/null; then $PY scripts/14_submissions.py; else echo "LibreOffice not found: skipping PDFs"; fi
 
 ```
 
@@ -3266,6 +3373,8 @@ scipy==1.17.1
 statsmodels==0.15.0
 Jinja2==3.1.6
 pypandoc_binary==1.17
+python-docx
+python-pptx
 
 ```
 
@@ -5013,13 +5122,19 @@ def main():
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(PAPER), undefined=jinja2.StrictUndefined,
                              keep_trailing_newline=True,
                              comment_start_string="<#--", comment_end_string="--#>")  # pandoc uses {#refs}
-    for name, toc in [("manuscript", False), ("working_paper", True)]:
-        if not (PAPER / f"{name}_template.md").exists():
+    style_ref = ROOT / "tools" / "lian_style" / "assets" / "lian-article-reference.docx"  # house style
+    docs = [("manuscript", "manuscript", False, {}),
+            ("working_paper", "working_paper", True, {"doc_label": "Working Paper", "doc_authors": "[Author name]"}),
+            ("capstone_paper", "working_paper", False,  # SA3 submission: same text, group byline, no TOC field
+             {"doc_label": "Capstone Paper", "doc_authors": "Lian Cataytay, [Name 2], [Name 3]"})]
+    for name, template, toc, extra in docs:
+        if not (PAPER / f"{template}_template.md").exists():
             continue
-        text = env.get_template(f"{name}_template.md").render(n=n, t=tables)
+        text = env.get_template(f"{template}_template.md").render(n=n, t=tables, **extra)
         (PAPER / f"{name}.md").write_text(text)
         args = ["--citeproc", f"--bibliography={PAPER / 'references.bib'}",
-                f"--resource-path={PAPER}:{ROOT}", "--metadata=link-citations:true"]
+                f"--resource-path={PAPER}:{ROOT}", "--metadata=link-citations:true",
+                f"--reference-doc={style_ref}"]
         if toc:
             args += ["--toc", "--toc-depth=2"]
         pypandoc.convert_file(str(PAPER / f"{name}.md"), "docx", outputfile=str(PAPER / f"{name}.docx"),
@@ -5639,7 +5754,8 @@ CODE = ["run_all.sh", "requirements.txt", "ospd/lp.py", "ospd/regions.py", "scri
         "scripts/01b_download_poverty.py", "scripts/02_clean_psa.py", "scripts/03_build_panel.py",
         "scripts/04_replicate.py", "scripts/05_estimate.py", "scripts/06_figures.py", "scripts/07_episode_2026.py",
         "scripts/08_paper.py", "scripts/09_descriptive.py", "scripts/10_analysis_report.py",
-        "scripts/11_master_document.py", "tests/test_lp.py"]
+        "scripts/11_master_document.py", "scripts/13_presentation.py", "scripts/14_submissions.py",
+        "tests/test_lp.py"]
 
 
 def prepare(text, levels=1):
@@ -5698,6 +5814,354 @@ def main():
                                       f"--resource-path={DOCS}:{ROOT / 'paper'}:{ROOT}", "--toc", "--toc-depth=2",
                                       "--metadata=title:Master Document — Who Pays for Oil Shocks?"])
     print("wrote docs/master_document.md and .docx;", len(text.split()), "words")
+
+
+if __name__ == "__main__":
+    main()
+
+```
+
+## scripts/13_presentation.py
+
+```python
+"""SA3 presentation deck in the house style (black and white, Times New Roman, 16:9).
+
+Every number comes from output/tables/paper_numbers.json and every figure from
+output/figures/, so the deck changes when the analysis changes. Writes
+docs/presentation_SA3.pptx (the PDF is made by scripts/14_submissions.py).
+"""
+
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "tools" / "lian_style" / "scripts"))
+from lian_deck import Deck  # noqa: E402
+
+FIG = ROOT / "output" / "figures"
+n = json.loads((ROOT / "output" / "tables" / "paper_numbers.json").read_text())
+
+
+def pos(x):
+    """Drop the minus sign for wording such as '0.021 pp more'."""
+    return str(x).replace("−", "")
+
+
+d = Deck(short_title="Who Pays for Oil Shocks? · SA3 Capstone")
+
+d.title_slide(
+    "Who Pays for Oil Shocks? Fuel Price Pass-Through to the Inflation of Poor Households across Philippine Regions",
+    ["Capstone Paper Presentation (SA3)",
+     "Graduate School of Applied Economics, University of Southeastern Philippines"],
+    byline="Prepared by: **Lian Cataytay**, [Name 2], [Name 3]",
+    date="October 2026",
+)
+
+# 1. Motivation
+s = d.slide("1. Why this question matters now",
+            "The 2026 oil shock pushed inflation above target, and the poor's inflation even higher.")
+left, right = d.columns(2)
+d.text(s, left, [
+    f"**Pump prices:** the fuel index was {n['yoy_fuel_apr']}% above a year earlier in April 2026",
+    f"**Headline inflation:** {n['yoy_all_feb']}% in February → {n['yoy_all_apr']}% in April → {n['yoy_all_aug']}% in August",
+    f"**Bottom 30% of households:** {n['yoy_b30_apr']}% in April and {n['yoy_b30_aug']}% in August",
+    "**BSP target:** 2–4%",
+], heading="The shock")
+d.panel(s, right, [
+    "**RA 12316:** lets the President suspend fuel excise taxes when Dubai crude ≥ USD 80/barrel",
+    "**Excise suspended** on LPG and kerosene, not on gasoline and diesel",
+    "**Fuel subsidies** for public utility vehicle drivers",
+    f"**BSP** raised its policy rate {n['n_hikes_word']} times, to {n['policy_aug']}%",
+], heading="The policy response")
+d.source(s, "Sources: PSA CPI (2018 = 100); RA 12316; BSP. Inflation is year on year.")
+
+# 2. Gap and question
+s = d.slide("2. Research gap and questions",
+            "Cross-country evidence says fuel shocks hurt the rich more; is that true in the Philippines?")
+top, bottom = d.split(d.body(), 1.0)
+left, right = d.columns(2, top)
+d.text(s, left, [
+    "**Kpodar and Liu (2022), 122 countries:** fuel price shocks are *progressive*: prices rise more for richer households",
+    "**But Filipino poor households** spend over half their budget on food and ride public transport",
+    "**PSA publishes a bottom-30% CPI** by region, so we can test this directly",
+], heading="The gap")
+d.text(s, right, [
+    "**Objective 1 (descriptive):** trends in fuel prices and both inflation rates, 2001–2026",
+    "**Objective 2 (estimation):** pass-through (RQ1), the inflation gap (RQ2), categories (RQ3), regions (RQ4)",
+    "**Objective 3 (policy):** the 2026 shock, its peso cost and the policy response",
+], heading="Three objectives")
+d.callout(s, bottom, "Research question:",
+          "When fuel prices rise, do poor Filipino households face larger price increases than the average household, "
+          "and does it depend on where they live?")
+
+# 3. Key terms
+s = d.slide("3. Key terms and notation", "Each term keeps the same meaning on every slide.")
+d.table(s, d.body(), [
+    ["Term", "Meaning and formula"],
+    ["Fuel price shock", "Monthly change in PSA's retail fuel index 07.2.2: f_{t} = 100·Δln F_{t}"],
+    ["Inflation (group g)", "π^{g}_{t} = 100·Δln P^{g}_{t}; A = all income households, B = bottom 30%"],
+    ["Pass-through", "β_{h}: change in inflation h months later per 1% fuel rise; cumulative B_{h} = β_{0} + … + β_{h}"],
+    ["Inflation gap", "D_{t} = 100·ln(P^{A}_{t} / P^{B}_{t}); a fall means prices rose more for the poor (*regressive*)"],
+    ["Basket weight", "w^{g}_{k}: share of group g's 2018 budget spent on category k"],
+    ["Region groups", "Our own dummies G_{r}: high poverty, high food share, Mindanao, island regions"],
+], col_widths=[1.2, 4], first_col_bold=True, size=16)
+d.source(s, "Both CPIs are official PSA indices; the gap and the region groups are our constructions.")
+
+# 4. Theory
+s = d.slide("4. Theoretical framework",
+            "A group's pass-through equals the fuel content of what it buys.")
+left, right = d.columns(2, widths=[1, 1.15])
+d.image(s, left, FIG / "figw0_framework.png", caption="Solid: transmission; dashed: where policy acts.")
+d.text(s, right, [
+    "**Cost-push pricing** (Leontief input–output): each good's price rises with its fuel cost share, π_{k} ≈ φ_{k} f",
+    "**Cost-of-living index:** π^{g} ≈ Σ_{k} w^{g}_{k} φ_{k} f, so pass-through = fuel intensity of the basket",
+    "**Gap = weights effect + within-category effect** (the poor buy different items in each category)",
+    "**Oil-specific channels:** direct, indirect and second-round (Kilian 2008; Blanchard and Galí 2010)",
+    "**Welfare cost** ≈ budget-share-weighted price rise (Deaton 1989)",
+])
+
+# 5. Data and method
+s = d.slide("5. Data and empirical strategy",
+            "Local projections on monthly PSA data, 2001–August 2026, national and 17 regions.")
+top, bottom = d.split(d.body(), 1.25)
+d.table(s, top, [
+    ["Variable", "Source", "Coverage"],
+    ["All-income CPI and 13 categories", "PSA OpenSTAT", "1994–Aug 2026, national and 17 regions"],
+    ["Bottom-30% CPI", "PSA OpenSTAT", "2000–Aug 2026, national and 17 regions"],
+    ["Retail fuel index 07.2.2 (shock)", "PSA OpenSTAT", "1994–Aug 2026, national and 17 regions"],
+    ["Crude oil, pump price, FX, policy rate, food", "World Bank, BSP, BIS, FAO", "Robustness and controls"],
+], col_widths=[2.4, 1.8, 2.6], size=15)
+d.text(s, bottom, [
+    "**Model** (Jordà 2005; Kpodar and Liu 2022), for each h = 0…12: π_{t+h} = α_{h} + β_{h} f_{t} + 12 lags + leads + trend + ε",
+    "**Errors:** Newey–West (national), region fixed effects and Driscoll–Kraay (panel); 90% bands",
+], bullets=False, size=16)
+
+# 6. Validation
+s = d.slide("6. Validation before any Philippine estimate",
+            "Our code reproduces the reference study's European results under rules set in advance.")
+left, right = d.columns(2, widths=[1.3, 1])
+d.image(s, left, FIG / "figr_eu_validation.png")
+d.table(s, right, [
+    ["Shock (EU, impact)", "Ours", "Paper"],
+    ["Pump price after tax", n["rep_after"], "0.055"],
+    ["Pump price before tax", n["rep_before"], "0.020"],
+    ["Brent crude in euro", n["rep_brent"], "0.015"],
+], col_widths=[2, 1, 1], align=["l", "r", "r"], size=16)
+d.source(s, "Response of monthly HICP inflation to a 1% fuel price rise, 2005–Jun 2019. A simulation test also passed.")
+
+# 7. Objective 1
+s = d.slide("7. Objective 1: the poor's inflation has been higher",
+            f"Bottom-30% prices rose {pos(n['d_cum_gap_ph'])} log points more than all-income prices since 2001.")
+left, right = d.columns(2, widths=[1.5, 1])
+d.image(s, left, FIG / "figd1_trends.png")
+d.text(s, right, [
+    f"**Average inflation, 2001–2026:** {n['d_b30_mean_ann']}% (bottom 30%) vs {n['d_all_mean_ann']}% (all)",
+    f"**Higher for the poor** in {n['d_years_b30_higher']} of {n['d_years_total']} years",
+    f"**Fuel-shock episodes:** poor's inflation higher in {n['d_episodes_b30_higher']} of {n['d_n_episodes']}",
+    f"**Peak gap in 2008** (rice crisis): {n['d_2008_b30']}% vs {n['d_2008_all']}%",
+])
+d.source(s, "Source: PSA CPI; authors' calculations. Year-on-year rates.")
+
+# 8. RQ1
+s = d.slide("8. RQ1: fuel prices pass through quickly and keep building",
+            f"A 10% fuel price rise raises the price level by about {n['rq1_all_c12_10pct']}% after a year.")
+left, right = d.columns(2, widths=[1.3, 1])
+d.image(s, left, FIG / "fig1_rq1_passthrough.png")
+d.text(s, right, [
+    f"**Impact:** {n['rq1_all_c0']} pp per 1% fuel rise (s.e. {n['rq1_all_c0_se']})",
+    f"**After 12 months:** {n['rq1_all_c12']} (all) and {n['rq1_b30_c12']} (bottom 30%)",
+    f"**Larger than the cross-country** developing-economy impact ({n['kl_dev_b0']})",
+    f"**Crude oil understates it:** only about {n['crude_share']}% of the retail estimate",
+])
+d.source(s, "Cumulative responses, 90% bands. National, Newey–West standard errors.")
+
+# 9. RQ2 and RQ4 pooled
+s = d.slide("9. RQ2: the poor pay more, not less",
+            "The gap falls after a fuel shock: the effect is regressive, the opposite of the cross-country finding.")
+top, bottom = d.split(d.body(), 1.0)
+d.image(s, top, FIG / "fig2_rq2_rq4_ratio.png")
+d.text(s, bottom, [
+    f"**National:** {n['rq2_c6']} after 6 months (s.e. {n['rq2_c6_se']}), significant at h = {n['rq2_sig_h']}  ·  "
+    f"**17-region panel:** {n['rq4_c6']} (s.e. {n['rq4_c6_se']}), significant",
+    f"**Meaning:** a 10% fuel rise leaves the poor's price level about {n['gap6_10pct']}% higher than the average household's",
+], bullets=False, size=16)
+
+# 10. RQ3
+s = d.slide("10. RQ3: which prices carry the shock?",
+            "Transport, utilities and food carry the shock; budget shares alone would predict the opposite gap.")
+left, right = d.columns(2, widths=[1.3, 1])
+d.image(s, left, FIG / "fig3_rq3_components.png")
+d.text(s, right, [
+    f"**Largest responses:** transport {n['rq3_transport']}, housing and utilities {n['rq3_housing']}, food {n['rq3_food']}",
+    f"**{n['rq3_nsig']} of 13** categories respond significantly",
+    f"**Weights alone** predict a *progressive* gap ({n['rq3_gap_pred']})",
+    f"**Within categories, responses differ:** utilities {n['rq3b_c04_b30']} (poor) vs {n['rq3b_c04_all']}; "
+    f"transport {n['rq3b_c07_b30']} vs {n['rq3b_c07_all']}",
+])
+d.source(s, "Cumulative response after 12 months, all-income CPI divisions, 90% CI. Within-category comparison is exploratory (2013–2026).")
+
+# 11. RQ4
+s = d.slide("11. RQ4: do regions differ?",
+            "The gap tends to be wider in Mindanao and island regions, but the evidence is weak.")
+left, right = d.columns(2, widths=[1.3, 1])
+d.image(s, left, FIG / "fig4_rq4_groups.png")
+d.text(s, right, [
+    f"**Mindanao:** {n['rq4_mindanao']} extra (s.e. {n['rq4_mindanao_se']})",
+    f"**Island regions:** {n['rq4_island']} (s.e. {n['rq4_island_se']})",
+    f"**High poverty:** {n['rq4_high_poverty']} (s.e. {n['rq4_high_poverty_se']})",
+    f"**High food share:** {n['rq4_high_food']} (s.e. {n['rq4_high_food_se']})",
+    "**None survives** a correction for testing four groups",
+])
+d.source(s, "Additional cumulative effect on the gap after 12 months; 17-region panel, Driscoll–Kraay errors.")
+
+# 12. Robustness
+s = d.slide("12. How robust is the regressive result?",
+            "The sign holds in almost every check, but the effect is concentrated in 2001–2012.")
+left, right = d.columns(2, widths=[1.3, 1])
+d.image(s, left, FIG / "fig5_robustness.png")
+d.text(s, right, [
+    f"**Leave one region out:** {n['loo_min']} to {n['loo_max']}",
+    f"**2001–2012:** {n['split_p1']}; **2013–2026:** {n['split_p2']}",
+    f"**Near zero** with macro controls ({n['rob_macro']}), the gasoline index and the World Bank pump price",
+    "**Read with care:** regressive in sign, strongest in the 2000s",
+])
+d.source(s, "Cumulative gap response after 6 months, 90% CI. Open squares: supplementary analyses.")
+
+# 13. Objective 3: out of sample
+s = d.slide("13. Objective 3: what explains the 2026 surge?",
+            f"A model estimated only on data to 2025 explains about half of the 2026 price rise.")
+top, bottom = d.split(d.body(), 0.9)
+d.image(s, top, FIG / "fig6_2026_out_of_sample.png")
+d.text(s, bottom, [
+    f"**Dec 2025–Aug 2026:** fuel-driven {n['e1_all_fd']} of {n['e1_all_act']} log points (all), "
+    f"{n['e1_b30_fd']} of {n['e1_b30_act']} (bottom 30%)  ·  **Prices did not fall** when fuel eased in May–June",
+], bullets=False, size=16)
+
+# 14. Peso cost and decomposition
+s = d.slide("14. The cost to poor families, and why it was higher",
+            f"Fuel added about PHP {n['e3_ph_cost']} a month to a poverty-line family's costs; rice drove the extra gap.")
+left, right = d.columns(2, widths=[1, 1.2])
+d.panel(s, left, [
+    f"**National:** PHP {n['e3_ph_cost']} a month for a family of five at the poverty line",
+    f"**By region:** PHP {n['e3_min']} ({n['e3_min_reg']}) to {n['e3_max']} ({n['e3_max_reg']})",
+    f"**All price increases:** about PHP {n['e3_ph_actual_cost']} a month",
+    f"**Highest actual rise:** {n['e2_top_names']}",
+], heading="Peso cost by August 2026")
+d.image(s, right, FIG / "fig7_2026_gap_decomposition.png",
+        caption=f"Contributions to the {n['e5_total_gap']} pp gap: cereals {n['e5_cereals_gap']}.")
+
+# 15. Policy
+s = d.slide("15. Policy implications", "Transfers sized to the poor's own price index are better targeted than fuel tax cuts.")
+d.table(s, d.body(), [
+    ["Instrument (2026)", "What the evidence says"],
+    ["Excise relief, gasoline and diesel", f"Mainly helps the better-off: motor fuel is {n['w_fuel_all']}% of the average basket, {n['w_fuel_b30']}% of the poor's"],
+    ["Excise relief, LPG and kerosene", "Distribution-neutral for LPG (same weight and response); kerosene matters more for the poor but is small"],
+    ["Fuel subsidies for drivers", "Protect poor commuters only if tied to fare restraint"],
+    ["Policy rate increases", "Appropriate: pass-through builds for at least a year"],
+    ["Targeted cash transfers", f"Best targeted; size with the bottom-30% CPI (PHP {n['e3_ph_cost']}–{n['e3_ph_actual_cost']} a month)"],
+    ["Rice price and supply measures", f"Needed: cereals explain {n['e5_cereals_gap']} pp of the 2026 gap"],
+], col_widths=[1.6, 3.6], first_col_bold=True, size=15)
+
+# 16. Limitations and data appendix
+s = d.slide("16. Limitations and reproducibility",
+            "The results are descriptive of transmission, not a clean causal test, and every number can be rebuilt.")
+left, right = d.columns(2)
+d.text(s, left, [
+    "**Retail prices may respond** to local conditions; an identified oil supply shock is the next step",
+    "**Bottom 30% vs all**, not poorest vs richest",
+    "**2026 analysis** covers eight months; rice and trade policy cannot be separated from fuel",
+], heading="Limitations")
+d.panel(s, right, [
+    "**All data public:** PSA OpenSTAT, World Bank, BSP, BIS, FAO, Eurostat",
+    "**Data appendix** in the paper links every figure and table to its source and script",
+    "**One command** (./run_all.sh) rebuilds every number",
+    "**Pre-registered** estimation plan and replication test",
+], heading="Data and reproducibility")
+
+d.takeaway("In the Philippines, the poor pay more when fuel prices rise.", [
+    f"**Pass-through is fast and lasting:** a 10% fuel rise lifts prices about {n['rq1_all_c12_10pct']}% within a year",
+    "**Regressive, not progressive:** the poor's prices rise more, through food, utilities and fares",
+    "**2026:** fuel explains about half of the surge; rice drove the poor's extra inflation",
+    "**Policy:** protect the poor with transfers sized to their price index, not broad fuel tax cuts",
+])
+d.closing("Thank you", "Questions and discussion")
+d.save(ROOT / "docs" / "presentation_SA3.pptx")
+
+```
+
+## scripts/14_submissions.py
+
+```python
+"""Make the course submission files in the house style, with PDFs.
+
+FA2: docs/capstone_proposal_FA2.docx (scripts/12_capstone_proposal.js), single-spaced
+     to stay within the 10-page limit.
+SA3: paper/capstone_paper.docx (scripts/08_paper.py), double-spaced, with the data
+     appendix; docs/presentation_SA3.pptx (scripts/13_presentation.py).
+
+Each Word file is copied to submissions/, passed through the house-style finisher
+(tools/lian_style), converted to PDF with LibreOffice and audited with check_style.
+Needs LibreOffice Writer and Impress (apt-get install libreoffice-writer
+libreoffice-impress libreoffice-math).
+"""
+
+import re
+import shutil
+import subprocess
+import sys
+import zipfile
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+TOOLS = ROOT / "tools" / "lian_style" / "scripts"
+OUT = ROOT / "submissions"
+
+JOBS = [  # source, submission name, spacing (None for decks)
+    (ROOT / "docs" / "capstone_proposal_FA2.docx", "FA2_Capstone_Proposal.docx", "single"),
+    (ROOT / "paper" / "capstone_paper.docx", "SA3_Capstone_Paper.docx", "double"),
+    (ROOT / "docs" / "presentation_SA3.pptx", "SA3_Presentation.pptx", None),
+]
+
+
+def run(*args):
+    subprocess.run([sys.executable, *map(str, args)], check=True)
+
+
+def fix_bullets(docx):
+    """Give pandoc's bullet lists a visible Times New Roman bullet (the symbol-font glyph is lost)."""
+    tmp = docx.with_suffix(".tmp")
+    with zipfile.ZipFile(docx) as zin, zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zout:
+        for item in zin.infolist():
+            data = zin.read(item.filename)
+            if item.filename == "word/numbering.xml":
+                xml = data.decode("utf-8")
+
+                def lvl(m):
+                    block = m.group(0)
+                    if 'w:numFmt w:val="bullet"' not in block:
+                        return block
+                    glyph = "•" if m.group(1) in ("0", "2", "4", "6", "8") else "–"
+                    block = re.sub(r'<w:lvlText w:val="[^"]*"/>', f'<w:lvlText w:val="{glyph}"/>', block)
+                    return re.sub(r'<w:rFonts [^>]*/>', '<w:rFonts w:ascii="Times New Roman" '
+                                  'w:hAnsi="Times New Roman" w:cs="Times New Roman"/>', block)
+
+                xml = re.sub(r'<w:lvl w:ilvl="(\d)".*?</w:lvl>', lvl, xml, flags=re.S)
+                data = xml.encode("utf-8")
+            zout.writestr(item, data)
+    tmp.replace(docx)
+
+
+def main():
+    OUT.mkdir(exist_ok=True)
+    for src, name, spacing in JOBS:
+        dst = OUT / name
+        shutil.copyfile(src, dst)
+        if spacing:
+            run(TOOLS / "docx_style.py", "finish", dst, "--spacing", spacing)
+            fix_bullets(dst)
+        run(TOOLS / "render.py", dst, "--outdir", OUT)
+        run(TOOLS / "check_style.py", dst)
 
 
 if __name__ == "__main__":
@@ -5772,6 +6236,10 @@ def test_interaction_detects_group_difference():
 # Appendix K. Version history (git log)
 
 ```text
+5e9bc0c 2026-10-14 Add empirical-econ-study skill: research, data, validation, estimation, figures, writing, delivery
+e8e7ef4 2026-10-06 Revise FA2 proposal (notation, theory, paragraph workplan); add session handoff Rmd
+8d50e31 2026-10-06 Add FA2 capstone proposal (docx, built by scripts/12_capstone_proposal.js)
+6d25134 2026-10-05 Make the analysis report visual and add a statistical annex
 6fcc84e 2026-10-05 Add working paper, analysis report, master document, descriptive analysis and black-and-white figures
 221ea28 2026-10-05 Add IMRAD manuscript generated from output tables, verified references and submission checklist
 4683d86 2026-10-05 Add 2026 episode analyses (out-of-sample test, regional burden, peso cost, mechanism, gap decomposition)

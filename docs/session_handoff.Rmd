@@ -276,6 +276,11 @@ gap.
 
 The following items are still open:
 
+0. **Course submissions are built** in `submissions/` (FA2 proposal, SA3 paper with data
+   appendix, SA3 deck, each .docx/.pptx and .pdf; `scripts/14_submissions.py`). Fill in the group
+   names `[Name 2]`, `[Name 3]` and the AI-use disclosure, then rebuild. The PDFs need LibreOffice
+   Writer and Impress (`apt-get install libreoffice-writer libreoffice-impress libreoffice-math`).
+
 1. **Working paper formatting.** Waiting for the template (upload item 2). The
    fallback proposed was IMF-working-paper style without IMF branding; the user
    has not confirmed it.

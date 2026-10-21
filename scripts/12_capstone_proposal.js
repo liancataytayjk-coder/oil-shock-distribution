@@ -31,8 +31,8 @@ function runs(text, base = {}) {
 }
 const p = (text, opts = {}) => new Paragraph({ children: runs(text), spacing: { after: 120 },
   alignment: AlignmentType.JUSTIFIED, ...opts });
-const h1 = (text) => new Paragraph({ text, heading: HeadingLevel.HEADING_1 });
-const h2 = (text) => new Paragraph({ text, heading: HeadingLevel.HEADING_2 });
+const h1 = (text) => new Paragraph({ text, heading: HeadingLevel.HEADING_1, keepNext: true });
+const h2 = (text) => new Paragraph({ text, heading: HeadingLevel.HEADING_2, keepNext: true });
 const bullet = (text) => new Paragraph({ children: runs(text), numbering: { reference: "bullets", level: 0 },
   spacing: { after: 60 } });
 const num = (text, ref = "numbers") => new Paragraph({ children: runs(text), numbering: { reference: ref, level: 0 },
@@ -41,7 +41,7 @@ const eq = (text, label) => new Paragraph({
   children: [...runs(text, { italics: false }), new TextRun({ text: `\t(${label})` })],
   tabStops: [{ type: "right", position: W }], alignment: AlignmentType.CENTER, spacing: { before: 80, after: 120 },
 });
-const caption = (text) => new Paragraph({ children: runs(text, { bold: true, size: 22 }), spacing: { before: 120, after: 80 } });
+const caption = (text) => new Paragraph({ children: runs(text, { bold: true, size: 22 }), spacing: { before: 120, after: 80 }, keepNext: true });
 const note = (text) => new Paragraph({ children: runs(text, { size: 20 }), spacing: { before: 60, after: 160 } });
 
 const border = { style: BorderStyle.SINGLE, size: 4, color: "000000" };
@@ -72,7 +72,7 @@ add(
     children: [new TextRun({ text: "Who Pays for Oil Shocks? Fuel Price Pass-Through to the Inflation of Poor Households across Philippine Regions",
       bold: true, size: 30 })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 40 },
-    children: [new TextRun({ text: "Group members: [Name 1], [Name 2], [Name 3]", size: 22 })] }),
+    children: [new TextRun({ text: "Group members: Lian Cataytay, [Name 2], [Name 3]", size: 22 })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 40 },
     children: [new TextRun({ text: "Graduate School of Applied Economics, University of Southeastern Philippines", size: 22 })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 240 },
@@ -210,6 +210,7 @@ const doc = new Document({
   styles: {
     default: { document: { run: { font: FONT, size: 24 }, paragraph: { spacing: { line: 252 } } } },
     paragraphStyles: [
+      { id: "Normal", name: "Normal", run: { font: FONT, size: 24 } },
       { id: "Heading1", name: "Heading 1", basedOn: "Normal", next: "Normal", quickFormat: true,
         run: { font: FONT, size: 26, bold: true }, paragraph: { spacing: { before: 240, after: 120 }, outlineLevel: 0 } },
       { id: "Heading2", name: "Heading 2", basedOn: "Normal", next: "Normal", quickFormat: true,

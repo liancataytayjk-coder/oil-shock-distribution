@@ -31,7 +31,8 @@ CODE = ["run_all.sh", "requirements.txt", "ospd/lp.py", "ospd/regions.py", "scri
         "scripts/01b_download_poverty.py", "scripts/02_clean_psa.py", "scripts/03_build_panel.py",
         "scripts/04_replicate.py", "scripts/05_estimate.py", "scripts/06_figures.py", "scripts/07_episode_2026.py",
         "scripts/08_paper.py", "scripts/09_descriptive.py", "scripts/10_analysis_report.py",
-        "scripts/11_master_document.py", "tests/test_lp.py"]
+        "scripts/11_master_document.py", "scripts/13_presentation.py", "scripts/14_submissions.py",
+        "tests/test_lp.py"]
 
 
 def prepare(text, levels=1):

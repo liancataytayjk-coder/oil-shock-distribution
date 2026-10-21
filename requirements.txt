@@ -10,3 +10,5 @@ scipy==1.17.1
 statsmodels==0.15.0
 Jinja2==3.1.6
 pypandoc_binary==1.17
+python-docx
+python-pptx

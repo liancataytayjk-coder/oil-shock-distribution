@@ -1,19 +1,20 @@
 ---
 title: "Who Pays for Oil Shocks? Fuel Price Pass-Through to the Inflation of Poor Households across Philippine Regions, 2001–2026"
-subtitle: "Working Paper"
+subtitle: "{{ doc_label }}"
 author:
-  - "[Author name], Master of Arts in Economics (Applied Economics), Graduate School of Applied Economics, University of Southeastern Philippines, Davao City"
+  - "{{ doc_authors }}, Master of Arts in Economics (Applied Economics), Graduate School of Applied Economics, University of Southeastern Philippines, Davao City"
 date: "October 2026"
 abstract: |
-  This working paper asks whether poor Filipino households pay more than others when fuel prices rise, and whether the answer depends on where they live. It uses the Philippine Statistics Authority's monthly consumer price index (CPI) for all income households and for the bottom 30% income households, for the country and 17 regions, from 2001 to August 2026, together with the CPI sub-index for retail motor fuels. The paper pursues three objectives. Objective 1 describes the trends: since 2001, bottom-30% prices have risen {{ n.d_cum_gap_ph|replace("−","") }} log points more than all-income prices, the poor's inflation exceeded the average in {{ n.d_episodes_b30_higher }} of {{ n.d_n_episodes }} fuel-shock episodes, and in August 2026 it stood at {{ n.yoy_b30_aug }}% against {{ n.yoy_all_aug }}%. Objective 2 estimates the local projection model of Kpodar and Liu (2022), validated by reproducing their EU benchmark: a 1% rise in fuel prices raises the price level by {{ n.rq1_all_c0 }} pp within the month and {{ n.rq1_all_c12 }} pp after a year, and the poor's prices rise {{ n.rq4_c6|replace("−","") }} pp more after six months in the regional panel — the opposite of the cross-country finding — with the gap concentrated in 2001–2012. Objective 3 draws policy implications from the 2026 shock: a model estimated on data to 2025 explains about half of the 2026 price surge; the fuel-driven extra cost for a poverty-line family of five is about PHP {{ n.e3_ph_cost }} a month; and rice accounted for most of the poor's excess inflation. Excise relief on LPG is distribution-neutral, cuts in gasoline and diesel taxes would mainly help the better-off, and transfers sized to the poor's own price index, together with attention to rice and fares, are the better-targeted response.
+  This {{ doc_label|lower }} asks whether poor Filipino households pay more than others when fuel prices rise, and whether the answer depends on where they live. It uses the Philippine Statistics Authority's monthly consumer price index (CPI) for all income households and for the bottom 30% income households, for the country and 17 regions, from 2001 to August 2026, together with the CPI sub-index for retail motor fuels. The paper pursues three objectives. Objective 1 describes the trends: since 2001, bottom-30% prices have risen {{ n.d_cum_gap_ph|replace("−","") }} log points more than all-income prices, the poor's inflation exceeded the average in {{ n.d_episodes_b30_higher }} of {{ n.d_n_episodes }} fuel-shock episodes, and in August 2026 it stood at {{ n.yoy_b30_aug }}% against {{ n.yoy_all_aug }}%. Objective 2 estimates the local projection model of Kpodar and Liu (2022), validated by reproducing their EU benchmark: a 1% rise in fuel prices raises the price level by {{ n.rq1_all_c0 }} pp within the month and {{ n.rq1_all_c12 }} pp after a year, and the poor's prices rise {{ n.rq4_c6|replace("−","") }} pp more after six months in the regional panel — the opposite of the cross-country finding — with the gap concentrated in 2001–2012. Objective 3 draws policy implications from the 2026 shock: a model estimated on data to 2025 explains about half of the 2026 price surge; the fuel-driven extra cost for a poverty-line family of five is about PHP {{ n.e3_ph_cost }} a month; and rice accounted for most of the poor's excess inflation. Excise relief on LPG is distribution-neutral, cuts in gasoline and diesel taxes would mainly help the better-off, and transfers sized to the poor's own price index, together with attention to rice and fares, are the better-targeted response.
+
+  **Keywords:** oil price shock; inflation inequality; fuel price pass-through; local projections; bottom 30% CPI; regional inflation; Philippines
+
+  **JEL classification:** E31, Q41, I32, D31, R12
 keywords: "oil price shock; inflation inequality; fuel prices; local projections; bottom 30% CPI; regional inflation; Philippines"
 bibliography: references.bib
 link-citations: true
 ---
 
-**Keywords:** oil price shock; inflation inequality; fuel price pass-through; local projections; bottom 30% CPI; regional inflation; Philippines
-
-**JEL classification:** E31, Q41, I32, D31, R12
 
 # Chapter 1. Introduction
 
@@ -129,16 +130,16 @@ $$
 \Delta \ln y_{t+h} = \alpha_h + \sum_{q=1}^{12} \gamma_{1q}\, \Delta \ln y_{t-q} + \sum_{q=1}^{12} \gamma_{2q}\, \Delta \ln F_{t-q} + \beta_h\, \Delta \ln F_{t} + \sum_{l=1}^{h-1} \gamma_{3l}\, \Delta \ln F_{t+l} + \delta_h\, t + \varepsilon_{t+h}
 $$
 
-- **Left-hand side.** Δln y_{t+h} is the change in the log price index in month *t + h*, multiplied by 100 (approximately the monthly inflation rate in percent). The model is written in changes because the levels of prices are non-stationary (Section 5.1.6).
-- **Lags of the outcome**, Δln y_{t−1}, …, Δln y_{t−12}, absorb the persistence of inflation and, because the data are not seasonally adjusted, its seasonal pattern: the coefficient on the lag that falls in the same calendar month a year earlier picks up seasonality.
-- **Lags of the fuel price**, Δln F_{t−1}, …, Δln F_{t−12}, remove the part of today's inflation that is a delayed effect of past fuel shocks.
-- **The shock**, Δln F_t, today's percentage change in the fuel index. Its coefficient β_h is the quantity of interest: the change in inflation in month *t + h* per 1% change in fuel prices in month *t*.
-- **The Teulings–Zubanov terms**, the fuel price changes in months *t + 1*, …, *t + h − 1*. Fuel prices are persistent: a shock today is often followed by further increases. Without these terms, β_h would mix the effect of today's shock with the effect of the later shocks it predicts. Including them isolates the effect of a one-time shock [@teulings_zubanov_2014]. Following the reference study's tables, there are none at *h* = 0 and *h* = 1.
-- **A linear trend** *t* and a constant α_h. In the regional panel the constant is replaced by region fixed effects.
+- **Left-hand side.** Δln y~t+h~ is the change in the log price index in month *t + h*, multiplied by 100 (approximately the monthly inflation rate in percent). The model is written in changes because the levels of prices are non-stationary (Section 5.1.6).
+- **Lags of the outcome**, Δln y~t−1~, …, Δln y~t−12~, absorb the persistence of inflation and, because the data are not seasonally adjusted, its seasonal pattern: the coefficient on the lag that falls in the same calendar month a year earlier picks up seasonality.
+- **Lags of the fuel price**, Δln F~t−1~, …, Δln F~t−12~, remove the part of today's inflation that is a delayed effect of past fuel shocks.
+- **The shock**, Δln F~t~, today's percentage change in the fuel index. Its coefficient β~h~ is the quantity of interest: the change in inflation in month *t + h* per 1% change in fuel prices in month *t*.
+- **The Teulings–Zubanov terms**, the fuel price changes in months *t + 1*, …, *t + h − 1*. Fuel prices are persistent: a shock today is often followed by further increases. Without these terms, β~h~ would mix the effect of today's shock with the effect of the later shocks it predicts. Including them isolates the effect of a one-time shock [@teulings_zubanov_2014]. Following the reference study's tables, there are none at *h* = 0 and *h* = 1.
+- **A linear trend** *t* and a constant α~h~. In the regional panel the constant is replaced by region fixed effects.
 
 ## 3.4 From monthly effects to the price level
 
-β_h is an effect on *inflation in one month*. Policy questions are usually about the *price level*: how much higher are prices after a year? The answer is the cumulative response, β_0 + β_1 + … + β_h. To obtain it with a correct standard error, we re-estimate the model with the cumulative change Σ_{j=0}^{h} Δln y_{t+j} = ln y_{t+h} − ln y_{t−1} on the left-hand side.
+β~h~ is an effect on *inflation in one month*. Policy questions are usually about the *price level*: how much higher are prices after a year? The answer is the cumulative response, β~0~ + β~1~ + … + β~h~. To obtain it with a correct standard error, we re-estimate the model with the cumulative change Σ~j=0~^h^ Δln y~t+j~ = ln y~t+h~ − ln y~t−1~ on the left-hand side.
 
 *Worked example.* With the estimates of Chapter 5, the cumulative response of the all-income CPI after twelve months is {{ n.rq1_all_c12 }}. A 10% increase in fuel prices therefore raises the price level by 10 × {{ n.rq1_all_c12 }} ≈ {{ n.rq1_all_c12_10pct }}% after a year. For the distributional gap D = ln(CPI all/CPI b30), a cumulative response of {{ n.rq4_c6 }} after six months means that a 10% fuel increase lowers D by {{ n.gap6_10pct }} log points: the poor's price level ends up {{ n.gap6_10pct }}% higher, relative to the average household's, than before the shock.
 
@@ -148,7 +149,7 @@ Because the outcome at horizon *h* overlaps with the outcomes of nearby months, 
 
 ## 3.6 The panel version and group differences
 
-For 17 regions *r*, the model is estimated jointly with region fixed effects u_r, using each region's own fuel index and outcome. To test whether a group of regions *G* (for example, Mindanao) responds differently, we add the interaction Δln F_{r,t} × G_r. Its coefficient θ_h is the *additional* response in group *G*; the coefficient on Δln F_{r,t} is then the response outside *G*. Because G_r does not change over time, its own effect is absorbed by the fixed effects.
+For 17 regions *r*, the model is estimated jointly with region fixed effects u~r~, using each region's own fuel index and outcome. To test whether a group of regions *G* (for example, Mindanao) responds differently, we add the interaction Δln F~r,t~ × G~r~. Its coefficient θ~h~ is the *additional* response in group *G*; the coefficient on Δln F~r,t~ is then the response outside *G*. Because G~r~ does not change over time, its own effect is absorbed by the fixed effects.
 
 ## 3.7 Checking the implementation
 
@@ -160,15 +161,15 @@ The full code is in the replication package (`ospd/lp.py` for the estimator, `sc
 
 **Step 1. Arrange the data.** One row per region and month, sorted by region and then date, with a complete monthly calendar (missing months as blank rows, so that "lag 1" is always the previous calendar month). Compute 100 × Δln of each price index and of the fuel index, and an integer month counter *t* for the trend.
 
-**Step 2. Build the regressors for horizon *h*.** Within each region, shift the outcome forward by *h* months to obtain y_{t+h}; shift the outcome and the fuel change backward by 1 to 12 months to obtain the lags; shift the fuel change forward by 1 to *h* − 1 months to obtain the Teulings–Zubanov terms.
+**Step 2. Build the regressors for horizon *h*.** Within each region, shift the outcome forward by *h* months to obtain y~t+h~; shift the outcome and the fuel change backward by 1 to 12 months to obtain the lags; shift the fuel change forward by 1 to *h* − 1 months to obtain the Teulings–Zubanov terms.
 
 **Step 3. Restrict the sample** to shock dates in the estimation window *after* building the lags, so that earlier data still supply the lags of the first observations, and drop rows with any missing value.
 
-**Step 4. Estimate by OLS** (with region fixed effects in the panel) and keep the coefficient on Δln F_t and its standard error.
+**Step 4. Estimate by OLS** (with region fixed effects in the panel) and keep the coefficient on Δln F~t~ and its standard error.
 
 **Step 5. Repeat for *h* = 0, …, 12**, and again with the cumulative outcome.
 
-**Step 6. Plot** β_h against *h* with the 90% band β_h ± 1.645 × s.e.
+**Step 6. Plot** β~h~ against *h* with the 90% band β~h~ ± 1.645 × s.e.
 
 A minimal version of steps 2–4 for one horizon of the national model, written in Python with *pandas* and *statsmodels*, is:
 
@@ -206,7 +207,7 @@ which returns one row per horizon with the coefficient, its standard error, the 
 - *Sample restriction before lagging.* Restricting the sample first throws away the data needed for the lags of the first observations.
 - *Splices and base changes.* Joining series with different bases can create artificial jumps; check the months where series are joined (Section 4.2.3).
 - *Seasonality.* With non-seasonally-adjusted data, twelve lags are needed; fewer lags leave seasonality in the errors.
-- *Reading per-horizon coefficients as level effects.* β_h is an effect on monthly inflation, not on the price level; report cumulative responses for level questions.
+- *Reading per-horizon coefficients as level effects.* β~h~ is an effect on monthly inflation, not on the price level; report cumulative responses for level questions.
 - *Multiple testing.* Testing many groups or horizons makes some "significant" results likely by chance; report how many tests were run and correct for them.
 
 # Chapter 4. Methodology
@@ -269,7 +270,7 @@ The local projection model of Chapter 3 is estimated with *p* = 12 lags, horizon
 
 ### 4.3.3 Objective 3: policy implications
 
-- **Out-of-sample test of the 2026 shock.** The cumulative responses are re-estimated on data ending in December 2025 and applied to the observed 2026 fuel path: the fuel-driven change in the price level between December 2025 and month *m* is Σ_s β^{cum}_{m−s} Δln F_s, summed over the 2026 months up to *m*. This is compared with the actual change.
+- **Out-of-sample test of the 2026 shock.** The cumulative responses are re-estimated on data ending in December 2025 and applied to the observed 2026 fuel path: the fuel-driven change in the price level between December 2025 and month *m* is Σ~s~ β^cum^~m−s~ Δln F~s~, summed over the 2026 months up to *m*. This is compared with the actual change.
 - **Regional burden and peso cost.** The pooled regional responses are applied to each region's fuel path. The fuel-driven rise in the bottom-30% CPI is converted to pesos for a family of five living at the official poverty line (the 2023 regional per-capita poverty threshold × 5 / 12, carried to December 2025 with the regional bottom-30% CPI).
 - **Mechanism.** National responses (2013–2026) of the bottom-30% and all-income sub-indices for electricity, gas and other fuels, LPG, kerosene, solid fuels, passenger transport services and cereals, with their weights in each basket.
 - **Decomposition of the 2026 gap.** The actual December 2025–August 2026 change in each index is split into item contributions using the fixed 2018 weights (descriptive, no model).
@@ -277,7 +278,7 @@ The local projection model of Chapter 3 is estimated with *p* = 12 lags, horizon
 
 ## 4.4 Validation
 
-*Simulation.* Panels and time series are generated from y_t = 0.4 y_{t−1} + 0.04 x_t + 0.02 x_{t−1} + 0.01 x_{t−2} + e_t, whose impulse response is known. The estimator recovers it within 0.006 at every horizon with Newey–West, clustered and Driscoll–Kraay errors, recovers the cumulative response, and detects a known group difference.
+*Simulation.* Panels and time series are generated from y~t~ = 0.4 y~t−1~ + 0.04 x~t~ + 0.02 x~t−1~ + 0.01 x~t−2~ + e~t~, whose impulse response is known. The estimator recovers it within 0.006 at every horizon with Newey–West, clustered and Driscoll–Kraay errors, recovers the cumulative response, and detects a known group difference.
 
 *Replication gate.* Before any Philippine estimate, the estimator had to reproduce three results of @kpodar_liu_2022 on EU data (harmonised CPIs and Weekly Oil Bulletin pump prices, 2005–June 2019), under criteria written in advance: an impact response to after-tax gasoline prices between 0.035 and 0.075 (reference 0.055), near zero from the second month; a larger response to after-tax than to before-tax prices and to crude oil; and the advanced-economy shape with the EU fuels index.
 
@@ -512,6 +513,4 @@ The results qualify the policy conclusion usually drawn from the cross-country e
 ::: {#refs}
 :::
 
-# Appendix A. Reproducing the study
-
-The replication package contains the raw data with a source log, the code for every step, the decision log recording when each specification was fixed, the output tables, the figures and this document. Running `./run_all.sh` in a Python 3.11 environment with the packages in `requirements.txt` regenerates all of them; `./run_all.sh --download` first downloads the PSA tables again. A separate *Analysis and Results Report* lists every estimate, and the *Master Document* describes the whole process of data collection, analysis and interpretation.
+{% include "data_appendix.md" %}
