@@ -154,8 +154,9 @@ Cumulative responses to a 1 pp fuel price rise, 90% bands, Jan 2001–Aug 2026.
   (8 pages, single-spaced), `SA3_Capstone_Paper.docx/.pdf` (the working paper text with a group byline and
   Appendix A, the data appendix `paper/data_appendix.md`: source links S1–S15 and a figure/table → source →
   script → output map), `SA3_Presentation.pptx/.pdf` (19 slides, `scripts/13_presentation.py`, numbers from
-  `paper_numbers.json`). Built by `scripts/14_submissions.py` (needs LibreOffice Writer/Impress). Placeholders:
-  group members [Name 2], [Name 3]; AI-use disclosure in Section 4.6.
+  `paper_numbers.json`). Built by `scripts/14_submissions.py` (needs LibreOffice Writer/Impress). Author: Lian
+  Cataytay (sole author); date November 2026. No AI-use disclosure in generated documents: the author
+  adds it through the author's own pre-submission procedure.
 - `.claude/skills/empirical-econ-study/`: reusable skill for the whole workflow (research → data → validation → estimation → figures → writing → delivery); packaged copy in `deliverables/empirical-econ-study.skill`.
 
 ## Manuscript

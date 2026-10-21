@@ -28,8 +28,8 @@ d.title_slide(
     "Who Pays for Oil Shocks? Fuel Price Pass-Through to the Inflation of Poor Households across Philippine Regions",
     ["Capstone Paper Presentation (SA3)",
      "Graduate School of Applied Economics, University of Southeastern Philippines"],
-    byline="Prepared by: **Lian Cataytay**, [Name 2], [Name 3]",
-    date="October 2026",
+    byline="Prepared by: **Lian Cataytay**",
+    date="November 2026",
 )
 
 # 1. Motivation

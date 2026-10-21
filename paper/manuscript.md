@@ -160,8 +160,6 @@ The 2026 oil shock raised prices for poor Filipino households faster than for th
 
 **Data and code availability.** All data are public. The replication package (download scripts, raw files with a source log, estimation code, tests and a decision log recording when each specification was fixed) reproduces every number, table and figure with one command.
 
-**Use of AI tools.** [To be completed by the author in line with the journal's policy: describe how AI tools were used in data processing, coding and drafting, and confirm that the author reviewed and takes responsibility for all content.]
-
 **Funding.** [To be completed.] **Conflict of interest.** [To be completed.] **Acknowledgements.** [To be completed.]
 
 # References

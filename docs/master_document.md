@@ -185,7 +185,7 @@ These are listed in full in the submission checklist (Appendix H). The most impo
 2. Confirm the specification against the published *Energy Economics* version of the reference study.
 3. Confirm PSA's methodology for the bottom-30% CPI and BARMM's boundaries before 2019.
 4. Verify the 2026 policy facts marked "secondary".
-5. Complete the AI-use disclosure required by the journal. You must be able to explain and defend every number and argument; this document is meant to make that possible.
+5. Prepare any disclosure the venue requires through your own pre-submission procedure (the generated documents do not include one). You must be able to explain and defend every number and argument; this document is meant to make that possible.
 6. Consider the strengthening analyses: an identified oil supply shock as an instrument, policy event dummies, joint inference for the 2026 projections, and September 2026 data.
 
 ## Glossary of methods
@@ -556,6 +556,14 @@ Cumulative responses to a 1 pp fuel price rise, 90% bands, Jan 2001–Aug 2026.
 - `scripts/12_capstone_proposal.js` (docx-js) → `docs/capstone_proposal_FA2.docx` (FA2, ≤ 10 pages; key terms with notation, theoretical framework, paragraph workplan).
 - `docs/session_handoff.Rmd`: context and must-upload list for a new session. Keep it current.
 - User style: as simple as possible, define every term on first use, paragraphs over bullets/tables.
+- **Course submissions (2026-10-21):** `submissions/` holds the files to hand in, in the house style (Times New Roman,
+  black and white, three-line tables; tools vendored in `tools/lian_style/`): `FA2_Capstone_Proposal.docx/.pdf`
+  (8 pages, single-spaced), `SA3_Capstone_Paper.docx/.pdf` (the working paper text with a group byline and
+  Appendix A, the data appendix `paper/data_appendix.md`: source links S1–S15 and a figure/table → source →
+  script → output map), `SA3_Presentation.pptx/.pdf` (19 slides, `scripts/13_presentation.py`, numbers from
+  `paper_numbers.json`). Built by `scripts/14_submissions.py` (needs LibreOffice Writer/Impress). Author: Lian
+  Cataytay (sole author); date November 2026. No AI-use disclosure in generated documents: the author
+  adds it through the author's own pre-submission procedure.
 - `.claude/skills/empirical-econ-study/`: reusable skill for the whole workflow (research → data → validation → estimation → figures → writing → delivery); packaged copy in `deliverables/empirical-econ-study.skill`.
 
 ### Manuscript
@@ -2027,7 +2035,7 @@ The analysis is written in Python 3.11 with *pandas*, *statsmodels*, *linearmode
 
 ### 4.6 Ethical considerations
 
-The study uses published aggregate statistics; no individual or household data were collected. AI tools were used in data processing, coding and drafting; [the author to complete a disclosure statement and confirm review of and responsibility for all content].
+The study uses published aggregate statistics; no individual or household data were collected.
 
 ## Chapter 5. Results and Discussion
 
@@ -2691,8 +2699,6 @@ The 2026 oil shock raised prices for poor Filipino households faster than for th
 
 **Data and code availability.** All data are public. The replication package (download scripts, raw files with a source log, estimation code, tests and a decision log recording when each specification was fixed) reproduces every number, table and figure with one command.
 
-**Use of AI tools.** [To be completed by the author in line with the journal's policy: describe how AI tools were used in data processing, coding and drafting, and confirm that the author reviewed and takes responsibility for all content.]
-
 **Funding.** [To be completed.] **Conflict of interest.** [To be completed.] **Acknowledgements.** [To be completed.]
 
 ## References
@@ -2898,9 +2904,9 @@ The items below are what stands between the draft and submission.
 
 - [ ] Check AEJ author guidelines for length, abstract limit, reference style, figure
       format, and anonymised manuscript requirements; adjust the template.
-- [ ] Complete the declarations: AI-use statement (required by Wiley; describe the use of
-      Claude Code for data processing, coding and drafting, and confirm your review and
-      responsibility), funding, conflicts, acknowledgements.
+- [ ] Complete the declarations: funding, conflicts, acknowledgements. (The AI-use
+      statement is handled by the author's own procedure before each submission, not in
+      the generated documents.)
 - [ ] Title page with author details separate from the anonymised manuscript.
 - [ ] Cover letter (I can draft it once the framing is fixed).
 - [ ] Replication package: this repository at a tagged commit, with README, data licence
@@ -5125,8 +5131,8 @@ def main():
     style_ref = ROOT / "tools" / "lian_style" / "assets" / "lian-article-reference.docx"  # house style
     docs = [("manuscript", "manuscript", False, {}),
             ("working_paper", "working_paper", True, {"doc_label": "Working Paper", "doc_authors": "[Author name]"}),
-            ("capstone_paper", "working_paper", False,  # SA3 submission: same text, group byline, no TOC field
-             {"doc_label": "Capstone Paper", "doc_authors": "Lian Cataytay, [Name 2], [Name 3]"})]
+            ("capstone_paper", "working_paper", False,  # SA3 submission: same text, author byline, no TOC field
+             {"doc_label": "Capstone Paper", "doc_authors": "Lian Cataytay"})]
     for name, template, toc, extra in docs:
         if not (PAPER / f"{template}_template.md").exists():
             continue
@@ -5854,8 +5860,8 @@ d.title_slide(
     "Who Pays for Oil Shocks? Fuel Price Pass-Through to the Inflation of Poor Households across Philippine Regions",
     ["Capstone Paper Presentation (SA3)",
      "Graduate School of Applied Economics, University of Southeastern Philippines"],
-    byline="Prepared by: **Lian Cataytay**, [Name 2], [Name 3]",
-    date="October 2026",
+    byline="Prepared by: **Lian Cataytay**",
+    date="November 2026",
 )
 
 # 1. Motivation
@@ -6236,6 +6242,7 @@ def test_interaction_detects_group_difference():
 # Appendix K. Version history (git log)
 
 ```text
+8a971c6 2026-10-21 Add course submissions: FA2 proposal, SA3 capstone paper with data appendix, SA3 deck (house style, PDFs)
 5e9bc0c 2026-10-14 Add empirical-econ-study skill: research, data, validation, estimation, figures, writing, delivery
 e8e7ef4 2026-10-06 Revise FA2 proposal (notation, theory, paragraph workplan); add session handoff Rmd
 8d50e31 2026-10-06 Add FA2 capstone proposal (docx, built by scripts/12_capstone_proposal.js)

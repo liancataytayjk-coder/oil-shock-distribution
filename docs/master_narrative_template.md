@@ -185,7 +185,7 @@ These are listed in full in the submission checklist (Appendix H). The most impo
 2. Confirm the specification against the published *Energy Economics* version of the reference study.
 3. Confirm PSA's methodology for the bottom-30% CPI and BARMM's boundaries before 2019.
 4. Verify the 2026 policy facts marked "secondary".
-5. Complete the AI-use disclosure required by the journal. You must be able to explain and defend every number and argument; this document is meant to make that possible.
+5. Prepare any disclosure the venue requires through your own pre-submission procedure (the generated documents do not include one). You must be able to explain and defend every number and argument; this document is meant to make that possible.
 6. Consider the strengthening analyses: an identified oil supply shock as an instrument, policy event dummies, joint inference for the 2026 projections, and September 2026 data.
 
 ## Glossary of methods

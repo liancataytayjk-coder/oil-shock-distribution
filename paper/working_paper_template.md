@@ -3,7 +3,7 @@ title: "Who Pays for Oil Shocks? Fuel Price Pass-Through to the Inflation of Poo
 subtitle: "{{ doc_label }}"
 author:
   - "{{ doc_authors }}, Master of Arts in Economics (Applied Economics), Graduate School of Applied Economics, University of Southeastern Philippines, Davao City"
-date: "October 2026"
+date: "November 2026"
 abstract: |
   This {{ doc_label|lower }} asks whether poor Filipino households pay more than others when fuel prices rise, and whether the answer depends on where they live. It uses the Philippine Statistics Authority's monthly consumer price index (CPI) for all income households and for the bottom 30% income households, for the country and 17 regions, from 2001 to August 2026, together with the CPI sub-index for retail motor fuels. The paper pursues three objectives. Objective 1 describes the trends: since 2001, bottom-30% prices have risen {{ n.d_cum_gap_ph|replace("−","") }} log points more than all-income prices, the poor's inflation exceeded the average in {{ n.d_episodes_b30_higher }} of {{ n.d_n_episodes }} fuel-shock episodes, and in August 2026 it stood at {{ n.yoy_b30_aug }}% against {{ n.yoy_all_aug }}%. Objective 2 estimates the local projection model of Kpodar and Liu (2022), validated by reproducing their EU benchmark: a 1% rise in fuel prices raises the price level by {{ n.rq1_all_c0 }} pp within the month and {{ n.rq1_all_c12 }} pp after a year, and the poor's prices rise {{ n.rq4_c6|replace("−","") }} pp more after six months in the regional panel — the opposite of the cross-country finding — with the gap concentrated in 2001–2012. Objective 3 draws policy implications from the 2026 shock: a model estimated on data to 2025 explains about half of the 2026 price surge; the fuel-driven extra cost for a poverty-line family of five is about PHP {{ n.e3_ph_cost }} a month; and rice accounted for most of the poor's excess inflation. Excise relief on LPG is distribution-neutral, cuts in gasoline and diesel taxes would mainly help the better-off, and transfers sized to the poor's own price index, together with attention to rice and fares, are the better-targeted response.
 
@@ -288,7 +288,7 @@ The analysis is written in Python 3.11 with *pandas*, *statsmodels*, *linearmode
 
 ## 4.6 Ethical considerations
 
-The study uses published aggregate statistics; no individual or household data were collected. AI tools were used in data processing, coding and drafting; [the author to complete a disclosure statement and confirm review of and responsibility for all content].
+The study uses published aggregate statistics; no individual or household data were collected.
 
 # Chapter 5. Results and Discussion
 

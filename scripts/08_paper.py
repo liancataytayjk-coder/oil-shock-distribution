@@ -204,8 +204,8 @@ def main():
     style_ref = ROOT / "tools" / "lian_style" / "assets" / "lian-article-reference.docx"  # house style
     docs = [("manuscript", "manuscript", False, {}),
             ("working_paper", "working_paper", True, {"doc_label": "Working Paper", "doc_authors": "[Author name]"}),
-            ("capstone_paper", "working_paper", False,  # SA3 submission: same text, group byline, no TOC field
-             {"doc_label": "Capstone Paper", "doc_authors": "Lian Cataytay, [Name 2], [Name 3]"})]
+            ("capstone_paper", "working_paper", False,  # SA3 submission: same text, author byline, no TOC field
+             {"doc_label": "Capstone Paper", "doc_authors": "Lian Cataytay"})]
     for name, template, toc, extra in docs:
         if not (PAPER / f"{template}_template.md").exists():
             continue

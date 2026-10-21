@@ -72,11 +72,11 @@ add(
     children: [new TextRun({ text: "Who Pays for Oil Shocks? Fuel Price Pass-Through to the Inflation of Poor Households across Philippine Regions",
       bold: true, size: 30 })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 40 },
-    children: [new TextRun({ text: "Group members: Lian Cataytay, [Name 2], [Name 3]", size: 22 })] }),
+    children: [new TextRun({ text: "Lian Cataytay", size: 22 })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 40 },
     children: [new TextRun({ text: "Graduate School of Applied Economics, University of Southeastern Philippines", size: 22 })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 240 },
-    children: [new TextRun({ text: "Submitted: Week 10, October 2026", size: 22 })] }),
+    children: [new TextRun({ text: "Submitted: Week 10, November 2026", size: 22 })] }),
 );
 
 add(h1("1. Motivation and Philippine Policy Relevance"));

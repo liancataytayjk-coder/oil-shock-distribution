@@ -75,7 +75,7 @@ the items that are **not** in the repository.
 | 2 | Working-paper formatting template (PDF or DOCX) | **No**: it never arrived in the first session | Required before the working paper is reformatted |
 | 3 | Reference-style guide or sample ("the basis for the reference") | **No**: never arrived | Needed to restyle the reference lists |
 | 4 | Course syllabus or rubric for FA2 and later outputs | No | So documents match the grading criteria |
-| 5 | Group member names, adviser name, and any adviser comments | No | Fill the placeholders `[Name 1]`, `[Name 2]`, `[Name 3]` in the proposal |
+| 5 | Adviser name and any adviser comments | No | The author is Lian Cataytay (sole author) |
 | 6 | Concept note | Yes (`docs/concept_note.md`) | Upload only if it has changed |
 
 If an upload does not appear as a file card in the chat, commit the file to the
@@ -277,8 +277,8 @@ gap.
 The following items are still open:
 
 0. **Course submissions are built** in `submissions/` (FA2 proposal, SA3 paper with data
-   appendix, SA3 deck, each .docx/.pptx and .pdf; `scripts/14_submissions.py`). Fill in the group
-   names `[Name 2]`, `[Name 3]` and the AI-use disclosure, then rebuild. The PDFs need LibreOffice
+   appendix, SA3 deck, each .docx/.pptx and .pdf; `scripts/14_submissions.py`). Sole author Lian Cataytay;
+   dated November 2026; no AI-use disclosure in the documents (handled separately). Rebuild after edits. The PDFs need LibreOffice
    Writer and Impress (`apt-get install libreoffice-writer libreoffice-impress libreoffice-math`).
 
 1. **Working paper formatting.** Waiting for the template (upload item 2). The

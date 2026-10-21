@@ -54,9 +54,9 @@ The items below are what stands between the draft and submission.
 
 - [ ] Check AEJ author guidelines for length, abstract limit, reference style, figure
       format, and anonymised manuscript requirements; adjust the template.
-- [ ] Complete the declarations: AI-use statement (required by Wiley; describe the use of
-      Claude Code for data processing, coding and drafting, and confirm your review and
-      responsibility), funding, conflicts, acknowledgements.
+- [ ] Complete the declarations: funding, conflicts, acknowledgements. (The AI-use
+      statement is handled by the author's own procedure before each submission, not in
+      the generated documents.)
 - [ ] Title page with author details separate from the anonymised manuscript.
 - [ ] Cover letter (I can draft it once the framing is fixed).
 - [ ] Replication package: this repository at a tagged commit, with README, data licence
