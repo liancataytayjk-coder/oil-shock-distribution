@@ -187,17 +187,17 @@ def main():
                                            "region_info.csv": "region", "items_2026.csv": "basket x item x month"}[f]})
     for s in SOURCES:
         for path in s["files"]:
-            if path.startswith(("psa/", "wb/", "bsp/", "bis/", "fao/", "extracts/")):
-                full = RAW / path
+            if path.startswith(("psa/", "wb/", "bsp/", "bis/", "fao/", "extracts/", "reference/")):
+                full = (RAW.parent if path.startswith("reference/") else RAW) / path
                 rows = sum(1 for _ in open(full, "rb")) - 1 if full.suffix == ".csv" else "(Excel/PDF)"
-                ds.append({"File": f"data/raw/{path}", "Description": f"Raw, {s['id']}: {s['title']}", "Rows": rows,
+                ds.append({"File": f"data/{'' if path.startswith('reference/') else 'raw/'}{path}", "Description": f"Raw, {s['id']}: {s['title']}", "Rows": rows,
                            "Columns": "", "Unit of observation": "as published"})
     ds = pd.DataFrame(ds)
 
     raw_vars = []
     for s in SOURCES:
         for path in s["files"]:
-            p = RAW / path
+            p = (RAW.parent if path.startswith("reference/") else RAW) / path
             if p.suffix != ".csv" or not p.exists():
                 continue
             cols = pd.read_csv(p, nrows=0, encoding="latin-1").columns
@@ -206,7 +206,7 @@ def main():
             for c in cols:
                 if c in months or c in aves:
                     continue
-                raw_vars.append({"File": f"data/raw/{path}", "Source": s["id"], "Column": c,
+                raw_vars.append({"File": f"data/{'' if path.startswith('reference/') else 'raw/'}{path}", "Source": s["id"], "Column": c,
                                  "Description": "as published by the source"})
             if months:
                 raw_vars.append({"File": f"data/raw/{path}", "Source": s["id"],

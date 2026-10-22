@@ -72,6 +72,13 @@ SOURCES = [
          files=["paper/policy_context_2026.md"],
          links=["https://lawphil.net/statutes/repacts/ra2026/ra_12316_2026.html"],
          coverage="Mar-Sep 2026", licence="Public documents"),
+    dict(id="S12", publisher="Kpodar and Liu (2021), IMF Working Paper WP/21/271",
+         title="Published coefficients of the reference study (Annex Tables 1-2, Figure 7)",
+         use="Comparison of the Philippine pass-through with the reference study's estimates",
+         files=["reference/kpodar_liu_2021_targets.csv"],
+         links=["https://www.imf.org/en/publications/wp/issues/2021/11/12/the-distributional-implications-of-the-"
+                "impact-of-fuel-price-increases-on-inflation-506822"],
+         coverage="Advanced and developing economies, 2000-2019", licence="Typed from the published paper"),
 ]
 
 # Results map: output file -> what it is, the data it uses, the scripts that make it, where it appears.
