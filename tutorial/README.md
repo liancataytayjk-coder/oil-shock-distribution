@@ -322,7 +322,7 @@ absorbed by the fixed effects.
 
 ## 11. The same in Stata
 
-The study's full Stata 17 pipeline will be added in `code/stata/`. The core of one horizon looks like this
+The study's full Stata 17 pipeline is in `code/stata/` (written, not yet run in Stata; see its README). The core of one horizon looks like this
 (national model, cumulative outcome, Newey–West; panel with Driscoll–Kraay needs
 `ssc install xtscc`):
 

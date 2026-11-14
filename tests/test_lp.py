@@ -59,3 +59,20 @@ def test_interaction_detects_group_difference():
     res = local_projection(df, "y", "x", time="t", unit="unit", horizons=0, p=6, interact=("G",))
     theta = res.loc[res.term == "shock_x_G", "beta"].iloc[0]
     assert abs(theta - 0.03) < 0.005
+
+
+def test_full_leads_remove_h1_bias_with_persistent_shocks():
+    """With x_t = 0.6 x_{t-1} + u_t, leads 1..h-1 leave h = 1 biased (no lead); leads 1..h (tz="full") do not."""
+    rng = np.random.default_rng(3)
+    T = 4000
+    u, e = rng.normal(0, 3, T), rng.normal(0, 0.2, T)
+    x, y = np.zeros(T), np.zeros(T)
+    for t in range(T):
+        x[t] = (0.6 * x[t - 1] if t else 0) + u[t]
+        y[t] = (RHO * y[t - 1] if t else 0) + e[t] + sum(b * x[t - j] for j, b in enumerate(B) if t - j >= 0)
+    df = pd.DataFrame({"t": np.arange(T), "y": y, "x": x})
+    paper = local_projection(df, "y", "x", time="t", horizons=3, p=12, se="newey_west")
+    full = local_projection(df, "y", "x", time="t", horizons=3, p=12, se="newey_west", tz="full")
+    truth = true_irf(3)
+    assert abs(paper.beta.iloc[1] - truth[1]) > 0.015          # the h = 1 bias of the reference lead set
+    np.testing.assert_allclose(full.beta.to_numpy(), truth, atol=0.006)

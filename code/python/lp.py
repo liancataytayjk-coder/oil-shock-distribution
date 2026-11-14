@@ -6,7 +6,9 @@ optional controls (contemporaneous plus p lags), a linear time trend and,
 for panels, unit fixed effects. beta_h is the coefficient on x_t.
 
 The lead set follows Annex Tables 1-2 of the reference paper: no lead at h = 0
-or h = 1, leads 1..h-1 thereafter (decision D4 in CLAUDE.md).
+or h = 1, leads 1..h-1 thereafter (decision D4 in CLAUDE.md). tz="full" uses
+Teulings and Zubanov's own lead set, 1..h (robustness, decision D13); tz=False
+drops the leads.
 """
 
 from __future__ import annotations
@@ -36,7 +38,8 @@ def _design(df, y, x, unit, time, h, p, controls, interact, cumulative, tz, exog
         out[f"{y}_l{q}"] = shift(y, q)
         out[f"{x}_l{q}"] = shift(x, q)
     if tz:
-        for lead in range(1, h):
+        last = h if tz == "full" else h - 1
+        for lead in range(1, last + 1):
             out[f"{x}_f{lead}"] = shift(x, -lead)
     for c in controls:
         out[c] = df[c]

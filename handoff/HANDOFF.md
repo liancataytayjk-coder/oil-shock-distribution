@@ -11,7 +11,7 @@ This study asks whether rising fuel prices hurt poor Filipino households more th
 
 The study has three objectives and three research questions. Objective 1 describes the data (trends, fuel price episodes, the inflation gap). Objective 2 estimates how much fuel prices pass through to the prices of both groups (RQ1) and whether the poor pay more, and why (RQ2). Objective 3 applies the estimates to the 2026 oil shock, puts a peso value on its cost to a poor family and assesses the policy responses (RQ3).
 
-**Status at handoff (14 November 2026).** All analyses are finished and every document is built. The whole pipeline was re-run from the raw data on the handoff date: all five automated tests pass, every document passes the house-style check, and no number or text changed from the committed version. All work is on the Git branch `claude/bold-hamilton-0ixcim`.
+**Status at handoff (14 November 2026).** All analyses are finished and every document is built. The article has been restructured for the *Asian Economic Journal* (decision D15), the 15 reviewed references have been checked against their sources, two supplementary checks were added (Teulings–Zubanov leads, D13; a VAR, D14), the full Stata 17 replication has been written, and a study kit prepares the defense. The whole pipeline was re-run from the raw data on the handoff date: all automated tests pass and every document passes the house-style check. The main estimates are unchanged. All work is on the Git branch `claude/bold-hamilton-0ixcim`.
 
 # 2. Start here: the documents
 
@@ -20,19 +20,25 @@ Table: Table 1. The finished documents (each in Word and PDF).
 | Document | File | Pages | Use |
 |------------------|------------------------------|-------:|----------------------------------------|
 | Working paper (chapter form) | `paper/working_paper.pdf` / `.docx` | 54 | The full study: Chapters 1–5 and Appendices A (review matrix), B (supplementary results) and C (data) |
-| Journal article (IMRAD) | `paper/article.pdf` / `.docx` | 27 | Draft for the *Asian Economic Journal*, with an online appendix |
+| Journal article (IMRAD), reading version | `paper/article.pdf` / `.docx` | {art} | For the *Asian Economic Journal*: descriptives, RQ1, RQ2 (national and panel side by side, budget-share decomposition), robustness, the 2026 application and policy |
+| Article: online appendix | `paper/article_online_appendix.pdf` / `.docx` | {app} | The 15-study review matrix, all 13 divisions, every robustness check, region groups, leave one region out, the VAR, further descriptives, data appendix |
+| Article: submission file and title page | `paper/article_submission.pdf` / `.docx`; `paper/article_title_page.*` | {sub} + 1 | Blinded main text with tables and figures at the end, one per page; separate title page with the word count |
+| Study kit | `study_kit/study_kit.pdf` / `.docx` | {kit} | Ten-day study plan, 40 likely defense questions with answers, the study on one page, how to redo the analysis on other data |
 | Research proposal, national pitch | `paper/proposal_pitch.pdf` / `.docx` | 11 | Short, national-only proposal that sells the idea: why it matters, how others answered it, how we answer it with Philippine data |
 | Local projections booklet | `tutorial/lp_booklet.pdf` / `.docx` | 37 | Teaching booklet: theory, code step by step, interpretation, exercises with answers |
 | Local projections tutorial (web) | `tutorial/README.md` | | Short GitHub version of the booklet |
 | Codebook | `codebook/codebook.xlsx` | | Every variable, its source and its definition |
+| Reference check | `paper/reference_check.md` | | How each of the 15 reviewed studies was verified, and the one correction |
+| Stata replication | `code/stata/` (README inside) | | Re-estimates every result and compares it with Python; written, not yet run |
+| Local projection on any data | `study_kit/lp_any.py`, `study_kit/lp_any.do` | | Run the study's specification on any CSV file (Python) or data set (Stata) |
 
-The figures are in `output/figures/` (PNG at 300 dpi, TIFF for journals, PDF), and the tables in `output/tables/`. The file `output/tables/estimates.csv` holds every estimate (column `core` = 1 marks the main-text results), and `output/tables/paper_numbers.json` holds the 230 numbers quoted in the papers.
+The figures are in `output/figures/` (PNG at 300 dpi, TIFF for journals, PDF), and the tables in `output/tables/`. The file `output/tables/estimates.csv` holds every estimate (column `core` = 1 marks the main-text results), and `output/tables/paper_numbers.json` holds the numbers quoted in the papers.
 
 # 3. Key results in brief
 
 **RQ1, pass-through.** A 1% rise in pump prices raises the all-income price level by 0.044% within the month, 0.087% after six months and 0.102% after a year; the bottom-30% price level responds almost identically (0.044, 0.095 and 0.102). A 10% rise in pump prices makes prices about 1% higher a year later. World crude prices capture only about 40% of this.
 
-**RQ2, who pays more.** The effect is not progressive, contrary to the cross-country finding. The inflation gap (all-income minus bottom-30% inflation) responds negatively: nationally −0.0155 after six months, significant only at 3, 4, 7 and 8 months; in the 17-region panel −0.0214 (standard error 0.0084), significant from 3 to 12 months. Budget shares alone would predict a progressive gap (+0.0101), so the regressive sign comes from larger price increases within the categories the poor buy (housing and household fuels, food). The gap shrinks with macroeconomic controls (−0.0046) and is concentrated in 2001–2012 (−0.0541 against −0.0091 since 2013); leaving out any one region changes little (−0.0227 to −0.0203).
+**RQ2, who pays more.** The effect is not progressive, contrary to the cross-country finding. The inflation gap (all-income minus bottom-30% inflation) responds negatively: nationally −0.0155 after six months, significant only at 3, 4, 7 and 8 months; in the 17-region panel −0.0214 (standard error 0.0084), significant from 3 to 12 months. Budget shares alone would predict a progressive gap (+0.0101), so the regressive sign comes from larger price increases within the categories the poor buy (housing and household fuels, food). The gap shrinks with macroeconomic controls (−0.0046) and is concentrated in 2001–2012 (−0.0541 against −0.0091 since 2013); leaving out any one region changes little (−0.0227 to −0.0203). With Teulings and Zubanov's own leads the six-month results barely move (CPI all 0.087 → 0.088; gap −0.0155 → −0.0160; panel −0.0214 → −0.0216), and a VAR with fuel ordered first also gives a negative gap (−0.0219 after six months).
 
 **RQ3, the 2026 shock.** A model estimated only on data to December 2025 explains 2.55 of the 4.81% rise in the all-income price level and 3.13 of the 5.98% rise for the bottom 30% between December 2025 and August 2026. The fuel-driven cost to a family of five at the poverty line is about PHP 467 a month (PHP 390–633 across regions); the total extra cost was about PHP 907. Rice and other cereals account for +1.67 points of the poor's +1.24-point excess price rise.
 
@@ -40,7 +46,7 @@ The figures are in `output/figures/` (PNG at 300 dpi, TIFF for journals, PDF), a
 
 The handoff comes with two zip files in `handoff/zip/`. They are not stored in Git because of their size; rebuild them with `.venv/bin/python handoff/build_handoff.py`.
 
-**`oil-shock_deliverables_2026-11.zip`** holds only the finished outputs, for reading and sharing: this guide (Word and PDF), the working paper, the article, the pitch proposal, the booklet and the tutorial, all figures and tables, and the codebook.
+**`oil-shock_deliverables_2026-11.zip`** holds only the finished outputs, for reading and sharing: this guide (Word and PDF), the working paper, the article with its online appendix, submission file and title page, the pitch proposal, the booklet and the tutorial, the study kit with its two scripts, the reference check, all figures and tables, and the codebook.
 
 **`oil-shock_full-project_2026-11.zip`** holds the complete project, everything needed to rebuild every number: the code, the raw and clean data, all outputs and documents, the templates, the house-style tools, the tests, the tutorial and the version 1 archive. It leaves out only the Python environment (`.venv`), which is rebuilt from `requirements.txt`, and Git's internal files.
 
@@ -65,6 +71,8 @@ Table: Table 2. Where everything is.
 | `codebook/` | `codebook.xlsx` |
 | `tools/lian_style/` | House style: Word reference document, `docx_style.py`, `render.py`, `check_style.py` |
 | `tests/` | Automated tests of the estimator (simulated data with known answers) |
+| `study_kit/` | The study kit, its source and build script, and `lp_any.py` / `lp_any.do` |
+| `code/stata/` | Stata 17 replication: `00_master.do` runs import, estimator, descriptives, estimates, 2026, VAR and the comparison with Python |
 | `handoff/` | This guide, the manifest and the handoff build script |
 | `archive/v1_full/` | Version 1, unchanged: the 51-page working paper, the journal draft, the EU replication gate, all robustness checks, the FA2 proposal and SA3 submissions |
 
@@ -76,12 +84,10 @@ You need Python 3.11, LibreOffice (Writer and Math, for the PDFs) and `pdftotext
 python3.11 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ./run_all.sh
-.venv/bin/python tutorial/lp_tutorial.py
-.venv/bin/python tutorial/build_booklet.py
 .venv/bin/python handoff/build_handoff.py
 ```
 
-The first two lines create the Python environment. `run_all.sh` rebuilds the data, the results, the papers, the pitch proposal and the codebook and runs the tests (about four minutes). The last three lines rebuild the tutorial numbers and figures, the booklet, and this guide with its manifest and zip files.
+The first two lines create the Python environment. `run_all.sh` rebuilds the data, the results, the papers (working paper; article, online appendix, submission file and title page), the pitch proposal, the codebook, the tutorial, the booklet and the study kit, and runs the tests (about eight minutes). The last line rebuilds this guide with its manifest and zip files. For the Stata replication, open Stata 17 in the top folder and run `do code/stata/00_master.do` (see `code/stata/README.md`).
 
 `run_all.sh` runs, in order: `01_extract_excel.py` (copies the Excel columns used into CSV), `02_build_clean.py` (builds the clean data), `03_descriptive.py` (Objective 1), `04_estimate.py` (RQ1, RQ2, robustness and appendix), `05_policy_2026.py` (RQ3), `06_figures.py`, `07_papers.py` (working paper and article), `08_codebook.py`, `09_pitch.py` (the pitch proposal) and the tests. To download the PSA tables again first, run `./run_all.sh --download`.
 
@@ -97,6 +103,8 @@ Table: Table 3. What to edit for each document.
 | Article | `paper/article_template.md` | `07_papers.py` |
 | Review matrix | `paper/review_matrix.csv` | `07_papers.py` |
 | Pitch proposal | `paper/pitch_template.md` | `09_pitch.py` |
+| Article online appendix | `paper/article_appendix_template.md` | `07_papers.py` |
+| Study kit | `study_kit/study_kit_template.md` | `study_kit/build_kit.py` |
 | Booklet | `tutorial/booklet_src/*.md` | `tutorial/build_booklet.py` |
 | References | `paper/references.bib`; booklet extras in `tutorial/booklet_src/extra.bib` | The document's build script |
 | Any estimate | The code in `code/python/`, plus a decisions-log entry | `./run_all.sh` |
@@ -109,11 +117,11 @@ All data are public and free. The PSA series come from PSA OpenSTAT: the all-inc
 
 # 9. Open items and next steps
 
-**Decisions for the adviser.** (1) Whether the distribution outcome should be in changes or levels; the reference paper is ambiguous. (2) The lead convention: the study follows the reference paper (fuel leads 1 to *h* − 1, decision D4); Teulings and Zubanov's own correction (leads 1 to *h*) removes the small zig-zag at months 1–2 and leaves the six- and twelve-month results unchanged. It could be reported as a footnote or robustness check (booklet Chapter 22 has the comparison).
+**Decisions for the adviser.** (1) Whether the distribution outcome should be in changes or levels; the reference paper is ambiguous. (2) The lead convention is now settled as planned: the main specification follows the reference paper (decision D4) and Teulings and Zubanov's own leads are a robustness row (D13); mention it if the adviser asks.
 
-**Work still to do.** (1) The Stata 17 version of the pipeline in `code/stata/` has not been written yet; the plan is for the author to run it and compare with Python's results (`run_all.sh` and the README already refer to `code/stata/00_master.do`). (2) Revise the FA2 proposal in the archive to the three-question structure, using the new pitch proposal as the base. (3) Slides, when needed. (4) The BARMM boundary before 2019 (ARMM versus BARMM, Cotabato City) is covered by the leave-one-region-out check but could be noted in the data appendix.
+**Work still to do.** (1) Run the Stata 17 code (`do code/stata/00_master.do`). It was written without access to Stata, so expect to fix small syntax errors; `07_compare.do` then reports how closely each estimate matches Python. (2) Revise the FA2 proposal in the archive to the three-question structure, using the new pitch proposal as the base. (3) Slides, when needed. (4) The BARMM boundary before 2019 (ARMM versus BARMM, Cotabato City) is covered by the leave-one-region-out check but could be noted in the data appendix.
 
-**Check before submitting.** (1) Several 2026 policy facts come from news or tax-firm reports rather than the official issuances, including the Finance Secretary's "not progressive" remark and the PHP 37 LPG saving per tank; `paper/policy_context_2026.md` marks each as verified or secondary. (2) Four references used only in the booklet (Sims 1980; Li, Plagborg-Møller and Wolf 2024; Jordà 2023; Nickell 1981) were entered from memory and should be checked. (3) The author adds the AI-use disclosure to each submission separately; the generated documents deliberately leave it out.
+**Check before submitting.** (1) Several 2026 policy facts come from news or tax-firm reports rather than the official issuances, including the Finance Secretary's "not progressive" remark and the PHP 37 LPG saving per tank; `paper/policy_context_2026.md` marks each as verified or secondary. (2) The 15 studies reviewed in the article were checked against their sources (`paper/reference_check.md`; Balié et al. now cites the 2021 journal article). The other references in the article (methods and data sources) and four references used only in the booklet (Sims 1980; Li, Plagborg-Møller and Wolf 2024; Jordà 2023; Nickell 1981) were not part of that check. (3) The journal's rules (an abstract of about 100 words, author–date references, a blinded main file, a separate title page, at most 8,000 words plus 20%, a submission fee for non-members) come from 2023–2024 issue notices because Wiley's author page could not be reached; confirm them at https://mc.manuscriptcentral.com/asej before submitting, and fill in the title page's placeholders (e-mail, funding, acknowledgements). (4) The author adds the AI-use disclosure to each submission separately; the generated documents deliberately leave it out.
 
 # 10. Version 1 archive
 

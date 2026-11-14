@@ -16,4 +16,7 @@ $PY 07_papers.py             # paper/: working paper and article (.md, .docx, .p
 $PY 08_codebook.py           # codebook/codebook.xlsx
 $PY 09_pitch.py              # paper/proposal_pitch (short national proposal)
 cd ../..
+$PY tutorial/lp_tutorial.py > /dev/null      # tutorial numbers and figures
+$PY tutorial/build_booklet.py                # tutorial/lp_booklet (.md, .docx, .pdf)
+$PY study_kit/build_kit.py                   # study_kit/study_kit (.md, .docx, .pdf)
 $PY -m pytest -q tests

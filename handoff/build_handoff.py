@@ -34,6 +34,10 @@ SKIP_DIRS = {".git", ".venv", "__pycache__", ".pytest_cache", "deliverables", ".
 DELIVERABLES = [
     "handoff/HANDOFF.md", "handoff/HANDOFF_GUIDE.pdf", "handoff/HANDOFF_GUIDE.docx", "README.md", "CLAUDE.md",
     "paper/working_paper.pdf", "paper/working_paper.docx", "paper/article.pdf", "paper/article.docx",
+    "paper/article_online_appendix.pdf", "paper/article_online_appendix.docx", "paper/article_submission.pdf",
+    "paper/article_submission.docx", "paper/article_title_page.pdf", "paper/article_title_page.docx",
+    "paper/reference_check.md", "study_kit/study_kit.pdf", "study_kit/study_kit.docx", "study_kit/lp_any.py",
+    "study_kit/lp_any.do", "code/stata/README.md",
     "paper/proposal_pitch.pdf", "paper/proposal_pitch.docx", "paper/review_matrix.csv",
     "paper/policy_context_2026.md", "tutorial/lp_booklet.pdf", "tutorial/lp_booklet.docx", "tutorial/README.md",
     "codebook/codebook.xlsx", "data/raw/source_log.md",

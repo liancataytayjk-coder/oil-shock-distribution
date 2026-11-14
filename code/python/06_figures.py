@@ -182,21 +182,53 @@ def forest(ax, rows):
 def fig06_robustness(est):
     c = est[est.cumulative & (est.h == 6) & (est.term == "shock") & (est.outcome == "d_ratio")]
     get = lambda rq, spec: tuple(c[(c.rq == rq) & (c.spec == spec)][["beta", "se"]].iloc[0])  # noqa: E731
+    v = pd.read_csv(TAB / "var_comparison.csv").query("outcome == 'd_ratio' and h == 6").iloc[0]
+    var6 = (v["var"], (v.var_hi - v.var_lo) / (2 * 1.645))       # Monte Carlo band shown as an equivalent s.e.
     rows = [("Baseline, national", *get("RQ2", "national"), False),
             ("Dubai crude in pesos (national)", *get("ROB", "dubai crude php"), False),
             ("Macro controls (national)", *get("ROB", "macro controls"), False),
             ("Excluding 2020 (national)", *get("ROB", "excl 2020"), False),
+            ("Leads 1 to h, Teulings–Zubanov (national)", *get("ROB", "TZ leads 1..h"), True),
+            ("VAR, fuel ordered first (national)", *var6, True),
             ("Baseline, 17-region panel", *get("RQ2", "panel"), False),
+            ("Leads 1 to h, Teulings–Zubanov (panel)", *get("ROB", "panel TZ leads 1..h"), True),
             ("Panel, 2001–2012", *get("ROB", "panel 2001-2012"), True),
             ("Panel, 2013–2026", *get("ROB", "panel 2013-2026"), True)]
     loo = c[(c.rq == "ROB") & c.spec.str.startswith("drop ")]
     rows.append(("Panel, one region left out (range)", float("nan"), 0.0, False))
-    fig, ax = plt.subplots(figsize=(6.2, 3.6))
+    fig, ax = plt.subplots(figsize=(6.2, 4.4))
     forest(ax, rows)
     ax.plot([loo.beta.min(), loo.beta.max()], [0, 0], color=BLACK, linewidth=4, solid_capstyle="butt")
     ax.set_xlabel("Cumulative response of ln(CPI all / CPI bottom 30%) after 6 months, 90% CI\n"
-                  "Open squares: split of the panel sample (specified after the first results)")
+                  "Open squares: checks specified after the first results")
     save(fig, "fig06_robustness")
+
+
+def figA5_var():
+    """Local projection against a VAR with fuel ordered first (decision D14)."""
+    v = pd.read_csv(TAB / "var_comparison.csv")
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 3.0))
+    for ax, (y, title, ylab) in zip(axes, [("d_cpi_all", "(a) CPI, all income", "Cumulative response (% per 1% fuel)"),
+                                           ("d_ratio", "(b) Gap, all income minus bottom 30%",
+                                            "Cumulative response (pp per 1% fuel)")]):
+        q = v[v.outcome == y]
+        ax.fill_between(q.h, q.lp_lo, q.lp_hi, color=LIGHT, linewidth=0)
+        ax.plot(q.h, q.lp, label="Local projection (baseline, 90% band)", **A)
+        ax.plot(q.h, q["var"], label="VAR, fuel first", color=BLACK, linestyle="--", marker="^", markersize=3.5,
+                markerfacecolor="white")
+        ax.plot(q.h, q.lp_noleads, label="Local projection without leads", color=BLACK, linestyle=":", marker="s",
+                markersize=3.0, markerfacecolor="white")
+        ax.plot(q.h, q.var_onetime, label="VAR, one-time fuel change", color=MID, linestyle="-", marker="D",
+                markersize=3.0)
+        zero(ax)
+        ax.set_xticks(range(0, 13, 2))
+        ax.set_xlabel("Months after the shock")
+        ax.set_ylabel(ylab)
+        ax.set_title(title, loc="left", fontsize=9)
+    h, lab = axes[0].get_legend_handles_labels()
+    fig.legend(h, lab, loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.12))
+    fig.tight_layout()
+    save(fig, "figA5_var")
 
 
 def fig07_rq3_2026():
@@ -326,6 +358,7 @@ def main():
     figA2_region_groups(est)
     figA3_robustness_all(est)
     figA4_regional()
+    figA5_var()
     print("figures written to", FIG)
 
 

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="never" page-range-format="minimal-two">
+  <info>
+    <title>Asian Economic Journal (author-date, from the journal's instructions for submissions)</title>
+    <id>aej-author-date-local</id>
+    <author><name>Lian Cataytay</name></author>
+    <category citation-format="author-date"/>
+    <category field="economics"/>
+    <summary>In text: (Becker, 1964; Mincer, 1974). List: Helpman, E., M. Melitz and S. Yeaple, 2004, Export versus FDI with heterogeneous firms. American Economic Review, 94, pp. 300-16.</summary>
+    <updated>2026-11-14T00:00:00+00:00</updated>
+  </info>
+  <macro name="author-bib">
+    <names variable="author">
+      <name and="text" delimiter=", " delimiter-precedes-last="never" initialize-with=". " name-as-sort-order="first" sort-separator=", "/>
+      <substitute>
+        <names variable="editor"/>
+        <text variable="publisher"/>
+        <text variable="title"/>
+      </substitute>
+    </names>
+  </macro>
+  <macro name="author-cite">
+    <names variable="author">
+      <name form="short" and="text" delimiter=", " delimiter-precedes-last="never"/>
+      <substitute>
+        <names variable="editor"/>
+        <text variable="publisher"/>
+        <text variable="title" form="short"/>
+      </substitute>
+    </names>
+  </macro>
+  <macro name="editors">
+    <names variable="editor">
+      <name and="text" delimiter=", " delimiter-precedes-last="never" initialize-with=". "/>
+      <label form="short" prefix=" (" suffix=")"/>
+    </names>
+  </macro>
+  <macro name="year">
+    <choose>
+      <if variable="issued">
+        <date variable="issued"><date-part name="year"/></date>
+      </if>
+      <else><text value="n.d."/></else>
+    </choose>
+  </macro>
+  <citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" collapse="year">
+    <layout prefix="(" suffix=")" delimiter="; ">
+      <group delimiter=", ">
+        <text macro="author-cite"/>
+        <text macro="year"/>
+        <group delimiter=" ">
+          <label variable="locator" form="short"/>
+          <text variable="locator"/>
+        </group>
+      </group>
+    </layout>
+  </citation>
+  <bibliography hanging-indent="true" et-al-min="11" et-al-use-first="10">
+    <sort>
+      <key macro="author-bib"/>
+      <key macro="year"/>
+    </sort>
+    <layout suffix=".">
+      <text macro="author-bib"/>
+      <text macro="year" prefix=", "/>
+      <choose>
+        <if type="book">
+          <text variable="title" font-style="italic" text-case="title" prefix=", "/>
+          <group prefix=". " delimiter=", ">
+            <text variable="publisher"/>
+            <text variable="publisher-place"/>
+          </group>
+        </if>
+        <else-if type="chapter paper-conference" match="any">
+          <text variable="title" prefix=", "/>
+          <group prefix=". " delimiter=" ">
+            <text value="In:"/>
+            <text macro="editors"/>
+            <text variable="container-title" font-style="italic" text-case="title" suffix="."/>
+          </group>
+          <group prefix=" " delimiter=", ">
+            <text variable="publisher"/>
+            <text variable="publisher-place"/>
+            <text variable="page" prefix="pp. "/>
+          </group>
+        </else-if>
+        <else-if type="article-journal article-magazine article-newspaper" match="any">
+          <text variable="title" prefix=", "/>
+          <group prefix=". " delimiter=", ">
+            <text variable="container-title" font-style="italic"/>
+            <text variable="volume"/>
+            <text variable="page" prefix="pp. "/>
+            <text variable="note"/>
+          </group>
+        </else-if>
+        <else-if type="report thesis" match="any">
+          <text variable="title" prefix=", "/>
+          <group prefix=". " delimiter=", ">
+            <group delimiter=" ">
+              <text variable="genre"/>
+              <text variable="number"/>
+            </group>
+            <text variable="publisher"/>
+          </group>
+        </else-if>
+        <else>
+          <text variable="title" text-case="title" prefix=", "/>
+          <group prefix=". " delimiter=", ">
+            <text variable="container-title" font-style="italic"/>
+            <text variable="publisher"/>
+            <text variable="URL"/>
+          </group>
+        </else>
+      </choose>
+    </layout>
+  </bibliography>
+</style>

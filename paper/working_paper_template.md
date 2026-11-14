@@ -106,7 +106,7 @@ A related literature measures inflation separately for different households. The
 
 ## 2.5 Rice, food prices and policy in Asia
 
-Rice is central to the cost of living of poor Asian households, and governments have long tried to stabilise its price; in Indonesia a rice price spike caused by an import ban pushed about four million people into poverty [@timmer_dawe_2007]. In the Philippines, the 2019 rice tariffication law lowered rice prices and benefited most households, especially the poorest, while hurting net-selling farmers [@balie_etal_2020; @briones_2021]. These studies matter here because an oil shock raises the cost of growing and moving rice, and because rice prices can move for reasons of trade policy at the same time as fuel prices.
+Rice is central to the cost of living of poor Asian households, and governments have long tried to stabilise its price; in Indonesia a rice price spike caused by an import ban pushed about four million people into poverty [@timmer_dawe_2007]. In the Philippines, the 2019 rice tariffication law lowered rice prices and benefited most households, especially the poorest, while hurting net-selling farmers [@balie_etal_2021; @briones_2021]. These studies matter here because an oil shock raises the cost of growing and moving rice, and because rice prices can move for reasons of trade policy at the same time as fuel prices.
 
 ## 2.6 Synthesis and research gap
 

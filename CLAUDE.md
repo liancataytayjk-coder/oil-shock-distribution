@@ -51,14 +51,16 @@ document) is archived unchanged in `archive/v1_full/` and still runs on its own.
 `./run_all.sh` (Python 3.11, `.venv`, `requirements.txt`) runs
 `code/python/01_extract_excel.py` → `02_build_clean.py` → `03_descriptive.py` →
 `04_estimate.py` → `05_policy_2026.py` → `06_figures.py` → `07_papers.py` →
-`08_codebook.py` → `09_pitch.py` (short national proposal, `paper/proposal_pitch.*`) → pytest. `00_download.py` refetches PSA tables. The Stata 17
+`08_codebook.py` → `09_pitch.py` (short national proposal, `paper/proposal_pitch.*`) → tutorial,
+booklet (`tutorial/`) and study kit (`study_kit/`) → pytest; `handoff/build_handoff.py` builds the guide and zips. `00_download.py` refetches PSA tables. The Stata 17
 version is `code/stata/` (to be run by the author; `00_master.do`). Estimator:
 `code/python/lp.py`; settings: `code/python/config.py`; sources and results map:
 `code/python/catalog.py` (S1–S12).
 
 Outputs: `paper/working_paper.*` (chapter form, Ch. 1–5 + Appendices A review
-matrix, B supplementary, C data appendix) and `paper/article.*` (IMRAD + online
-appendix); `output/tables/estimates.csv` (column `core`); `output/figures/fig01–08`
+matrix, B supplementary, C data appendix); `paper/article.*` (IMRAD, Asian Economic Journal,
+reading version) with `article_online_appendix.*`, `article_submission.*` (blinded, tables and
+figures at the end, author–date style `paper/asian-economic-journal.csl`) and `article_title_page.*`; `output/tables/estimates.csv` (column `core`); `output/figures/fig01–08`
 (main) and `figA1–A4` (appendix); `codebook/codebook.xlsx`.
 
 ## Decisions log
@@ -79,6 +81,10 @@ appendix); `output/tables/estimates.csv` (column `core`); `output/figures/fig01�
 
 | D12 | 2026-10-22 | Version 2: keep only the core analyses in the main text (three RQs: pass-through; who pays more, national + pooled panel + why; 2026 and policy), five core robustness checks, everything else in appendices; drop the EU validation; region-group interactions moved to the appendix. All estimates unchanged from version 1 (verified to 1e-10). | Author's request for a one-semester scope; checks that weaken the result (macro controls, period split) kept in the main text to avoid cherry-picking. |
 
+| D13 | 2026-11-14 | Supplementary robustness: Teulings–Zubanov's own lead set (leads 1..h, `lp.py tz="full"`), national (CPI all, gap) and panel (gap). Main specification keeps D4. | Found while writing the tutorial: with leads 1..h−1 the h = 1 estimate is biased when shocks are serially correlated. Changes almost nothing from h = 3: CPI all 0.087→0.088 (h = 6); gap −0.0155→−0.0160; panel −0.0214→−0.0216. |
+| D14 | 2026-11-14 | Supplementary check: VAR(12) in (fuel, outcome) with constant and trend, fuel ordered first (Cholesky), shock scaled to 1% fuel on impact; 90% Monte Carlo bands; also the VAR response to a one-time fuel change (later fuel held at zero) and the LP without leads. | Plagborg-Møller and Wolf (2021): LP and VAR estimate the same impulse response; the VAR matches the LP without leads (CPI all 0.113 vs 0.115 at h = 6). The gap stays negative (−0.0219 at h = 6). |
+| D15 | 2026-11-14 | Article version 3 for the *Asian Economic Journal*: IMRAD; descriptives → RQ1 → RQ2 (national and panel side by side; budget-share decomposition and 2026 contribution accounting labelled descriptive) → 2026 application and policy; review limited to 15 studies (column `article` in `paper/review_matrix.csv`); separate online appendix with every robustness check; blinded submission file and title page; author–date references. | Author's scope for the defense and submission. Item-level bottom-30% indices start in 2013, so the 2008 episode cannot be decomposed by item. |
+
 ## Key results (unchanged from version 1)
 
 RQ1: CPI_all +0.044 on impact, 0.087 at h = 6, 0.102 at h = 12; b30 0.044, 0.095, 0.102; crude ≈ 40% of retail.
@@ -92,9 +98,7 @@ RQ3: fuel-driven 2.55 of 4.81 (all), 3.13 of 5.98 (b30); PHP 467/month (390–63
 
 - [ ] Distribution outcome in changes vs levels (reference paper ambiguous); ask the adviser.
 - [ ] BARMM pre-2019 boundary (ARMM vs BARMM, Cotabato City); leave-one-region-out covers it.
-- [ ] Stata code: to be written and run by the author in Stata 17; compare with `code/stata/expected_results.csv`.
-- [ ] Lead convention (found while writing `tutorial/`): leads 1..h−1 (paper, D4) leave h = 1 biased
-      when fuel shocks are serially correlated (corr 0.36); with leads 1..h (Teulings–Zubanov) the h = 1–2
-      zig-zag disappears and h ≥ 3 is unchanged (CPI all 0.087→0.088 at h = 6; gap −0.0155→−0.0160).
-      Consider reporting it as a robustness check or footnote; decide with the adviser.
+- [ ] Stata code: written (`code/stata/`, D13–D14 included); to be run by the author in Stata 17; `07_compare.do` compares with `code/stata/expected_results.csv`.
+- [ ] AEJ submission rules taken from 2023–2024 issue notices (Wiley page not reachable): ~100-word abstract, author–date references, blinded main file, separate title page, 8,000 words + 20%; confirm on the live page before submitting.
+- [x] Lead convention: reported as a robustness row (D13); the main specification keeps D4.
 - [ ] FA2 proposal to be revised to the three-RQ structure after the papers are final.

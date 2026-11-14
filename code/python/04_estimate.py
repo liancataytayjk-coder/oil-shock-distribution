@@ -18,8 +18,9 @@ import numpy as np
 import pandas as pd
 
 import data_io
-from config import H, P, REGIONS_17, START, TAB
+from config import H, P, REGIONS_17, ROOT, START, TAB
 from lp import local_projection
+from statsmodels.tsa.api import VAR
 
 DIVISIONS = {
     "c01": "Food and non-alcoholic beverages", "c02": "Alcoholic beverages and tobacco",
@@ -86,6 +87,9 @@ def main():
         run(nat, y, "d_dubai_php", "ROB", "dubai crude php", True)
         run(nat, y, "d_fuel", "ROB", "macro controls", True, controls=("d_php_usd", "d_policy_rate", "d_ffpi"))
         run(nat, y, "d_fuel", "ROB", "excl 2020", True, drop=nat.date.dt.year == 2020)
+        run(nat, y, "d_fuel", "ROB", "TZ leads 1..h", True, tz="full")          # decision D13
+        run(nat, y, "d_fuel", "VARCHK", "LP no leads", False, tz=False)         # decision D14
+    run(reg, "d_ratio", "d_fuel", "ROB", "panel TZ leads 1..h", True, tz="full", **dk)
     run(reg, "d_ratio", "d_fuel", "ROB", "panel 2001-2012", True, end="2012-12-01", **dk)
     run(reg, "d_ratio", "d_fuel", "ROB", "panel 2013-2026", True, start="2013-01-01", **dk)
     for r in REGIONS_17:
@@ -125,10 +129,66 @@ def main():
     dec["contrib_gap"] = dec.contrib_all - dec.contrib_b30
     dec.to_csv(TAB / "rq2_weights_decomposition.csv", index_label="coicop")
 
+    var_check(nat, est)
+    expected_results(est)
+
     s = est[est.cumulative & (est.term == "shock") & est.h.isin([0, 6, 12])]
     print(s[s.rq.isin(["RQ1", "RQ2"])].pivot_table(index=["rq", "spec", "outcome"], columns="h",
                                                    values="beta").round(4).to_string())
     print("weights-only gap:", round(dec.contrib_gap.sum(), 4))
+
+
+def var_irf(nat, y, x="d_fuel", p=P, horizons=H, start=START, repl=1000):
+    """VAR(p) in (fuel, y) with a constant and trend, fuel ordered first (Cholesky).
+
+    Returns, for h = 0..H, the cumulative response of y to a fuel innovation scaled to 1% on impact
+    ('var', with a 90% Monte Carlo band) and to a one-time 1% fuel change with later fuel held at zero
+    ('var_onetime', the VAR counterpart of the local projection with Teulings-Zubanov leads).
+    """
+    first = pd.Timestamp(start) - pd.DateOffset(months=p)          # p pre-sample months supply the lags
+    d = nat[nat.date >= first].set_index("date")[[x, y]].dropna()
+    d.index.freq = "MS"
+    res = VAR(d).fit(p, trend="ct")
+    irf = res.irf(horizons)
+    p00 = irf.orth_irfs[0, 0, 0]
+    cum = np.cumsum(irf.orth_irfs[:, 1, 0]) / p00
+    lo, hi = irf.cum_errband_mc(orth=True, repl=repl, signif=0.10, seed=0)
+    a, sig = res.coefs, res.sigma_u.values
+    b0 = sig[1, 0] / sig[0, 0]
+    f = np.zeros(horizons + 1)
+    f[0] = 1.0
+    r = np.zeros(horizons + 1)
+    for h in range(horizons + 1):
+        r[h] = b0 * f[h] + sum(a[j - 1][1, 1] * r[h - j] + a[j - 1][1, 0] * f[h - j] for j in range(1, min(h, p) + 1))
+    return pd.DataFrame({"h": range(horizons + 1), "var": cum, "var_lo": lo[:, 1, 0] / p00,
+                         "var_hi": hi[:, 1, 0] / p00, "var_onetime": np.cumsum(r), "nobs": res.nobs})
+
+
+def var_check(nat, est):
+    """Supplementary check (decision D14): VAR with fuel first next to the local projections."""
+    rows = []
+    for y in ["d_cpi_all", "d_ratio"]:
+        v = var_irf(nat, y)
+        pick = lambda spec, rq: est[(est.rq == rq) & (est.spec == spec) & (est.outcome == y) & est.cumulative  # noqa: E731
+                                    & (est.term == "shock")].set_index("h")
+        base = pick("baseline" if y == "d_cpi_all" else "national", "RQ1" if y == "d_cpi_all" else "RQ2")
+        v["lp"], v["lp_lo"], v["lp_hi"] = v.h.map(base.beta), v.h.map(base.lo), v.h.map(base.hi)
+        v["lp_noleads"] = v.h.map(pick("LP no leads", "VARCHK").beta)
+        v.insert(0, "outcome", y)
+        rows.append(v)
+    out = pd.concat(rows, ignore_index=True)
+    out.to_csv(TAB / "var_comparison.csv", index=False)
+    print(out[out.h.isin([0, 6, 12])].round(4).to_string(index=False))
+
+
+def expected_results(est):
+    """Cumulative estimates for the Stata replication to compare against (code/stata/07_compare.do)."""
+    keep = est[est.cumulative & est.term.str.startswith("shock")].copy()
+    keep = keep[~keep.spec.str.startswith("drop ") | keep.spec.isin(["drop NCR", "drop BARMM"])]
+    cols = ["rq", "spec", "outcome", "shock", "term", "h", "beta", "se", "nobs"]
+    out = ROOT / "code" / "stata" / "expected_results.csv"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    keep[cols].to_csv(out, index=False, float_format="%.10g")
 
 
 if __name__ == "__main__":

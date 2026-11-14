@@ -133,4 +133,7 @@ RESULTS = [
     ("figA4_regional", "Regional inflation and cumulative gap", "S1-S5", "03_descriptive.py; 06_figures.py",
      "03_descriptive.do", "appendix"),
     ("desc_crosscorr.csv", "Cross-correlations", "S1-S4", "03_descriptive.py", "03_descriptive.do", "appendix"),
+    ("var_comparison.csv", "VAR with fuel ordered first next to the local projections", "S1-S4", "04_estimate.py",
+     "06_var.do", "core"),
+    ("figA5_var", "Local projection against VAR", "S1-S4", "04_estimate.py; 06_figures.py", "06_var.do", "appendix"),
 ]

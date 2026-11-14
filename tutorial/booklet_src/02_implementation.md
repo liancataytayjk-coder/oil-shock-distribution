@@ -287,7 +287,8 @@ Table: Table 7. Options of the study's estimator.
 | `exog=(...)` | Variables entered in the same month only | Dummies for the series' splice months |
 | `interact=("G",)` | Adds shock × G and returns its coefficient | Region groups; asymmetry |
 | `sample=mask` | Keeps shock dates where the mask is true, after lags are built | Sub-periods; dropping 2020 |
-| `tz=False` | Drops the Teulings–Zubanov leads | Not used |
+| `tz="full"` | Uses Teulings and Zubanov's own leads, 1 to *h* | Robustness check (decision D13) |
+| `tz=False` | Drops the leads | The VAR comparison (decision D14) |
 
 ## 16. Step 7: the regional panel
 
@@ -429,7 +430,7 @@ Note: $B_{m-s}$ is the cumulative response of the all-income price level estimat
 
 ## 19. Step 10: the same in Stata
 
-The study's full Stata 17 pipeline will be added in `code/stata/`, to be run by the author. The core of one horizon looks like this. Stata's time-series operators `L.` (lag) and `F.` (lead) respect the calendar declared by `tsset` or `xtset`, so gaps and region boundaries are handled automatically. Point estimates should match Python's; standard errors can differ slightly because packages use different small-sample corrections. This snippet has not yet been run in Stata.
+The study's full Stata 17 pipeline is in `code/stata/` (`00_master.do`); its program `lp_irf` estimates any specification, and `07_compare.do` checks every estimate against Python's. The code has been written but not yet run in Stata. The core of one horizon looks like this. Stata's time-series operators `L.` (lag) and `F.` (lead) respect the calendar declared by `tsset` or `xtset`, so gaps and region boundaries are handled automatically. Point estimates should match Python's; standard errors can differ slightly because packages use different small-sample corrections.
 
 ```stata
 import delimited "data/clean/national_monthly.csv", clear
