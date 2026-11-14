@@ -13,6 +13,7 @@ Fuel price pass-through to the inflation of poor households across Philippine re
 | Code: Python | `code/python/` (run `./run_all.sh`) |
 | Code: Stata 17 | `code/stata/` (run `00_master.do`) |
 | Tables and figures | `output/tables/`, `output/figures/` |
+| Local projections tutorial (theory + code) | `tutorial/README.md` |
 | House-style tools (Word/PDF formatting) | `tools/lian_style/` |
 | Complete first version (archived) | `archive/v1_full/` |
 

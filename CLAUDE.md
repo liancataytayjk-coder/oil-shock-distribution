@@ -93,4 +93,8 @@ RQ3: fuel-driven 2.55 of 4.81 (all), 3.13 of 5.98 (b30); PHP 467/month (390–63
 - [ ] Distribution outcome in changes vs levels (reference paper ambiguous); ask the adviser.
 - [ ] BARMM pre-2019 boundary (ARMM vs BARMM, Cotabato City); leave-one-region-out covers it.
 - [ ] Stata code: to be written and run by the author in Stata 17; compare with `code/stata/expected_results.csv`.
+- [ ] Lead convention (found while writing `tutorial/`): leads 1..h−1 (paper, D4) leave h = 1 biased
+      when fuel shocks are serially correlated (corr 0.36); with leads 1..h (Teulings–Zubanov) the h = 1–2
+      zig-zag disappears and h ≥ 3 is unchanged (CPI all 0.087→0.088 at h = 6; gap −0.0155→−0.0160).
+      Consider reporting it as a robustness check or footnote; decide with the adviser.
 - [ ] FA2 proposal to be revised to the three-RQ structure after the papers are final.
