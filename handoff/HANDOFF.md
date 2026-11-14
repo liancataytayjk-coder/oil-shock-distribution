@@ -20,10 +20,10 @@ Table: Table 1. The finished documents (each in Word and PDF).
 | Document | File | Pages | Use |
 |------------------|------------------------------|-------:|----------------------------------------|
 | Working paper (chapter form) | `paper/working_paper.pdf` / `.docx` | 54 | The full study: Chapters 1–5 and Appendices A (review matrix), B (supplementary results) and C (data) |
-| Journal article (IMRAD), reading version | `paper/article.pdf` / `.docx` | {art} | For the *Asian Economic Journal*: descriptives, RQ1, RQ2 (national and panel side by side, budget-share decomposition), robustness, the 2026 application and policy |
-| Article: online appendix | `paper/article_online_appendix.pdf` / `.docx` | {app} | The 15-study review matrix, all 13 divisions, every robustness check, region groups, leave one region out, the VAR, further descriptives, data appendix |
-| Article: submission file and title page | `paper/article_submission.pdf` / `.docx`; `paper/article_title_page.*` | {sub} + 1 | Blinded main text with tables and figures at the end, one per page; separate title page with the word count |
-| Study kit | `study_kit/study_kit.pdf` / `.docx` | {kit} | Ten-day study plan, 40 likely defense questions with answers, the study on one page, how to redo the analysis on other data |
+| Journal article (IMRAD), reading version | `paper/article.pdf` / `.docx` | 22 | For the *Asian Economic Journal*: descriptives, RQ1, RQ2 (national and panel side by side, budget-share decomposition), robustness, the 2026 application and policy |
+| Article: online appendix | `paper/article_online_appendix.pdf` / `.docx` | 16 | The 15-study review matrix, all 13 divisions, every robustness check, region groups, leave one region out, the VAR, further descriptives, data appendix |
+| Article: submission file and title page | `paper/article_submission.pdf` / `.docx`; `paper/article_title_page.*` | 33 + 1 | Blinded main text with tables and figures at the end, one per page; separate title page with the word count |
+| Study kit | `study_kit/study_kit.pdf` / `.docx` | 10 | Ten-day study plan, 40 likely defense questions with answers, the study on one page, how to redo the analysis on other data |
 | Research proposal, national pitch | `paper/proposal_pitch.pdf` / `.docx` | 11 | Short, national-only proposal that sells the idea: why it matters, how others answered it, how we answer it with Philippine data |
 | Local projections booklet | `tutorial/lp_booklet.pdf` / `.docx` | 37 | Teaching booklet: theory, code step by step, interpretation, exercises with answers |
 | Local projections tutorial (web) | `tutorial/README.md` | | Short GitHub version of the booklet |

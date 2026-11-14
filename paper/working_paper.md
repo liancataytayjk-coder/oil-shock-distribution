@@ -106,7 +106,7 @@ A related literature measures inflation separately for different households. The
 
 ## 2.5 Rice, food prices and policy in Asia
 
-Rice is central to the cost of living of poor Asian households, and governments have long tried to stabilise its price; in Indonesia a rice price spike caused by an import ban pushed about four million people into poverty [@timmer_dawe_2007]. In the Philippines, the 2019 rice tariffication law lowered rice prices and benefited most households, especially the poorest, while hurting net-selling farmers [@balie_etal_2020; @briones_2021]. These studies matter here because an oil shock raises the cost of growing and moving rice, and because rice prices can move for reasons of trade policy at the same time as fuel prices.
+Rice is central to the cost of living of poor Asian households, and governments have long tried to stabilise its price; in Indonesia a rice price spike caused by an import ban pushed about four million people into poverty [@timmer_dawe_2007]. In the Philippines, the 2019 rice tariffication law lowered rice prices and benefited most households, especially the poorest, while hurting net-selling farmers [@balie_etal_2021; @briones_2021]. These studies matter here because an oil shock raises the cost of growing and moving rice, and because rice prices can move for reasons of trade policy at the same time as fuel prices.
 
 ## 2.6 Synthesis and research gap
 
@@ -437,14 +437,17 @@ The negative gap survives the five core checks in sign (Table 9, Figure 6), and 
 ![Figure 6. Robustness of the six-month gap (90% CI). Open squares: split of the panel sample, specified after the first results.](../output/figures/fig06_robustness.png){width=85%}
 
 | Specification | Gap, h = 6 | Gap, h = 12 |
-|---|---|---|
+|------------------------------|------------------|------------------|
 | Baseline, national | −0.0155 (0.0103) | −0.0097 (0.0113) |
 | Shock: Dubai crude in pesos (national) | −0.0093 (0.0056) | −0.0075 (0.0063) |
 | Controls: exchange rate, policy rate, world food prices (national) | −0.0046 (0.0156) | 0.0086 (0.0160) |
 | Excluding 2020 (national) | −0.0186 (0.0121) | −0.0142 (0.0129) |
+| Leads 1 to h, Teulings–Zubanov (national)† | −0.0160 (0.0105) | −0.0112 (0.0113) |
+| VAR, fuel ordered first (national)† | −0.0219 [−0.0503, 0.0042] | −0.0294 [−0.0668, 0.0041] |
 | Baseline, 17-region panel | −0.0214** (0.0084) | −0.0173** (0.0085) |
-| Panel, 2001–2012 | −0.0541*** (0.0197) | −0.0369** (0.0147) |
-| Panel, 2013–2026 | −0.0091 (0.0064) | −0.0063 (0.0075) |
+| Leads 1 to h, Teulings–Zubanov (panel)† | −0.0216** (0.0085) | −0.0179** (0.0086) |
+| Panel, 2001–2012† | −0.0541*** (0.0197) | −0.0369** (0.0147) |
+| Panel, 2013–2026† | −0.0091 (0.0064) | −0.0063 (0.0075) |
 | Panel, leaving out one region at a time (range) | −0.0227 to −0.0203 | −0.0189 to −0.0156 |
 
 Table: Table 9. Robustness of the gap
@@ -503,7 +506,7 @@ Between December 2025 and August 2026, the bottom-30% CPI rose 6.16% and the all
 Table 11 shows the household fuels, fares and cereals behind these results. LPG prices respond equally in both baskets (0.730 and 0.722), and LPG has the same budget share in both (1.27% and 1.33%). Kerosene responds strongly but is only 0.27% of even the poor's basket. Charcoal and wood are 4.02% of the poor's basket against 0.87% of the average, and do not respond to oil prices. The poor's fares have historically responded little (0.010 against 0.071).
 
 | Item | Weight, all (%) | Weight, bottom 30% (%) | Response, all-income index | Response, bottom-30% index |
-|---|---|---|---|---|
+|------------------------|---------|----------|---------------|---------------|
 | 04.5.2 Gas (LPG) | 1.27 | 1.33 | 0.730*** (0.152) | 0.722*** (0.148) |
 | 04.5.3 Liquid fuels (kerosene) | 0.04 | 0.27 | 1.152*** (0.114) | 1.111*** (0.107) |
 | 04.5.4 Solid fuels (charcoal, wood) | 0.87 | 4.02 | 0.013 (0.026) | 0.038 (0.024) |
@@ -616,7 +619,7 @@ The matrix summarises the 30 studies reviewed in Chapter 2, grouped by theme. Me
 | Author (year) | Country / sample | Method | Key findings |
 |---|---|---|---|
 | Timmer and Dawe (2007) | Asia; Indonesian experience | Policy analysis of food price stabilisation | Stabilising rice prices supports growth and food security; a rice price spike caused by an import ban pushed about 4 million Indonesians into poverty. |
-| Balié et al. (2020) | Philippines; global rice model and FIES | Simulation of rice tariffication on prices and household welfare | Rice tariffication lowered consumer and producer rice prices; most households, and the poorest quintiles and regions most, gained, while net-selling rice farmers lost. |
+| Balié et al. (2021) | Philippines; global rice model and FIES | Simulation of rice tariffication on prices and household welfare | Rice tariffication lowered consumer and producer rice prices; most households, and the poorest quintiles and regions most, gained, while net-selling rice farmers lost. |
 | Briones (2021) | Philippines | Market review and microsimulation | Rice tariffication lowered palay and retail rice prices; the lower palay price raises poverty only slightly, and targeted transfers to affected farmers can offset it. |
 
 # Appendix B. Supplementary results
@@ -624,7 +627,7 @@ The matrix summarises the 30 studies reviewed in Chapter 2, grouped by theme. Me
 This appendix reports analyses that support the main text but are not needed to answer the research questions: the response of every CPI division, the comparison of groups of regions, the remaining robustness checks, the cross-correlations and the regional figure. All were specified in the estimation plan except where noted.
 
 | COICOP division | Weight, all income (%) | Weight, bottom 30% (%) | Response after 12 months | Contribution to the gap if prices were the same |
-|---|---|---|---|---|
+|------------------------------|---------|----------|------------------|---------------|
 | 07 Transport | 9.0 | 6.1 | 0.370*** (0.044) | +0.0108 |
 | 12 Financial services | 0.0 | 0.0 | 0.358** (0.158) | +0.0001 |
 | 04 Housing, water, electricity, gas | 21.4 | 15.5 | 0.158*** (0.015) | +0.0092 |
@@ -651,7 +654,7 @@ Table: Table B1. Response after 12 months by CPI division, all income households
 **Groups of regions.** The estimation plan also tested whether the gap is wider in four groups of regions, defined before estimation from PSA data: high poverty (2018 poverty incidence above the median of the 17 regions), high food share (food above the median share of the regional basket), Mindanao (Regions IX to XIII and BARMM) and island regions (MIMAROPA, VI, VII and VIII). After a year the gap is 0.0166 points larger in Mindanao (standard error 0.0092), 0.0123 in island regions (0.0086) and 0.0095 in high-poverty regions (0.0078), and 0.0100 *smaller* where the food share is high (0.0052) (Table B2, Figure B2). None of these differences survives a correction for testing four groups, so the study does not claim that any group of regions bears more of the shock.
 
 | Group G | Other regions, h = 12 | Extra effect in G, h = 12 |
-|---|---|---|
+|------------------------------|------------------|------------------|
 | High poverty (2018 incidence above the median) | −0.0131 (0.0100) | −0.0095 (0.0078) |
 | High food share (above the median) | −0.0216** (0.0094) | 0.0100* (0.0052) |
 | Mindanao | −0.0118 (0.0096) | −0.0166* (0.0092) |
