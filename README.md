@@ -5,6 +5,7 @@ Fuel price pass-through to the inflation of poor households across Philippine re
 
 | What | Where |
 |---|---|
+| Handoff guide (start here) | `handoff/HANDOFF_GUIDE.pdf` / `.docx`; zips via `handoff/build_handoff.py` |
 | Research proposal, short national pitch | `paper/proposal_pitch.pdf` / `.docx` |
 | Working paper (chapter form) | `paper/working_paper.pdf` / `.docx` |
 | Journal article (IMRAD, with online appendix) | `paper/article.pdf` / `.docx` |
@@ -12,7 +13,7 @@ Fuel price pass-through to the inflation of poor households across Philippine re
 | Raw data, as downloaded, with source log | `data/raw/` |
 | Cleaned, analysis-ready data (CSV) | `data/clean/` |
 | Code: Python | `code/python/` (run `./run_all.sh`) |
-| Code: Stata 17 | `code/stata/` (run `00_master.do`) |
+| Code: Stata 17 | `code/stata/` (not yet written; to be run by the author) |
 | Tables and figures | `output/tables/`, `output/figures/` |
 | Local projections tutorial (theory + code) | `tutorial/README.md` |
 | Local projections booklet (theory, code, interpretation; Word + PDF) | `tutorial/lp_booklet.docx`, `.pdf` (built by `tutorial/build_booklet.py`) |
