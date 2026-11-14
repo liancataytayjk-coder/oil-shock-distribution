@@ -7,8 +7,11 @@ It works through the tutorial in five steps and prints every number the README q
   2. show why the Teulings-Zubanov leads matter when shocks come in runs;
   3. estimate the national model on the study's data, one horizon at a time, by hand;
   4. check the hand-made estimates against the project's estimator (code/python/lp.py);
-  5. estimate the regional panel with fixed effects and Driscoll-Kraay errors.
-Figures go to tutorial/figures/.
+  5. estimate the regional panel with fixed effects and Driscoll-Kraay errors;
+  6. compare two lead conventions (leads 1..h-1, as in the paper, vs leads 1..h);
+  7. apply the responses to the 2026 episode (fuel-driven rise = sum of B_(m-s) x f_s).
+Figures go to tutorial/figures/; every number is saved to tutorial/tutorial_numbers.json
+for the booklet (tutorial/build_booklet.py).
 """
 
 import sys
@@ -91,7 +94,7 @@ def step1():
     ax.legend()
     fig.savefig(FIG / "step1_simulation.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
-    return float(np.abs(beta - tru).max())
+    return pd.DataFrame({"h": range(H + 1), "true": tru, "est": beta, "se": se})
 
 
 # ---------------------------------------------------------------- step 2
@@ -189,9 +192,84 @@ def step5():
     return pan, natg
 
 
+# ---------------------------------------------------------------- step 6
+def nat_cum(nat, y, h, last_lead, start="2001-01-01"):
+    """Cumulative national LP at horizon h with fuel leads 1..last_lead (Newey-West, h+1 lags)."""
+    X = pd.DataFrame({"x": nat["d_fuel"]})
+    for q in range(1, 13):
+        X[f"y_l{q}"] = nat[y].shift(q)
+        X[f"x_l{q}"] = nat["d_fuel"].shift(q)
+    for lead in range(1, last_lead + 1):
+        X[f"x_f{lead}"] = nat["d_fuel"].shift(-lead)
+    X["trend"] = nat["t"]
+    dep = sum(nat[y].shift(-j) for j in range(h + 1))
+    d = X.assign(dep=dep)[nat["date"] >= start].dropna()
+    r = sm.OLS(d["dep"], sm.add_constant(d.drop(columns="dep"))).fit(cov_type="HAC", cov_kwds={"maxlags": h + 1})
+    return r.params["x"], r.bse["x"]
+
+
+def step6():
+    """Leads 1..h-1 (the paper, decision D4) against leads 1..h (Teulings and Zubanov's own correction)."""
+    nat = load_national()
+    ac = float(nat.loc[nat.date >= "2001-01-01", "d_fuel"].autocorr(1))
+    rows = []
+    for h in range(13):
+        r = {"h": h}
+        for y, tag in [("d_cpi_all", "all"), ("d_ratio", "gap")]:
+            r[f"{tag}_paper"], r[f"{tag}_paper_se"] = nat_cum(nat, y, h, h - 1)
+            r[f"{tag}_full"], r[f"{tag}_full_se"] = nat_cum(nat, y, h, h)
+        rows.append(r)
+    tab = pd.DataFrame(rows)
+    print(f"\nSTEP 6  lead conventions (first-order autocorrelation of fuel changes = {ac:.2f})")
+    print(tab[["h", "all_paper", "all_full", "gap_paper", "gap_full"]].round(4).to_string(index=False))
+    return tab, ac
+
+
+# ---------------------------------------------------------------- step 7
+def step7():
+    """Apply the responses to an episode: the fuel-driven rise in prices, Dec 2025 to Aug 2026."""
+    nat = load_national()
+    pre = nat[nat.date <= "2025-12-01"].reset_index(drop=True)              # estimate on data to Dec 2025 only
+    irf = local_projection(pre, "d_cpi_all", "d_fuel", time="t", horizons=12, p=12, se="newey_west",
+                           sample=pre.date >= "2001-01-01", cumulative=True).set_index("h")["beta"]
+    ep = nat.loc[(nat.date >= "2026-01-01") & (nat.date <= "2026-08-01"), ["date_str", "d_fuel", "cpi_all"]].reset_index(drop=True)
+    m = len(ep) - 1                                                          # August is month index 7
+    ep["months_to_aug"] = m - ep.index
+    ep["B"] = ep.months_to_aug.map(irf)
+    ep["contribution"] = ep.B * ep.d_fuel
+    base = nat.loc[nat.date == "2025-12-01", "cpi_all"].iloc[0]
+    actual = float(100 * np.log(ep.cpi_all.iloc[-1] / base))
+    print("\nSTEP 7  fuel-driven rise in the all-income price level, Dec 2025 to Aug 2026 (model to Dec 2025)")
+    print(ep[["date_str", "d_fuel", "months_to_aug", "B", "contribution"]].round(3).to_string(index=False))
+    print(f"total fuel-driven = {ep.contribution.sum():.2f}; actual = {actual:.2f}")
+    tab = ep[["date_str", "d_fuel", "months_to_aug", "B", "contribution"]].rename(columns={"date_str": "month"})
+    return tab, float(ep.contribution.sum()), actual
+
+
+def _records(df):
+    return [{k: (round(float(v), 6) if isinstance(v, (float, np.floating)) else
+                 v if isinstance(v, str) else int(v)) for k, v in r.items()}
+            for r in df.to_dict("records")]
+
+
 if __name__ == "__main__":
-    err = step1()
-    step2()
-    step3_4()
-    step5()
-    print("\nfigures written to", FIG)
+    import json
+    s1 = step1()
+    with_l, without, tru = step2()
+    hand, diff = step3_4()
+    pan, natg = step5()
+    lead_tab, ac = step6()
+    ep, ep_total, ep_actual = step7()
+    hand = hand.rename(columns={"B_h (cumulative outcome)": "B_h"})
+    out = {
+        "step1": _records(s1), "step1_maxerr": float(np.abs(s1.est - s1.true).max()),
+        "step2": _records(pd.DataFrame({"h": range(len(tru)), "true": tru, "with": with_l, "without": without})),
+        "step3": _records(hand[["h", "beta_h", "se", "running_sum", "B_h", "se_B", "nobs"]]),
+        "step4_maxdiff": diff,
+        "step5": _records(pd.DataFrame({"h": pan.h, "nat": natg.beta, "nat_se": natg.se, "pan": pan.beta,
+                                        "pan_se": pan.se, "pan_obs": pan.nobs})),
+        "step6": _records(lead_tab), "fuel_ac1": ac,
+        "step7": _records(ep), "step7_total": ep_total, "step7_actual": ep_actual,
+    }
+    (ROOT / "tutorial" / "tutorial_numbers.json").write_text(json.dumps(out, indent=1))
+    print("\nfigures written to", FIG, "; numbers to tutorial/tutorial_numbers.json")

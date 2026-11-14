@@ -3,6 +3,9 @@
 *How to estimate how a shock spreads over time — the theory, the code, and the traps — using the
 oil-shock study in this repository as the worked example.*
 
+A longer, printable version with exercises is the booklet [`lp_booklet.pdf`](lp_booklet.pdf) (Word: `lp_booklet.docx`;
+built by `build_booklet.py`).
+
 Every number and figure below is produced by [`lp_tutorial.py`](lp_tutorial.py). Run it from the
 repository root:
 
@@ -176,7 +179,7 @@ clustered and Driscoll–Kraay errors, every time the analysis is rebuilt.
 
 ## 7. Step 2 — why the "leads" matter
 
-Real fuel shocks are not one-off: in our data a monthly fuel price change is correlated 0.36 with
+Real fuel shocks are not one-off: in our data (2001–2026) a monthly fuel price change is correlated 0.39 with
 the previous month's. If shocks come in runs, a rise today *predicts* a rise next month, and next
 month's rise has its own effect. A regression on today's shock alone then credits today's shock with
 the effects of the shocks it predicts.
