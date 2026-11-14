@@ -5,6 +5,7 @@ Fuel price pass-through to the inflation of poor households across Philippine re
 
 | What | Where |
 |---|---|
+| Research proposal, short national pitch | `paper/proposal_pitch.pdf` / `.docx` |
 | Working paper (chapter form) | `paper/working_paper.pdf` / `.docx` |
 | Journal article (IMRAD, with online appendix) | `paper/article.pdf` / `.docx` |
 | Codebook (every raw and cleaned variable, sources, regions, results map) | `codebook/codebook.xlsx` |

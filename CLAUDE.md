@@ -51,7 +51,7 @@ document) is archived unchanged in `archive/v1_full/` and still runs on its own.
 `./run_all.sh` (Python 3.11, `.venv`, `requirements.txt`) runs
 `code/python/01_extract_excel.py` → `02_build_clean.py` → `03_descriptive.py` →
 `04_estimate.py` → `05_policy_2026.py` → `06_figures.py` → `07_papers.py` →
-`08_codebook.py` → pytest. `00_download.py` refetches PSA tables. The Stata 17
+`08_codebook.py` → `09_pitch.py` (short national proposal, `paper/proposal_pitch.*`) → pytest. `00_download.py` refetches PSA tables. The Stata 17
 version is `code/stata/` (to be run by the author; `00_master.do`). Estimator:
 `code/python/lp.py`; settings: `code/python/config.py`; sources and results map:
 `code/python/catalog.py` (S1–S12).

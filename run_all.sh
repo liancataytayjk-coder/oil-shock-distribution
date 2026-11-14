@@ -14,5 +14,6 @@ $PY 05_policy_2026.py        # RQ3
 $PY 06_figures.py            # output/figures
 $PY 07_papers.py             # paper/: working paper and article (.md, .docx, .pdf)
 $PY 08_codebook.py           # codebook/codebook.xlsx
+$PY 09_pitch.py              # paper/proposal_pitch (short national proposal)
 cd ../..
 $PY -m pytest -q tests
