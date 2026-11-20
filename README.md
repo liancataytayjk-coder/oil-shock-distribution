@@ -5,6 +5,8 @@ Fuel price pass-through to the inflation of poor households across Philippine re
 
 | What | Where |
 |---|---|
+| **Manuscript for the Asian Economic Journal (panel study)** | `paper/manuscript.pdf` / `.docx`; blinded `paper/manuscript_submission.*`; `paper/manuscript_title_page.*` |
+| Stata teaching sequence (the manuscript, step by step) | `code/stata/teaching/` (start with its README) |
 | Handoff guide (start here) | `handoff/HANDOFF_GUIDE.pdf` / `.docx`; zips via `handoff/build_handoff.py` |
 | Research proposal, short national pitch | `paper/proposal_pitch.pdf` / `.docx` |
 | Working paper (chapter form) | `paper/working_paper.pdf` / `.docx` |

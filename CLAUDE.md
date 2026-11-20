@@ -51,7 +51,8 @@ document) is archived unchanged in `archive/v1_full/` and still runs on its own.
 `./run_all.sh` (Python 3.11, `.venv`, `requirements.txt`) runs
 `code/python/01_extract_excel.py` → `02_build_clean.py` → `03_descriptive.py` →
 `04_estimate.py` → `05_policy_2026.py` → `06_figures.py` → `07_papers.py` →
-`08_codebook.py` → `09_pitch.py` (short national proposal, `paper/proposal_pitch.*`) → tutorial,
+`08_codebook.py` → `09_pitch.py` (short national proposal, `paper/proposal_pitch.*`) → `10_panel_study.py`
+→ `11_manuscript.py` (the AEJ manuscript, `paper/manuscript*.*`) → tutorial,
 booklet (`tutorial/`) and study kit (`study_kit/`) → pytest; `handoff/build_handoff.py` builds the guide and zips. `00_download.py` refetches PSA tables. The Stata 17
 version is `code/stata/` (to be run by the author; `00_master.do`). Estimator:
 `code/python/lp.py`; settings: `code/python/config.py`; sources and results map:
@@ -84,6 +85,8 @@ figures at the end, author–date style `paper/asian-economic-journal.csl`) and 
 | D13 | 2026-11-14 | Supplementary robustness: Teulings–Zubanov's own lead set (leads 1..h, `lp.py tz="full"`), national (CPI all, gap) and panel (gap). Main specification keeps D4. | Found while writing the tutorial: with leads 1..h−1 the h = 1 estimate is biased when shocks are serially correlated. Changes almost nothing from h = 3: CPI all 0.087→0.088 (h = 6); gap −0.0155→−0.0160; panel −0.0214→−0.0216. |
 | D14 | 2026-11-14 | Supplementary check: VAR(12) in (fuel, outcome) with constant and trend, fuel ordered first (Cholesky), shock scaled to 1% fuel on impact; 90% Monte Carlo bands; also the VAR response to a one-time fuel change (later fuel held at zero) and the LP without leads. | Plagborg-Møller and Wolf (2021): LP and VAR estimate the same impulse response; the VAR matches the LP without leads (CPI all 0.113 vs 0.115 at h = 6). The gap stays negative (−0.0219 at h = 6). |
 | D15 | 2026-11-14 | Article version 3 for the *Asian Economic Journal*: IMRAD; descriptives → RQ1 → RQ2 (national and panel side by side; budget-share decomposition and 2026 contribution accounting labelled descriptive) → 2026 application and policy; review limited to 15 studies (column `article` in `paper/review_matrix.csv`); separate online appendix with every robustness check; blinded submission file and title page; author–date references. | Author's scope for the defense and submission. Item-level bottom-30% indices start in 2013, so the 2008 episode cannot be decomposed by item. |
+
+| D16 | 2026-11-20 | Manuscript for the AEJ is the panel study (`paper/manuscript.*`, `10_panel_study.py`, `11_manuscript.py`): one method (panel LP, region FE, Driscoll–Kraay), the 17-region panel, RQ1 (both groups), RQ2 (gap + budget-share calculation, descriptive), five robustness checks (leave one region out, excl. 2008, period split, Dubai crude in pesos, exchange-rate/policy-rate/world-food controls; food-only added), RQ3 (responses to Dec 2025 applied to the 2026 national fuel path; moving-block bootstrap, 12-month blocks, 999 replications; peso cost). New panel estimates are supplementary (after the main results). Stata teaching sequence `code/stata/teaching/`. | Author's lean scope for the defense. Panel CPI responses: all 0.047/0.086/0.102, b30 0.046/0.105/0.116. Crude in pesos: gap −0.0116 (0.0050) at h = 6. With world food prices controlled the gap is −0.0036 (0.0133): reported openly as food channel vs common commodity cycle. 2026 gap predicted −0.77 [−1.45, −0.25] vs actual −1.18; PHP 499/month, PHP 109 above average inflation. |
 
 ## Key results (unchanged from version 1)
 

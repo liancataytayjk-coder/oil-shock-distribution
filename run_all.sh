@@ -15,6 +15,8 @@ $PY 06_figures.py            # output/figures
 $PY 07_papers.py             # paper/: working paper and article (.md, .docx, .pdf)
 $PY 08_codebook.py           # codebook/codebook.xlsx
 $PY 09_pitch.py              # paper/proposal_pitch (short national proposal)
+$PY 10_panel_study.py        # the panel study: estimates, 2026 block bootstrap, figures (about 9 minutes)
+$PY 11_manuscript.py         # paper/manuscript (AEJ): reading version, blinded submission, title page
 cd ../..
 $PY tutorial/lp_tutorial.py > /dev/null      # tutorial numbers and figures
 $PY tutorial/build_booklet.py                # tutorial/lp_booklet (.md, .docx, .pdf)
