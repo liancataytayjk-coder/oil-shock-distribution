@@ -6,7 +6,7 @@
 * that steps 4 to 7 reuse.
 * Expected (Python), cumulative response per 1% fuel:
 *   all households  h=0 0.047 (0.006)   h=6 0.086 (0.013)   h=12 0.102 (0.016)
-*   bottom 30%      h=0 0.046 (0.008)   h=6 0.105 (0.019)   h=12 0.116 (0.023)
+*   low-income      h=0 0.046 (0.008)   h=6 0.105 (0.019)   h=12 0.116 (0.023)
 * =============================================================================
 
 use "$TOUT/panel.dta", clear
@@ -77,7 +77,7 @@ twoway (rarea lo hi h if outcome == "d_cpi_all", color(gs13)) ///
             msymbol(Sh) msize(small)), ///
        yline(0, lcolor(black)) xlabel(0(2)12) xtitle("Months after the shock") ///
        ytitle("Cumulative response (% per 1% fuel)") ///
-       legend(order(2 "All households (90% band)" 3 "Bottom 30%") ring(0) position(5) cols(1)) ///
+       legend(order(2 "All households (90% band)" 3 "Low-income households") ring(0) position(5) cols(1)) ///
        scheme(s1mono)
 graph export "$TOUT/step03_passthrough.png", replace width(1600)
 

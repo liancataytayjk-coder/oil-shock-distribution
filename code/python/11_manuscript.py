@@ -12,6 +12,7 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 import data_io
@@ -36,7 +37,8 @@ def tables(pn):
     est = pd.read_csv(TAB / "panel_estimates.csv")
     g = lambda spec, y, h: est[(est.spec == spec) & (est.outcome == y) & (est.h == h)].iloc[0]  # noqa: E731
     t = {}
-    t["responses"] = md(["Months after the shock (*h*)", "All households", "Bottom 30%", "Gap (all − bottom 30%)"],
+    t["responses"] = md(["Months after the shock (*h*)", "All households", "Low-income households",
+                         "Gap (all − low-income)"],
                         [[h, cell(g("baseline", "d_cpi_all", h).beta, g("baseline", "d_cpi_all", h).se),
                           cell(g("baseline", "d_cpi_b30", h).beta, g("baseline", "d_cpi_b30", h).se),
                           cell(g("baseline", "d_ratio", h).beta, g("baseline", "d_ratio", h).se, 4)]
@@ -53,19 +55,26 @@ def tables(pn):
     rows += [["(a) Gap implied by budget shares", "", "", "", f(dec.contrib_gap.sum(), 4, sign=True)],
              ["(b) Estimated gap, panel", "", "", "", f(gap12, 4)],
              ["(c) Within-category part, (b) − (a)", "", "", "", f(gap12 - dec.contrib_gap.sum(), 4)]]
-    t["decomp"] = md(["CPI division", "Weight, all (%)", "Weight, bottom 30% (%)", "Response, 12 months",
+    t["decomp"] = md(["Spending category", "Budget share, all (%)", "Budget share, low-income (%)", "Response, 12 months",
                       "Contribution to the gap"], rows, [5, 1.6, 1.8, 2.6, 2.4])
     loo6 = est[est.spec.str.startswith("drop ") & (est.h == 6)]
     loo12 = est[est.spec.str.startswith("drop ") & (est.h == 12)]
-    rob = [("Baseline", "baseline", "d_ratio"), ("Excluding 2008", "excl 2008", "d_ratio"),
-           ("Shock dates 2001–2012", "2001-2012", "d_ratio"), ("Shock dates 2013–2026", "2013-2026", "d_ratio"),
-           ("Shock: Dubai crude oil in pesos", "crude in pesos", "d_ratio"),
-           ("Controls: exchange rate, policy rate, world food prices", "macro and food controls", "d_ratio"),
-           ("Control: world food prices only", "food price control", "d_ratio")]
-    rows = [[lab, cell(g(s, y, 6).beta, g(s, y, 6).se, 4), cell(g(s, y, 12).beta, g(s, y, 12).se, 4)] for lab, s, y in rob]
-    rows.insert(1, ["One region left out (range over 17 regions)", f"{f(loo6.beta.min(), 4)} to {f(loo6.beta.max(), 4)}",
-                    f"{f(loo12.beta.min(), 4)} to {f(loo12.beta.max(), 4)}"])
-    t["robust"] = md(["Specification", "Gap, 6 months", "Gap, 12 months"], rows, [5.5, 3, 3])
+    c = lambda s, y, h: cell(g(s, y, h).beta, g(s, y, h).se, 4 if y == "d_ratio" else 3)  # noqa: E731
+    rows = [["Baseline (retail fuel price)", c("baseline", "d_cpi_all", 12), c("baseline", "d_cpi_b30", 12),
+             c("baseline", "d_ratio", 6), c("baseline", "d_ratio", 12)],
+            ["Shock: world crude price (Dubai, in pesos)", c("crude in pesos", "d_cpi_all", 12),
+             c("crude in pesos", "d_cpi_b30", 12), c("crude in pesos", "d_ratio", 6), c("crude in pesos", "d_ratio", 12)],
+            ["One region left out (range over 17 regions)", "", "", f"{f(loo6.beta.min(), 4)} to {f(loo6.beta.max(), 4)}",
+             f"{f(loo12.beta.min(), 4)} to {f(loo12.beta.max(), 4)}"]]
+    t["robust"] = md(["Specification", "All households, 12 months", "Low-income, 12 months", "Gap, 6 months",
+                      "Gap, 12 months"], rows, [4.2, 2.6, 2.6, 2.6, 2.6])
+    geo = pd.read_csv(TAB / "panel_regions_lp.csv")
+    g6 = geo[geo.h == 6]
+    a6 = g6[g6.outcome == "d_cpi_all"].set_index("region")
+    d6 = g6[g6.outcome == "d_ratio"].set_index("region").sort_values("beta")
+    t["geo"] = md(["Region", "Poverty 2018 (%)", "Food share (%)", "Pass-through, all households", "Gap (all − low-income)"],
+                  [[r.region_name, f(r.poverty_2018, 1), f(r.food_share_2018, 1), cell(a6.loc[reg, "beta"], a6.loc[reg, "se"]),
+                    cell(r.beta, r.se, 4)] for reg, r in d6.iterrows()], [4.4, 1.6, 1.6, 2.8, 2.8])
     path = pd.read_csv(TAB / "panel_2026.csv")
     last = path[path.date == "2026-08-01"].set_index("series")
     lab = {"d_cpi_all": "All households", "d_cpi_b30": "Bottom 30%", "d_ratio": "Gap (all − bottom 30%)"}
@@ -95,6 +104,8 @@ def extra_numbers(pn, n):
          "lpg_share": f(100 * 37 / float(pn["php_cost_b30"].replace(",", "")), 0)}
     ep = pd.read_csv(TAB / "desc_episodes.csv")
     x["n_episodes"], x["n_episodes_b30"] = len(ep), int((ep.mean_gap_b30_minus_all > 0).sum())
+    feb, mar = nat.loc["2026-02-01", "fuel"], nat.loc["2026-03-01", "fuel"]
+    x["fuel_feb26"], x["fuel_mar26"], x["f_mar26"] = f"{feb:.1f}", f"{mar:.1f}", f(100 * np.log(mar / feb), 1)
     return x
 
 

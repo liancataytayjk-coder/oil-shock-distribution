@@ -14,9 +14,11 @@ do code/stata/teaching/02_one_horizon.do
 do code/stata/teaching/03_pass_through.do
 do code/stata/teaching/04_gap.do
 do code/stata/teaching/05_why.do
-do code/stata/teaching/06_robustness.do
-do code/stata/teaching/07_2026.do
+do code/stata/teaching/06_geography.do
+do code/stata/teaching/07_robustness.do
 do code/stata/teaching/08_check.do
+* optional, not in the manuscript:
+do code/stata/teaching/extra_2026.do
 ```
 
 | Step | What you do | Key result (Python) |
@@ -24,15 +26,16 @@ do code/stata/teaching/08_check.do
 | 0 | Paths; installs `xtscc` | — |
 | 1 | Read the 17-region panel, merge the national series, `xtset`, build lags and leads within regions | 17 regions, 2001–2026 |
 | 2 | One local projection by hand (*h* = 6): `xtreg, fe`, then `xtscc, fe` | 0.0856 (0.0132) |
-| 3 | RQ1: all horizons, both groups; the loop, then the program `panel_lp` | 0.047, 0.086, 0.102 (all); 0.046, 0.105, 0.116 (bottom 30%) |
-| 4 | RQ2: the gap | −0.0214 (0.0084) at 6 months, significant from 3 to 12 |
-| 5 | Why: the budget-share calculation | +0.0101 (progressive) |
-| 6 | Five robustness checks | survives (i), (ii), (iv); concentrated in 2001–2012; not with food controls |
-| 7 | RQ3: the 2026 shock out of sample; peso cost; block bootstrap | gap −0.77 [−1.45, −0.25] vs actual −1.18; PHP 499 and 109 |
+| 3 | Pass-through: all horizons, all households and low-income households; the loop, then the program `panel_lp` | 0.047, 0.086, 0.102 (all); 0.046, 0.105, 0.116 (low-income) |
+| 4 | Who pays more: the gap | −0.0214 (0.0084) at 6 months, significant from 3 to 12 |
+| 5 | By how much and why: the budget-share calculation | +0.0101 (progressive) |
+| 6 | Geography: a response for every region; Wald test of equality; correlation with poverty and food share | gap from −0.053 to +0.009; equality rejected (p = 0.03); correlations weak |
+| 7 | Robustness: world crude price as the shock; one region left out (plus the two estimates in the limitations) | crude: gap −0.0116 (0.0050); left-out range −0.0227 to −0.0203 |
 | 8 | Check everything against Python | differences below 1e-6 |
+| extra | The 2026 shock out of sample, peso cost, block bootstrap (not in the manuscript) | gap −0.77 [−1.45, −0.25] vs actual −1.18 |
 
-Outputs go to `output/stata_teaching/`. Step 6 and the bootstrap in step 7 take a few minutes; set
-`local REPS 0` in step 7 to skip the bootstrap.
+Outputs go to `output/stata_teaching/`. Steps 6 and 7 take a few minutes each; the optional 2026 extra includes a
+bootstrap (set `local REPS 0` there to skip it).
 
 **Status:** written for Stata 17 but not yet run in Stata. If a step stops with an error, the message
 and the line are usually enough to fix it; send them back if not.

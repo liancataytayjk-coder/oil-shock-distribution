@@ -15,7 +15,7 @@ list region date_str cpi_all cpi_b30 fuel d_cpi_all d_cpi_b30 d_fuel d_ratio in 
 * The four variables of the study (all are 100 x the monthly log change):
 *   d_fuel     the fuel shock f_rt: CPI sub-index 07.2.2, fuels for personal transport, region r, month t
 *   d_cpi_all  inflation of all households in region r
-*   d_cpi_b30  inflation of the bottom 30% of households in region r
+*   d_cpi_b30  inflation of low-income households (the poorest 30% by income) in region r
 *   d_ratio    the gap: d_cpi_all - d_cpi_b30  (negative = the poor's prices rose more)
 
 * 1.2 Add the national monthly series used in the robustness checks. They are the same

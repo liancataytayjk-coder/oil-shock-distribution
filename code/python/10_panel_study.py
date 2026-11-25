@@ -5,6 +5,8 @@ One method (local projections with region fixed effects and Driscoll-Kraay stand
   RQ1  pass-through of retail fuel prices to the price level of all households and of the bottom 30%;
   RQ2  the gap between the two (all-income minus bottom-30% inflation), why it has its sign
        (budget-share calculation, descriptive), and five robustness checks;
+  Geography: region-specific responses (shock x region indicators, common lags, region fixed effects,
+       Driscoll-Kraay), a Wald test that all 17 are equal, and their correlation with poverty and food shares;
   RQ3  the 2026 shock: responses estimated on data to December 2025, applied to the 2026 fuel path, with a
        moving-block bootstrap (blocks of 12 months, all regions together) for the uncertainty of the
        prediction, and the peso cost for a family of five at the poverty line.
@@ -13,6 +15,7 @@ Writes
   output/tables/panel_estimates.csv     cumulative responses, h = 0..12, every specification
   output/tables/panel_2026.csv          predicted and actual 2026 path, Philippines, with 90% bootstrap bands
   output/tables/panel_2026_regions.csv  2026 by region
+  output/tables/panel_regions_lp.csv    region-specific responses, h = 6 and 12 (geography)
   output/tables/panel_numbers.json      numbers quoted in the manuscript
   output/figures/figP1..figP4           pass-through, gap, robustness, 2026
   code/stata/teaching/expected_panel.csv  values the Stata teaching do-files should reproduce
@@ -29,7 +32,9 @@ import pandas as pd  # noqa: E402
 
 import data_io  # noqa: E402
 from config import FIG, H, P, ROOT, START, TAB  # noqa: E402
+from linearmodels.panel import PanelOLS  # noqa: E402
 from lp import _design, local_projection  # noqa: E402
+from scipy import stats  # noqa: E402
 
 CUT = pd.Timestamp("2025-12-01")
 M26 = pd.date_range("2026-01-01", "2026-08-01", freq="MS")
@@ -71,6 +76,7 @@ def estimates(reg):
         ("ROB", "2013-2026", "d_ratio"): lp(reg, "d_ratio", sample=reg.date >= "2013-01-01"),
         ("ROB", "crude in pesos", "d_ratio"): lp(reg, "d_ratio", x="d_dubai_php"),
         ("ROB", "crude in pesos", "d_cpi_all"): lp(reg, "d_cpi_all", x="d_dubai_php"),
+        ("ROB", "crude in pesos", "d_cpi_b30"): lp(reg, "d_cpi_b30", x="d_dubai_php"),
         ("ROB", "macro and food controls", "d_ratio"): lp(reg, "d_ratio", controls=CONTROLS),
         ("ROB", "food price control", "d_ratio"): lp(reg, "d_ratio", controls=("d_ffpi",)),
     }
@@ -84,6 +90,46 @@ def estimates(reg):
     est = pd.concat(rows, ignore_index=True)
     est.to_csv(TAB / "panel_estimates.csv", index=False)
     return est
+
+
+# ---------------------------------------------------------------- geography
+def regional_responses(reg, y, h):
+    """Equation (3) with the shock interacted with each region's indicator (lags common to all regions).
+    Returns the 17 responses, their Driscoll-Kraay covariance and the Wald test that they are all equal."""
+    regions = sorted(reg.region.unique())
+    d = _design(reg, y, "d_fuel", "region", "t", h, P, [], [], True, True, [])
+    d = d[(reg.date >= START).to_numpy()]
+    d["region"], d["tt"] = reg.loc[d.index, "region"], reg.loc[d.index, "t"]
+    d = d.dropna()
+    for r in regions:
+        d[f"sx_{r}"] = d["shock"] * (d["region"] == r)
+    regs = [c for c in d.columns if c not in ("dep", "region", "tt", "shock")]
+    idx = pd.MultiIndex.from_arrays([d.region, d.tt])
+    res = PanelOLS(d["dep"].set_axis(idx), d[regs].set_axis(idx).assign(const=1.0), entity_effects=True,
+                   drop_absorbed=True).fit(cov_type="kernel", kernel="bartlett", bandwidth=h + 1)
+    names = [f"sx_{r}" for r in regions]
+    b, V = res.params[names].to_numpy(), res.cov.loc[names, names].to_numpy()
+    k = len(regions)
+    R = np.hstack([np.eye(k - 1), -np.ones((k - 1, 1))])           # beta_r - beta_last = 0 for all r
+    W = float((R @ b) @ np.linalg.solve(R @ V @ R.T, R @ b))
+    out = pd.DataFrame({"region": regions, "outcome": y, "h": h, "beta": b, "se": np.sqrt(np.diag(V)),
+                        "nobs": int(res.nobs)})
+    return out, W, float(stats.chi2.sf(W, k - 1))
+
+
+def geography(reg):
+    info = data_io.region_info()
+    tabs, tests = [], []
+    for y in ("d_cpi_all", "d_ratio"):
+        for h in (6, 12):
+            t, W, pval = regional_responses(reg, y, h)
+            tabs.append(t)
+            tests.append({"outcome": y, "h": h, "wald": W, "df": len(t) - 1, "p": pval})
+    tab = pd.concat(tabs, ignore_index=True).merge(
+        info[["region_name", "poverty_2018", "food_share_2018"]], left_on="region", right_index=True)
+    tab["lo"], tab["hi"] = tab.beta - 1.645 * tab.se, tab.beta + 1.645 * tab.se
+    tab.to_csv(TAB / "panel_regions_lp.csv", index=False)
+    return tab, pd.DataFrame(tests)
 
 
 # ---------------------------------------------------------------- 2026 with a block bootstrap
@@ -212,6 +258,28 @@ def save(fig, name):
     plt.close(fig)
 
 
+def figure_regions(geo, est):
+    pooled = {y: est[(est.rq.isin(["RQ1", "RQ2"])) & (est.spec == "baseline") & (est.outcome == y) & (est.h == 6)].iloc[0]
+              for y in ("d_cpi_all", "d_ratio")}
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 4.4), sharey=True)
+    q0 = geo[(geo.outcome == "d_ratio") & (geo.h == 6)].sort_values("beta")
+    order = list(q0.region)
+    labels = dict(zip(geo.region, geo.region_name))
+    for ax, (y, title, xl) in zip(axes, [("d_cpi_all", "(a) Pass-through, all households", "% per 1% fuel"),
+                                        ("d_ratio", "(b) Gap, all − low-income households", "pp per 1% fuel")]):
+        q = geo[(geo.outcome == y) & (geo.h == 6)].set_index("region").loc[order]
+        ypos = np.arange(len(q))
+        ax.errorbar(q.beta, ypos, xerr=[q.beta - q.lo, q.hi - q.beta], fmt="o", color=BLACK, ecolor=BLACK,
+                    markersize=3.5, capsize=1.5, elinewidth=0.8)
+        ax.axvline(pooled[y].beta, color=BLACK, linestyle="--", linewidth=0.8)
+        ax.axvline(0, color=BLACK, linewidth=0.6)
+        ax.set_title(title, loc="left", fontsize=9)
+        ax.set_xlabel(f"Cumulative response after 6 months ({xl})")
+    axes[0].set_yticks(np.arange(len(order)), [labels[r] for r in order], fontsize=7)
+    fig.tight_layout()
+    save(fig, "figP5_regions")
+
+
 def figures(est, path):
     g = lambda rq, spec, y: est[(est.rq == rq) & (est.spec == spec) & (est.outcome == y)].sort_values("h")  # noqa: E731
     a, b, gap = g("RQ1", "baseline", "d_cpi_all"), g("RQ1", "baseline", "d_cpi_b30"), g("RQ2", "baseline", "d_ratio")
@@ -286,6 +354,14 @@ def numbers(est, path, cost, regions, res, nat):
             n[f"p_{k}_c{h}"], n[f"p_{k}_c{h}_se"] = f(r.beta), f(r.se)
     n["p_all_c12_10pct"] = f(10 * g("RQ1", "baseline", "d_cpi_all", 12).beta, 1)
     n["p_crude_c12"] = f(g("ROB", "crude in pesos", "d_cpi_all", 12).beta)
+    for h in (0, 6, 12):
+        for y, k in [("d_cpi_all", "all"), ("d_cpi_b30", "b30")]:
+            r = g("ROB", "crude in pesos", y, h)
+            n[f"crude_{k}_c{h}"], n[f"crude_{k}_c{h}_se"] = f(r.beta), f(r.se)
+    for h in (0, 1, 3, 6, 9, 12):
+        n[f"diff_c{h}"] = f(g("RQ1", "baseline", "d_cpi_b30", h).beta - g("RQ1", "baseline", "d_cpi_all", h).beta, 3)
+    loo12x = est[(est.rq == "LOO") & (est.h == 12)]
+    n["loo12_min"], n["loo12_max"] = f(loo12x.beta.min(), 4), f(loo12x.beta.max(), 4)
     n["p_crude_share"] = f(100 * g("ROB", "crude in pesos", "d_cpi_all", 12).beta / g("RQ1", "baseline", "d_cpi_all", 12).beta, 0)
     gap = est[(est.rq == "RQ2") & (est.spec == "baseline")]
     sig = gap[(gap.hi < 0) | (gap.lo > 0)].h.tolist()
@@ -326,11 +402,31 @@ def numbers(est, path, cost, regions, res, nat):
     n["obs_h0"] = f"{int(g('RQ2', 'baseline', 'd_ratio', 0).nobs):,}"
     n["obs_h12"] = f"{int(g('RQ2', 'baseline', 'd_ratio', 12).nobs):,}"
     n["b_reps"], n["block"] = f"{B_REPS:,}", BLOCK
-    (TAB / "panel_numbers.json").write_text(json.dumps(n, indent=1, ensure_ascii=False))
     return n
 
 
-def expected_for_stata(est, path, cost):
+def geo_numbers(n, geo, tests):
+    for y, k in [("d_cpi_all", "all"), ("d_ratio", "gap")]:
+        for h in (6, 12):
+            q = geo[(geo.outcome == y) & (geo.h == h)]
+            tt = tests[(tests.outcome == y) & (tests.h == h)].iloc[0]
+            d = 3 if k == "all" else 4
+            lo, hi = q.loc[q.beta.idxmin()], q.loc[q.beta.idxmax()]
+            n[f"geo_{k}_c{h}_min"], n[f"geo_{k}_c{h}_min_name"] = f(lo.beta, d), lo.region_name
+            n[f"geo_{k}_c{h}_max"], n[f"geo_{k}_c{h}_max_name"] = f(hi.beta, d), hi.region_name
+            n[f"geo_{k}_c{h}_mean"], n[f"geo_{k}_c{h}_sd"] = f(q.beta.mean(), d), f(q.beta.std(), d)
+            n[f"geo_{k}_c{h}_wald"], n[f"geo_{k}_c{h}_p"] = f(tt.wald, 1), f(tt.p, 3)
+            n[f"geo_{k}_c{h}_nsig"] = int((q.hi < 0).sum() if k == "gap" else (q.lo > 0).sum())
+            n[f"geo_{k}_c{h}_npos"] = int((q.beta > 0).sum())
+            n[f"geo_{k}_c{h}_corr_pov"] = f(q.beta.corr(q.poverty_2018), 2)
+            n[f"geo_{k}_c{h}_corr_food"] = f(q.beta.corr(q.food_share_2018), 2)
+    q = geo[(geo.outcome == "d_ratio") & (geo.h == 6)].sort_values("beta")
+    n["geo_gap_top3"] = ", ".join(q.region_name.head(3))
+    n["geo_wald_df"] = int(geo.region.nunique() - 1)
+
+
+
+def expected_for_stata(est, path, cost, geo=None, tests=None):
     out = ROOT / "code" / "stata" / "teaching"
     out.mkdir(parents=True, exist_ok=True)
     keep = est[est.rq.isin(["RQ1", "RQ2", "ROB"]) | est.spec.isin(["drop NCR", "drop BARMM"])]
@@ -338,6 +434,10 @@ def expected_for_stata(est, path, cost):
         out / "expected_panel.csv", index=False, float_format="%.10g")
     last = path[path.date == M26[-1].date()][["series", "fuel_driven", "actual"]]
     last.to_csv(out / "expected_2026.csv", index=False, float_format="%.10g")
+    if geo is not None:
+        geo[["region", "outcome", "h", "beta", "se", "nobs"]].to_csv(out / "expected_regions.csv", index=False,
+                                                                     float_format="%.10g")
+        tests.to_csv(out / "expected_regions_wald.csv", index=False, float_format="%.10g")
 
 
 def main():
@@ -345,8 +445,12 @@ def main():
     est = estimates(reg)
     path, cost, regions, res = application_2026(reg, nat)
     figures(est, path)
+    geo, tests = geography(reg)
+    figure_regions(geo, est)
     n = numbers(est, path, cost, regions, res, nat)
-    expected_for_stata(est, path, cost)
+    geo_numbers(n, geo, tests)
+    (TAB / "panel_numbers.json").write_text(json.dumps(n, indent=1, ensure_ascii=False))
+    expected_for_stata(est, path, cost, geo, tests)
     print(f"panel study: {len(est)} estimates; gap h6 {n['gap_c6']} ({n['gap_c6_se']}); "
           f"2026 gap fuel-driven {n['e_gap_fd']} [{n['e_gap_lo']}, {n['e_gap_hi']}] vs actual {n['e_gap_act']}; "
           f"extra cost PHP {n['php_extra']} [{n['php_extra_lo']}, {n['php_extra_hi']}]")

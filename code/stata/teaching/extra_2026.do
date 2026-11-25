@@ -1,5 +1,5 @@
 * =============================================================================
-* STEP 7. RQ3: the 2026 shock, out of sample
+* EXTRA (not in the manuscript). The 2026 shock, out of sample
 * -----------------------------------------------------------------------------
 * 1. Estimate the responses B_h on data that END in December 2025.
 * 2. Apply them to the actual 2026 fuel price changes f_1 (January) .. f_8 (August):
@@ -55,7 +55,7 @@ if _rc {
 }
 tempname R
 postfile `R' str40 spec str16 outcome str16 shock int h double beta se long nobs ///
-    using "$TOUT/step07_irf.dta", replace
+    using "$TOUT/step_extra_irf.dta", replace
 foreach y in cpi_all cpi_b30 ratio {
     panel_lp `y' fuel if s01, spec(to Dec 2025) post(`R')
 }
@@ -63,7 +63,7 @@ postclose `R'
 
 * 7.2 Apply them: sum_s B_(8-s) f_s.
 preserve
-use "$TOUT/step07_irf.dta", clear
+use "$TOUT/step_extra_irf.dta", clear
 foreach y in cpi_all cpi_b30 ratio {
     scalar fd_`y' = 0
     forvalues s = 1/8 {
@@ -79,7 +79,7 @@ display as result "fuel-driven cost, poverty-line family of five: PHP " %4.0f co
     " a month; extra over average inflation: PHP " %4.0f extra "   (Python: 499 and 109)"
 
 tempname E
-postfile `E' str16 series double fuel_driven actual using "$TOUT/step07.dta", replace
+postfile `E' str16 series double fuel_driven actual using "$TOUT/step_extra_2026.dta", replace
 post `E' ("d_cpi_all") (fd_cpi_all) (act_cpi_all)
 post `E' ("d_cpi_b30") (fd_cpi_b30) (act_cpi_b30)
 post `E' ("d_ratio") (fd_ratio) (act_ratio)
@@ -104,7 +104,7 @@ if `REPS' > 0 {
     keep if s01
     generate int block = floor((mdate - tm(2001m1)) / 12)
     tempname BS
-    postfile `BS' double fd_all fd_b30 fd_gap using "$TOUT/step07_boot.dta", replace
+    postfile `BS' double fd_all fd_b30 fd_gap using "$TOUT/step_extra_boot.dta", replace
     set seed 20261120
     forvalues r = 1/`REPS' {
         preserve
@@ -125,11 +125,11 @@ if `REPS' > 0 {
         restore
     }
     postclose `BS'
-    use "$TOUT/step07_boot.dta", clear
+    use "$TOUT/step_extra_boot.dta", clear
     _pctile fd_gap, percentiles(5 95)
     display as result "gap: 90% bootstrap band [" %5.2f r(r1) ", " %5.2f r(r2) "]   (Python: [-1.45, -0.25])"
 }
 
 * Read it: a model that never saw 2026 predicts about half of the price surge and that
 * the poor's prices rise more; the band for the gap excludes zero.
-display as text "Next: do code/stata/teaching/08_check.do"
+display as text "Done. 08_check.do also checks this extra if you ran it."

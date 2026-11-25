@@ -57,4 +57,4 @@ save "$TOUT/step05.dta", replace
 *     budget on it against 38%; housing and transport push it the other way. On budget
 *     shares alone the rich should lose more. The estimated gap (step 4) is regressive,
 *     so prices must rise faster WITHIN the categories the poor buy.
-display as text "Next: do code/stata/teaching/06_robustness.do"
+display as text "Next: do code/stata/teaching/06_geography.do"
