@@ -1,5 +1,7 @@
 # Teaching sequence: the panel study in Stata, step by step
 
+A step-by-step tutorial for these files, from setup to the figures, is `study_kit/stata_tutorial.pdf`.
+
 These do-files rebuild every result of the manuscript (`paper/manuscript.pdf`) in Stata 17, one step
 at a time, so that you can run and read each part of the analysis yourself. Each file explains what it
 does, prints the value Python obtained next to yours, and saves its results; step 8 checks them all.
@@ -17,6 +19,7 @@ do code/stata/teaching/05_why.do
 do code/stata/teaching/06_geography.do
 do code/stata/teaching/07_robustness.do
 do code/stata/teaching/08_check.do
+do code/stata/teaching/09_figures.do
 * optional, not in the manuscript:
 do code/stata/teaching/extra_2026.do
 ```
@@ -32,6 +35,7 @@ do code/stata/teaching/extra_2026.do
 | 6 | Geography: a response for every region; Wald test of equality; correlation with poverty and food share | gap from −0.053 to +0.009; equality rejected (p = 0.03); correlations weak |
 | 7 | Robustness: world crude price as the shock; one region left out (plus the two estimates in the limitations) | crude: gap −0.0116 (0.0050); left-out range −0.0227 to −0.0203 |
 | 8 | Check everything against Python | differences below 1e-6 |
+| 9 | Draw the manuscript's figures: trends, pass-through, gap, regions | four PNG files |
 | extra | The 2026 shock out of sample, peso cost, block bootstrap (not in the manuscript) | gap −0.77 [−1.45, −0.25] vs actual −1.18 |
 
 Outputs go to `output/stata_teaching/`. Steps 6 and 7 take a few minutes each; the optional 2026 extra includes a

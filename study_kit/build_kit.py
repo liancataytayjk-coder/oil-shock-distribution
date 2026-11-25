@@ -21,12 +21,11 @@ KIT = ROOT / "study_kit"
 STYLE = ROOT / "tools" / "lian_style"
 
 
-def main():
-    n = json.loads((ROOT / "output" / "tables" / "paper_numbers.json").read_text())
+def build(template, out, ctx):
     env = jinja2.Environment(loader=jinja2.FileSystemLoader(KIT), undefined=jinja2.StrictUndefined,
                              keep_trailing_newline=True, comment_start_string="<#--", comment_end_string="--#>")
-    text = env.get_template("study_kit_template.md").render(n=n, author="Lian Cataytay", date="November 2026")
-    md, docx = KIT / "study_kit.md", KIT / "study_kit.docx"
+    text = env.get_template(template).render(**ctx)
+    md, docx = KIT / f"{out}.md", KIT / f"{out}.docx"
     md.write_text(text)
     pypandoc.convert_file(str(md), "docx", outputfile=str(docx), extra_args=[
         f"--resource-path={ROOT}", f"--reference-doc={STYLE / 'assets' / 'lian-article-reference.docx'}"])
@@ -49,7 +48,15 @@ def main():
         subprocess.run([py, str(STYLE / "scripts" / "render.py"), str(docx), "--outdir", str(KIT)], check=True,
                        stdout=subprocess.DEVNULL)
     subprocess.run([py, str(STYLE / "scripts" / "check_style.py"), str(docx)], check=True)
-    print("wrote study_kit/study_kit.md, .docx" + (", .pdf" if shutil.which("soffice") else ""))
+    print(f"wrote study_kit/{out}.md, .docx" + (", .pdf" if shutil.which("soffice") else ""))
+
+
+def main():
+    n = json.loads((ROOT / "output" / "tables" / "paper_numbers.json").read_text())
+    pn = json.loads((ROOT / "output" / "tables" / "panel_numbers.json").read_text())
+    ctx = dict(n=n, pn=pn, author="Lian Cataytay", date="November 2026")
+    build("study_kit_template.md", "study_kit", ctx)
+    build("stata_tutorial_template.md", "stata_tutorial", ctx)
 
 
 if __name__ == "__main__":

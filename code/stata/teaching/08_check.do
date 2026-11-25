@@ -57,3 +57,4 @@ if !_rc {
     list series fuel_driven fd_py diff, noobs clean
 }
 display as text _n "Done. If every difference is below 1e-6, Stata reproduces the study."
+display as text "Next: do code/stata/teaching/09_figures.do"
