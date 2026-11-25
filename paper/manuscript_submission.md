@@ -1,7 +1,7 @@
 ---
 title: "Who Pays for Oil Shocks? Evidence from Philippine Regional Price Indices"
 abstract: |
-  We estimate how retail fuel prices pass through to the consumer prices of poor and average households, using the official price indices for the bottom 30% of households and for all households in 17 Philippine regions, 2001–2026, and panel local projections. A 1% rise in fuel prices raises the price level by 0.102% after a year. The prices of the bottom 30% rise about a quarter more, although their budget shares predict the opposite. The extra burden moves with food prices. Estimated on data to 2025, the model predicts the poor's excess inflation during the 2026 oil shock.
+  We estimate how retail fuel prices pass through to the consumer prices of low-income households, the poorest 30% by income, and of all households in 17 Philippine regions, 2001–2026, using panel local projections. A 1% rise in fuel prices raises the price level by 0.102% after a year. The prices of low-income households rise about a quarter more, although their budget shares predict the opposite; the difference arises within spending categories, mainly food. The response varies across regions, but not with regional poverty or food shares. The results hold with world crude prices as the shock and without any single region.
 
   **Keywords:** oil price shocks; inflation inequality; fuel prices; local projections; Philippines
 
@@ -14,153 +14,195 @@ link-citations: true
 
 # 1. Introduction
 
-When the price of oil rises, households pay more for fuel and, with a delay, for almost everything that fuel helps to produce and move. Whether poor households pay more than others is a question with direct policy consequences. Governments respond to oil shocks with fuel tax relief, fuel subsidies and cash transfers, and each response rests on an assumption about who bears the cost.
+When the price of oil rises, households pay more for fuel and, after a delay, for almost everything that fuel helps to produce and move. Whether poorer households pay more than others has direct consequences for policy. Governments respond to oil shocks with fuel tax relief, fuel subsidies and cash transfers, and each response assumes an answer to that question.
 
-The most comprehensive evidence on this question comes from @kpodar_liu_2022. Using retail fuel prices for 122 countries and consumer price indices for income quintiles that they rebuild from household budget surveys, they find that fuel price increases are *progressive*: the price level of the richest households rises more than that of the poorest, because richer households spend more on vehicle fuel. Their indices, however, assign the same price change to every income group within each spending category and let only the budget shares differ. If poor households buy different items within a category, and those items respond differently to fuel prices, rebuilt indices cannot detect it [@jaravel_2021].
+The most comprehensive evidence comes from @kpodar_liu_2022, who find across 122 countries that fuel price increases are *progressive*: they raise the cost of living of richer households more than that of poorer households. Their measure of each income group's cost of living, however, gives every group the same price change within a spending category and lets only the groups' spending shares differ. If poorer households buy different goods within a category, and those goods respond differently to fuel prices, this measure cannot detect it.
 
-The Philippines offers a direct test. The Philippine Statistics Authority publishes an official consumer price index for the bottom 30% of households by income, monthly and for each of 17 regions, built from that group's own budget shares at a detailed item level. Poor Filipino households spend 54.9% of their budget on food, against 37.7% for all households, and 1.59% on fuel for their own vehicles, against 2.39%. The question also became pressing in 2026, when an oil shock raised the retail fuel price index 76% above its level a year earlier and inflation for the bottom 30% reached 8.5% in April.
+The Philippines allows a direct test. The Philippine Statistics Authority publishes, every month and for each of 17 regions, a consumer price index for *low-income households*, defined as the 30% of households with the lowest income per person, alongside the *headline index* for all households. The low-income index uses that group's own spending pattern, item by item. Low-income households spend 54.9% of their budget on food, against 37.7% for all households, and 1.59% on fuel for their own vehicles, against 2.39%. The question also became pressing in 2026, when an oil shock raised retail fuel prices 76% above their level a year earlier and inflation for low-income households reached 8.5% in April.
 
-We make three contributions. First, we estimate the pass-through of retail fuel prices to the price level of all households and of the bottom 30% in a panel of 17 regions, with local projections [@jorda_2005] specified as in @kpodar_liu_2022. A 1% rise in fuel prices raises the all-household price level by 0.047% in the month of the shock and by 0.102% after a year. Second, we show that the effect is regressive, the opposite of the cross-country result. Six months after a shock, the price level of the bottom 30% has risen 25% more than that of all households, and the difference is significant at every horizon from 3 to 12 months. A budget-share calculation predicts a progressive effect, so the regressive gap must arise from faster price increases within the categories the poor buy; we show that it moves with food prices. Third, we test the estimates out of sample. Responses estimated on data ending in December 2025 predict a 2026 gap of −0.77 log points (90% bootstrap band −1.45 to −0.25), against an actual −1.18, and put the fuel-driven cost to a family of five at the poverty line at PHP 499 a month.
+We make three contributions. First, we estimate how much, and how fast, retail fuel prices raise the price level of low-income households and of all households, using local projections [@jorda_2005] specified as in @kpodar_liu_2022 and estimated on the 17-region panel. A 1% rise in fuel prices raises the price level of all households by 0.047% within the month and by 0.102% after a year. Second, we show that low-income households pay more, the opposite of the cross-country result, and measure by how much: six months after a shock their price level has risen about 25% more than that of all households. Spending shares alone predict the opposite sign, so the difference arises from faster price increases within the categories that low-income households buy. Third, we ask whether geography matters. The response differs across regions, and the differences are statistically significant, but they are unrelated to regional poverty or food spending.
 
-To the best of our knowledge, this is the first study to estimate the distributional pass-through of fuel prices with an official price index for low-income households. Section 2 reviews the related literature. Section 3 sets out a simple framework. Section 4 describes the data and the method. Section 5 presents the results, and Section 6 applies them to the 2026 oil shock. Section 7 concludes.
+To the best of our knowledge, this is the first study to estimate the pass-through of fuel prices with an official price index for low-income households. Section 2 reviews the related literature. Section 3 sets out the framework. Section 4 describes the data and builds the method step by step. Section 5 presents the results, and Section 6 discusses their implications. Section 7 summarises the findings and their limitations.
 
 # 2. Related literature
 
-The first strand of literature studies how oil price shocks reach consumer prices. @kilian_2009 separates oil supply shocks from shocks to global demand for commodities and to demand specific to oil, and shows that their effects on prices and activity differ. @blanchard_gali_2010 find that oil shocks had much smaller effects on inflation in the 2000s than in the 1970s, which they attribute to weaker wage responses, more credible monetary policy and a smaller oil share in production. @kanzig_2021 identifies oil supply news from futures price movements around OPEC announcements and finds that such news raises prices and inflation expectations immediately. These studies trace effects over time and distinguish the source of the shock; they do not ask who bears it.
+The study closest to ours is @kpodar_liu_2022. Using monthly retail fuel prices and consumer price indices for 122 countries over 2000–2019, they build a price index for each income fifth by combining the published price changes of the main spending categories with the spending shares of each fifth from household surveys. They then estimate local projections of each index on retail fuel price changes. They find that a 1% rise in retail fuel prices raises inflation by about 0.044 percentage points on impact in advanced economies and 0.018 in developing economies, that crude oil prices understate this effect, and that the effect is progressive, lasting beyond a year in developing economies. Their design implies that broad fuel tax relief benefits richer households most. Its limitation, for our question, is that all income groups share the same price change within each category, so the design can detect differences in spending shares but not differences in what households buy within a category.
 
-The second strand measures pass-through to inflation. @kpodar_abdallah_2017 build a database of monthly retail fuel prices for 162 countries and find that changes in world crude prices reach pump prices within about six months, more fully for increases than for decreases. @choi_etal_2018 estimate for 72 countries that a 10% rise in world oil prices raises inflation by about 0.4 percentage points on impact. @gelos_ustyugova_2017 find larger and more persistent effects where food and fuel weigh more in the basket. In developing Asia during the 2007–2008 price spike, subsidies and price controls limited the pass-through [@jongwanich_park_2011]. For the Philippines, @allon_pineda_etal_2026 find with local projections that oil and food price shocks have persistent effects on national inflation, and @valera_etal_2025 find across provinces that energy and rice prices raise inflation more when inflation is already high. None of these studies distinguishes income groups. @kpodar_liu_2022 do, with the rebuilt indices described above, and find a progressive effect that persists beyond a year in developing economies.
+Two studies document how oil prices reach consumers. @kpodar_abdallah_2017 assemble monthly retail gasoline prices for 162 countries and estimate, with local projections, how changes in world crude prices pass through to pump prices. Pass-through peaks after about six months and is larger for price increases than for decreases, which implies that retail prices, not crude prices, are the relevant measure of the shock consumers face. @choi_etal_2018 estimate, for 72 economies over 1970–2015 and again with local projections, that a 10% rise in world oil prices raises domestic inflation by about 0.4 percentage points on impact, an effect that fades within two years and has declined over time; the share of transport in the consumer basket and energy subsidies explain most differences across countries. Neither study distinguishes income groups.
 
-The third strand asks who bears fuel price changes. Richer households capture most of the benefit of fuel subsidies [@coady_etal_2015], and energy price increases tend to be progressive in poorer countries because energy budget shares first rise and then fall with income [@dorband_etal_2019]. Both conclusions rest on budget shares. Studies of inflation inequality point to a channel that budget shares miss: households with different incomes face different price changes within the same categories [@jaravel_2021]. In the Philippines, the food price increases of 2006–2008 raised poverty, and the poorest households were affected most whether or not they farmed [@fujii_2013]. Rice, the largest single item in the poor's basket, also responds to trade policy: the 2019 rice tariffication law lowered rice prices, and the poorest quintiles gained most [@balie_etal_2021].
+For the Philippines, @allon_pineda_etal_2026 estimate local projections of headline and core inflation and of inflation expectations on world oil, world food and domestic rice price shocks, using monthly national data. Oil and food shocks have significant and persistent effects, and the indirect, or second-round, effects of oil are larger than its direct effects. Their results show that the Philippine price level responds strongly and lastingly to oil, but they do not ask which households bear the increase.
 
-Our study joins these strands. We estimate pass-through as in the second strand, ask the distributional question of the third, and answer it with official prices that capture differences within categories.
+Studies of who bears energy price changes have mostly relied on spending shares. @dorband_etal_2019 combine household surveys of 87 low- and middle-income countries with input–output tables, which trace how an energy price rise raises the price of every good, and find that carbon pricing is progressive in countries with incomes below about USD 15,000 per person, because energy spending shares first rise and then fall with income. @jaravel_2021 reviews the evidence on *inflation inequality*, the difference in inflation rates across income groups, and shows with detailed price data for the United States that inflation falls with income and that aggregating goods into broad categories hides much of this difference. For the Philippines, @fujii_2013 combines household survey data with provincial prices and finds that the food price increases of 2006–2008 raised poverty, with the poorest households hit hardest whether or not they farmed. Together, these studies suggest that spending-share calculations can misstate who bears a price shock when poorer households buy different goods within a category; an official low-income index allows this to be tested directly.
 
 # 3. Framework
 
-Fuel is an input to almost every good. In the input–output price model [@miller_blair_2009], if margins and other costs are unchanged, a fuel price shock $f_t = 100\,\Delta \ln F_t$ raises the price of good *k* in proportion to its total fuel cost share $\phi_k$, so that $\pi_{k,t} \approx \phi_k f_t$. A group's consumer price index weights item prices by that group's budget shares $w^g_k$, so
+Fuel is an input to almost every good. To see how a fuel price shock reaches each household group, we follow the input–output price model [@miller_blair_2009] and define two shares.
 
-$$\pi^g_t \approx \Phi^g f_t, \qquad \Phi^g = \sum_k w^g_k\, \phi_k. \qquad\qquad (1)$$
+The *budget share* of good *k* for group *g* is the percentage of the group's spending that goes to that good:
 
-Intuitively, a group's pass-through equals the fuel intensity of its basket. We measure the difference between the two groups with the *inflation gap*, $D_t = 100 \ln(P^A_t / P^B_t)$, where *A* denotes all households and *B* the bottom 30%. Its monthly change is $\Delta D_t = \pi^A_t - \pi^B_t$, so a negative response of the gap means that the poor's prices rise more; we call such an effect *regressive*. The gap splits exactly into two terms:
+$$w^g_k = 100 \times \frac{E^g_k}{\sum_{j} E^g_j}, \qquad\qquad (1)$$
 
-$$\pi^A_t - \pi^B_t = \sum_k (w^A_k - w^B_k)\, \pi^A_{k,t} + \sum_k w^B_k\, (\pi^A_{k,t} - \pi^B_{k,t}). \qquad\qquad (2)$$
+where $E^g_k$ is the total spending of households in group *g* on good *k*, the sum in the denominator runs over all goods *j*, *g* = *A* denotes all households and *g* = *L* low-income households. For example, food takes 54.9% of the budget of low-income households and 37.7% of the budget of all households.
 
-The first term is a *weights effect*: the gap that arises because the groups divide their budgets differently across categories. The second is a *within-category effect*: the gap that arises because the groups buy different items within a category, whose prices change differently. Indices rebuilt from budget shares with common category prices capture only the first term. Finally, following @deaton_1989, the rise in a group's price index approximates the extra spending the group needs to buy the same basket, which lets us express the burden of a shock in pesos.
+The *fuel cost share* of good *k* is the share of its production and distribution cost that is spent on fuel, directly and through its inputs. If margins and other costs do not change, a fuel price shock raises the price of good *k* in proportion to it:
+
+$$\pi_{k,t} \approx \phi_k\, f_t, \qquad\qquad (2)$$
+
+where $\pi_{k,t}$ is the percentage change in the price of good *k* in month *t*, $\phi_k$ is its fuel cost share (between 0 and 1) and $f_t$ is the percentage change in the retail fuel price. For example, if fuel made up 30% of the cost of a bus ride, a 10% rise in fuel prices would raise the fare by about 3%.
+
+A group's inflation is the budget-share-weighted average of the price changes of the goods it buys. Combining this with equation (2) gives
+
+$$\pi^g_t \approx \sum_k \frac{w^g_k}{100}\, \pi_{k,t} \approx \Phi^g f_t, \qquad \Phi^g = \sum_k \frac{w^g_k}{100}\, \phi_k, \qquad\qquad (3)$$
+
+where $\pi^g_t$ is the inflation rate of group *g* and $\Phi^g$ is the *fuel intensity* of the group's basket, the budget-share-weighted average of the fuel cost shares. Intuitively, a group's prices respond more to fuel the more of its budget goes to fuel-intensive goods.
+
+We compare the groups with the *inflation gap*, the difference between the two inflation rates,
+
+$$\Delta D_t = \pi^A_t - \pi^L_t, \qquad\qquad (4)$$
+
+where $\pi^A_t$ and $\pi^L_t$ are the inflation rates of all households and of low-income households in month *t*. A negative gap means that low-income households' prices rose more; we call such an effect *regressive*, and a positive one *progressive*. The gap splits exactly into two parts:
+
+$$\pi^A_t - \pi^L_t = \underbrace{\sum_k \frac{w^A_k - w^L_k}{100}\, \pi^A_{k,t}}_{\text{weights effect}} + \underbrace{\sum_k \frac{w^L_k}{100}\, (\pi^A_{k,t} - \pi^L_{k,t})}_{\text{within-category effect}}, \qquad\qquad (5)$$
+
+where *k* now indexes spending categories, $\pi^A_{k,t}$ and $\pi^L_{k,t}$ are the price changes of category *k* in each group's index, and the other symbols are as above. The *weights effect* is the gap that arises because the groups divide their budgets differently across categories. The *within-category effect* arises because the groups buy different goods within a category, for example rice rather than meat, whose prices change differently. The cross-country measure of @kpodar_liu_2022 captures only the weights effect.
 
 # 4. Data and method
 
 ## 4.1 Data
 
-All price data are monthly consumer price indices of the Philippine Statistics Authority on the 2018 = 100 base [@psa_openstat_2026], for 17 regions. The shock is the change in the sub-index 07.2.2, fuels and lubricants for personal transport, which measures retail gasoline and diesel prices. Its monthly changes correlate at 0.87 with the World Bank's Manila pump price over 2016–2025. The outcomes are the all-household index and the bottom-30% index of each region. The bottom-30% series join the statistics authority's own back-calculated series for 2000–2017 to the current series.[^splice] Because these back-calculations exist only for the 17 regions defined before the Negros Island Region was created in 2024, we keep the 17-region map and extend it to August 2026 with the monthly changes published on the new map.[^nir] The panel is balanced, and the shock dates run from January 2001 to August 2026, which gives 5,219 region-months at the first horizon.
+All price data are monthly consumer price indices of the Philippine Statistics Authority on the 2018 = 100 base [@psa_openstat_2026], for each of 17 regions. Three of these indices define our variables.
 
-The robustness checks use Dubai crude oil in pesos [@worldbank_cmo_2026], the peso–dollar exchange rate and the policy interest rate of the central bank, and the FAO world food price index; these national series are the same for every region in a month. The budget-share calculation uses the 2018 weights of the two baskets and the national division indices. Poverty lines come from the statistics authority.
+The *retail fuel price*, also called the *pump price*, is the price consumers pay for gasoline and diesel at filling stations, including taxes and dealer margins. We measure it with the consumer price sub-index 07.2.2, "fuels and lubricants for personal transport". The monthly changes in this index correlate at 0.87 with the World Bank's Manila pump price over 2016–2025. The *world crude price* is the price of unrefined oil traded internationally; we use the Dubai benchmark, the reference price for crude oil imported into Asia, converted from US dollars per barrel to pesos [@worldbank_cmo_2026].
 
-[^splice]: The back-calculated series are joined in January 2012 and January 2018. Monthly changes in the gap are larger in those two months than on average; dummies for them leave the national gap unchanged to three decimals.
-
-[^nir]: The new map changes the boundaries of Regions VI, VII and XII and of the Bangsamoro region. Dropping their re-mapped 2026 months leaves the gap at six months unchanged to three decimals.
-
-## 4.2 Panel local projections
-
-For each horizon *h* = 0, 1, …, 12 months, we estimate by ordinary least squares the panel version of the specification of @kpodar_liu_2022:
-
-$$\sum_{j=0}^{h} y_{r,t+j} = \mu_{r,h} + B_h f_{r,t} + \sum_{q=1}^{12} \gamma_{q,h}\, y_{r,t-q} + \sum_{q=1}^{12} \lambda_{q,h}\, f_{r,t-q} + \sum_{l=1}^{h-1} \rho_{l,h}\, f_{r,t+l} + \delta_h\, t + \varepsilon_{r,t+h}, \qquad\qquad (3)$$
-
-where $y_{r,t}$ is monthly inflation (or the change in the gap) in region *r*, $f_{r,t}$ is the region's fuel shock, $\mu_{r,h}$ is a region fixed effect and *t* is a linear trend. The left-hand side is the change in the log price level from *t* − 1 to *t + h*, so $B_h$ is the *cumulative response*: the percentage change in the price level *h* months after a 1% rise in fuel prices. Intuitively, each horizon is a separate regression of the price level *h* months ahead on today's shock, holding the past constant [@jorda_2005]. The twelve lags absorb the persistence of inflation and the seasonality of the unadjusted indices. The leads $f_{r,t+1}, \dots, f_{r,t+h-1}$ hold constant the further fuel price changes that tend to follow a first one [@teulings_zubanov_2014], so that $B_h$ measures the effect of a single shock; we keep the lead set of the reference study. Lags and leads are built within regions before the sample is restricted, so the first shock dates keep their lags.
-
-Two features of the panel matter for inference. The outcome at horizon *h* overlaps with the outcomes of neighbouring months, so the errors are serially correlated; and every region is hit by the same national events in the same month, so the errors are correlated across regions. We therefore report Driscoll–Kraay standard errors with *h* + 1 lags, which allow both forms of dependence [@driscoll_kraay_1998]. With about 300 months per region, the bias from combining fixed effects with lagged outcomes is negligible. Bands are 90%, as in the reference study. The estimator recovers known responses in simulated data.
-
-## 4.3 The budget-share calculation
-
-To ask whether budget shares can explain the sign of the gap, we apply the weights term of equation (2) to estimated responses. For each of the 13 divisions *k* of the national consumer price index, we estimate the twelve-month cumulative response $B^{(k)}_{12}$ with the national version of equation (3) and compute
-
-$$G^{w} = \sum_{k=1}^{13} B^{(k)}_{12}\, \frac{w^A_k - w^B_k}{100}. \qquad\qquad (4)$$
-
-$G^w$ is the gap that would arise if both groups faced the same price change within each division. A positive value is progressive. The difference between the estimated gap and $G^w$ is the within-category part. This calculation is an accounting exercise outside the regression model: it describes where the gap comes from and does not test a causal channel.
-
-## 4.4 The 2026 out-of-sample test
-
-To test the estimates on an episode they have not seen, we re-estimate equation (3) on data that end in December 2025 and apply the responses to the fuel price changes of 2026. Because responses add up, the fuel-driven change in the log price level between December 2025 and month *m* is
-
-$$\widehat{\Delta \ln P}_{m} = \sum_{s=1}^{m} \widehat{B}_{m-s}\, f_s, \qquad\qquad (5)$$
-
-where $f_s$ is the fuel shock in month *s* of 2026. We apply the panel responses to the national fuel path and compare the prediction with the actual change in the national indices. The prediction combines thirteen estimated coefficients whose sampling errors are correlated across horizons. We therefore compute its uncertainty with a moving-block bootstrap: we resample blocks of 12 consecutive months, with all regions of a month kept together, re-estimate all horizons and recompute equation (5), 999 times. The 90% band is the 5th to 95th percentile of the bootstrap distribution.
-
-# 5. Results
-
-## 5.1 The record
-
-The inflation of the bottom 30% exceeded that of all households in 18 of the 25 years from 2001 to 2025 (Fig. 1). The largest difference occurred in 2008, when the oil price spike coincided with a rice price crisis and annual inflation reached 13.9% for the bottom 30% against 8.2% for all households. In 6 of the 9 episodes in which retail fuel prices stayed at least 15% above their level a year earlier, the poor's inflation was the higher of the two (Table 1). This descriptive record already points away from a progressive effect; the regressions below ask whether it is caused by fuel prices.
+The outcomes are the headline index for all households and the low-income index, by region. The low-income series join the statistics authority's own back-calculated series for 2000–2017 to the current series.[^splice] The back-calculations exist only for the 17 regions defined before the Negros Island Region was created in 2024, so we keep the 17-region map and extend it to August 2026 with the monthly changes published on the new map.[^nir] The budget-share calculation uses the 2018 budget shares of the two groups and the national price indices of the 13 spending categories. The panel is balanced. Shock dates run from January 2001 to August 2026, which gives 5,219 region-months.
 
 *[Figure 1 about here]*
 
+Low-income inflation exceeded headline inflation in 18 of the 25 years from 2001 to 2025 (Fig. 1). The largest difference occurred in 2008, when the oil price spike coincided with a rice price crisis: annual inflation reached 13.9% for low-income households against 8.2% for all households. The regressions below ask how much of such differences fuel prices cause.
+
+[^splice]: The back-calculated series are joined in January 2012 and January 2018. Monthly changes in the gap are larger in those two months than on average; adding indicator variables for them leaves the national estimate of the gap unchanged to three decimals.
+
+[^nir]: The new map changes the boundaries of Regions VI, VII and XII and of the Bangsamoro region. Dropping their re-mapped 2026 months leaves the six-month gap unchanged to three decimals.
+
+## 4.2 From the distributed-lag model to local projections, step by step
+
+**Step 1: the variables.** All variables are monthly percentage changes, measured as 100 times the change in the natural logarithm. The fuel shock and inflation are
+
+$$f_{r,t} = 100\,(\ln F_{r,t} - \ln F_{r,t-1}), \qquad \pi^g_{r,t} = 100\,(\ln P^g_{r,t} - \ln P^g_{r,t-1}), \qquad\qquad (6)$$
+
+where *r* indexes the 17 regions, *t* indexes months, $F_{r,t}$ is the retail fuel price index of region *r* in month *t*, $P^g_{r,t}$ is the consumer price index of group *g* (all households, *A*, or low-income households, *L*) and ln is the natural logarithm. For example, the national fuel index rose from 120.5 in February 2026 to 165.6 in March, a fuel shock of $100 \ln(165.6/120.5) \approx 31.8$%. The gap of equation (4) becomes $\Delta D_{r,t} = \pi^A_{r,t} - \pi^L_{r,t}$.
+
+**Step 2: the familiar starting point.** Consider first a single price series and an autoregressive distributed-lag (ARDL) model of inflation:
+
+$$\pi_t = \alpha + \sum_{q=1}^{p} \varphi_q\, \pi_{t-q} + \sum_{q=0}^{p} \theta_q\, f_{t-q} + \varepsilon_t, \qquad\qquad (7)$$
+
+where $\pi_t$ is inflation in month *t*, $f_{t-q}$ is the fuel shock *q* months earlier, *p* is the number of lags (we use *p* = 12), $\alpha$ is a constant, $\varphi_q$ are the coefficients on past inflation, $\theta_q$ are the coefficients on current and past fuel shocks, and $\varepsilon_t$ is the error term. In an ARDL model, the effect of a one-time 1% fuel shock on inflation *h* months later, the *dynamic multiplier* $m_h$, is built up recursively from the estimated coefficients:
+
+$$m_0 = \theta_0, \qquad m_h = \theta_h + \sum_{q=1}^{\min(h,p)} \varphi_q\, m_{h-q} \quad (h \geq 1), \qquad\qquad (8)$$
+
+where $\theta_h = 0$ for *h* > *p*. Each multiplier therefore depends on every coefficient of equation (7) being correctly estimated, and errors in the early coefficients carry over to all later horizons.
+
+**Step 3: the local projection.** @jorda_2005 proposed estimating each multiplier directly. Keep the right-hand side of equation (7), but move the left-hand side *h* months ahead:
+
+$$\pi_{t+h} = \alpha_h + \beta_h\, f_t + \sum_{q=1}^{p} \gamma_{q,h}\, \pi_{t-q} + \sum_{q=1}^{p} \lambda_{q,h}\, f_{t-q} + u_{t+h}, \qquad\qquad (9)$$
+
+where $\pi_{t+h}$ is inflation *h* months after month *t*, $\beta_h$ is the response of inflation at horizon *h* to a 1% fuel shock in month *t*, $\gamma_{q,h}$ and $\lambda_{q,h}$ are the coefficients on past inflation and past fuel shocks, $\alpha_h$ is a constant, and $u_{t+h}$ is the error term; the subscript *h* on every coefficient indicates that each horizon is a separate regression. Intuitively, a local projection is an ARDL regression whose dependent variable has been shifted *h* months into the future. Equation (9) is estimated by ordinary least squares once for each *h* = 0, 1, …, 12, and $\beta_h$ estimates the dynamic multiplier $m_h$ without the recursion of equation (8). With enough lags, both approaches estimate the same response in large samples [@plagborg_wolf_2021].
+
+**Step 4: from inflation to the price level.** Policy questions concern the price level: how much higher are prices *h* months after the shock? Because inflation is the change in the log price level, the sum of inflation from month *t* to month *t + h* is the percentage change in the price level over that period. Replacing the left-hand side of equation (9) with this sum gives the *cumulative response* $B_h$:
+
+$$\sum_{j=0}^{h} \pi_{t+j} = \alpha_h + B_h\, f_t + \sum_{q=1}^{p} \gamma_{q,h}\, \pi_{t-q} + \sum_{q=1}^{p} \lambda_{q,h}\, f_{t-q} + u_{t+h}, \qquad\qquad (10)$$
+
+where $\sum_{j=0}^{h} \pi_{t+j} = 100\,(\ln P_{t+h} - \ln P_{t-1})$ is the percentage change in the price level from the month before the shock to *h* months after it, $B_h$ is the percentage change in the price level caused by a 1% fuel shock, and the other symbols are as in equation (9). For example, $B_{12} = 0.10$ means that a 10% rise in fuel prices makes the price level 1.0% higher a year later.
+
+**Step 5: holding later shocks constant.** Fuel price increases tend to come in runs: a rise this month makes a rise next month more likely. Without further controls, $B_h$ would credit the first shock with the effect of the shocks that follow it. Following @teulings_zubanov_2014 and the specification of @kpodar_liu_2022, we add the fuel shocks between month *t* and month *t + h*, together with a linear trend:
+
+$$\sum_{j=0}^{h} \pi_{t+j} = \alpha_h + B_h\, f_t + \sum_{q=1}^{p} \gamma_{q,h}\, \pi_{t-q} + \sum_{q=1}^{p} \lambda_{q,h}\, f_{t-q} + \sum_{l=1}^{h-1} \rho_{l,h}\, f_{t+l} + \delta_h\, t + u_{t+h}, \qquad\qquad (11)$$
+
+where $f_{t+l}$ is the fuel shock *l* months after month *t* (a *lead* of the shock), $\rho_{l,h}$ is its coefficient, *t* is a linear time trend with coefficient $\delta_h$, and the other symbols are as in equation (10). With the leads held constant, $B_h$ measures the effect of a single 1% rise in fuel prices.
+
+**Step 6: the regional panel.** We estimate equation (11) on all 17 regions together, with each region's own inflation and fuel shock and a separate constant for each region:
+
+$$\sum_{j=0}^{h} y_{r,t+j} = \mu_{r,h} + B_h\, f_{r,t} + \sum_{q=1}^{12} \gamma_{q,h}\, y_{r,t-q} + \sum_{q=1}^{12} \lambda_{q,h}\, f_{r,t-q} + \sum_{l=1}^{h-1} \rho_{l,h}\, f_{r,t+l} + \delta_h\, t + u_{r,t+h}, \qquad\qquad (12)$$
+
+where $y_{r,t}$ is the outcome of region *r* in month *t* (headline inflation $\pi^A_{r,t}$, low-income inflation $\pi^L_{r,t}$, or the gap $\Delta D_{r,t}$), $f_{r,t}$ is the region's fuel shock, $\mu_{r,h}$ is a *region fixed effect* (a constant specific to region *r* that absorbs every feature of the region that does not change over time, such as its distance from Manila or its typical diet), $u_{r,t+h}$ is the error term, and the other symbols are as in equation (11). Lags and leads are taken within each region, so a region's past never borrows another region's data. With about 300 months per region, the small-sample bias from combining fixed effects with lagged outcomes is negligible.
+
+**Step 7: standard errors.** The outcome at horizon *h* overlaps with the outcomes of neighbouring months, so the errors of nearby months are correlated; and all regions are hit by the same national events in the same month, so the errors are also correlated across regions. Ordinary standard errors ignore both and are too small. We use *Driscoll–Kraay standard errors* with *h* + 1 lags, which allow for both forms of correlation [@driscoll_kraay_1998]. We report 90% confidence bands, $B_h \pm 1.645 \times \text{s.e.}(B_h)$, as in the reference study; a band that excludes zero indicates a response significant at the 10% level.
+
+## 4.3 Does geography matter?
+
+To estimate a separate response for each region while keeping the dynamics common, we replace $B_h f_{r,t}$ in equation (12) with a set of interactions:
+
+$$B_h\, f_{r,t} \;\longrightarrow\; \sum_{s=1}^{17} B_{h,s}\, \big(f_{r,t} \times \mathbb{1}[r = s]\big), \qquad\qquad (13)$$
+
+where *s* indexes regions, $\mathbb{1}[r = s]$ is an indicator equal to one for the observations of region *s* and zero otherwise, and $B_{h,s}$ is the cumulative response of region *s*. To test whether geography matters, we test the null hypothesis that all regions respond equally, $B_{h,1} = B_{h,2} = \dots = B_{h,17}$, with the Wald statistic
+
+$$W_h = (R\hat{b}_h)'\,(R\hat{V}_h R')^{-1}\,(R\hat{b}_h), \qquad\qquad (14)$$
+
+where $\hat{b}_h$ is the vector of the 17 estimated responses $B_{h,s}$, $\hat{V}_h$ is its Driscoll–Kraay covariance matrix, and *R* is the 16 × 17 matrix whose rows take the difference between each of the first 16 responses and the 17th. Under the null hypothesis, $W_h$ follows a chi-squared distribution with 16 degrees of freedom. We then ask whether the regional responses line up with each region's poverty rate and food budget share.
+
+## 4.4 The budget-share calculation
+
+To ask whether spending shares can explain the gap, we apply the weights effect of equation (5) to estimated responses. We estimate equation (11) for each of the 13 categories of the national headline index and compute
+
+$$G^{w}_{12} = \sum_{k=1}^{13} B^{(k)}_{12}\, \frac{w^A_k - w^L_k}{100}, \qquad\qquad (15)$$
+
+where $B^{(k)}_{12}$ is the twelve-month cumulative response of the price index of category *k* to a 1% fuel shock, $w^A_k$ and $w^L_k$ are the 2018 budget shares of category *k* for all households and for low-income households, and $G^{w}_{12}$ is the gap that would arise after twelve months if both groups faced the same price change within each category. A positive value is progressive. The difference between the estimated gap and $G^{w}_{12}$ is the within-category part. This calculation is an accounting exercise outside the regression model: it describes the source of the gap and does not test a causal channel.
+
+# 5. Results
+
+## 5.1 Pass-through: all households and low-income households
+
+Retail fuel prices pass through quickly and lastingly to both groups (Table 1, Fig. 2). A 1% rise raises the price level of all households by 0.047% in the month of the shock, by 0.086% after six months and by 0.102% after a year; a 10% rise in pump prices thus leaves prices about 1.0% higher a year later. The price level of low-income households rises by 0.046%, 0.105% and 0.116%. The two groups respond almost equally in the first month, and the low-income response pulls ahead from the third month on. The impact response for all households is of the same size as the advanced-economy estimate of @kpodar_liu_2022 (0.044).
+
 *[Table 1 about here]*
-
-## 5.2 Pass-through to the price level
-
-Retail fuel prices pass through quickly and lastingly (Table 2, Fig. 2). A 1% rise raises the all-household price level by 0.047% in the month of the shock, by 0.086% after six months and by 0.102% after a year, so that a 10% rise in pump prices leaves consumer prices about 1.0% higher a year later. The bottom-30% price level responds by 0.046%, 0.105% and 0.116%. The impact response is of the same size as the advanced-economy estimate of @kpodar_liu_2022 (0.044) and more than twice their developing-economy estimate (0.018). When Dubai crude oil in pesos replaces the retail price as the shock, the twelve-month response falls to 0.041, about 41% of the retail estimate; studies that measure oil shocks with crude prices therefore understate the pass-through to consumers.
-
-*[Table 2 about here]*
 
 *[Figure 2 about here]*
 
-## 5.3 Who pays more?
+## 5.2 Who pays more, and by how much?
 
-The gap responds negatively at every horizon (Table 2, Fig. 3). Six months after a 1% fuel price rise, the price level of the bottom 30% has risen 0.0214 percentage points more than that of all households (standard error 0.0084, *t* = 2.56); after a year the difference is 0.0173 points (0.0085). The 90% band excludes zero at every horizon from 3 to 12 months. In relative terms, the poor's price level rises about 25% more than the average household's: a 10% rise in pump prices raises average prices by 0.86% after six months and the prices of the bottom 30% by about 0.21 percentage points more.[^sep] The progressive effect found across countries does not hold in the Philippines; the effect is regressive.
+Low-income households pay more. The gap responds negatively at every horizon, and its 90% band excludes zero at every horizon from 3 to 12 months (Table 1, Fig. 3). Six months after a 1% rise in fuel prices, the price level of low-income households has risen 0.0214 percentage points more than that of all households (standard error 0.0084); after a year the difference is 0.0173 points (0.0085).[^sep] Relative to the response of all households, 0.086%, the low-income price level rises about 25% more. In concrete terms, a 10% rise in pump prices raises the price level of all households by 0.86% after six months, and that of low-income households by about 0.21 percentage points more. The progressive effect found across countries does not hold in the Philippines.
 
-[^sep]: The difference between the separate responses in Table 2 is 0.0196 at six months, close to the direct estimate of the gap. The two need not coincide, because the separate regressions control for each group's own past inflation while the gap regression controls for the past gap.
+[^sep]: The difference between the two separate responses in Table 1 is 0.0196 at six months, close to the direct estimate of the gap. The two need not coincide, because the separate regressions control for each group's own past inflation, whereas the gap regression controls for the past gap.
 
 *[Figure 3 about here]*
 
-## 5.4 Why the poor pay more
+Spending shares point the other way (Table 2). If both groups faced the same price change within each category, equation (15) gives a twelve-month gap of +0.0101, a progressive effect. Food pushes the gap toward regressive (−0.0124), because low-income households spend more of their budget on it. Housing and utilities (+0.0092) and transport (+0.0108) push it the other way, because all households together spend more on them and transport prices respond most to fuel (0.370 after a year). The estimated gap after twelve months is −0.0173, so the within-category part is about −0.0274: larger in size than the whole estimated gap, and of the opposite sign to the weights effect. Prices rise faster within the categories that low-income households buy.
 
-Budget shares predict the opposite sign (Table 3). If both groups faced the same price change within each division, the twelve-month gap would be +0.0101, a progressive effect. Food pushes the gap toward regressive (−0.0124), because the poor spend more on it. Housing and utilities (+0.0092) and transport (+0.0108) push it the other way, because the average household spends more on them and transport prices respond most to fuel (0.370 after a year). Since the estimated gap is −0.0173, the within-category part is about −0.0274: prices rise faster within the categories the poor buy, by more than enough to reverse the sign implied by their budget shares.
+*[Table 2 about here]*
 
-*[Table 3 about here]*
+The low-income category indices, which the statistics authority publishes nationally from 2013, point to the same categories. Over 2013–2026, the twelve-month response of the low-income food index is 0.067 against 0.055 in the headline index, and that of the low-income housing and utilities index, which includes cooking fuels, is 0.182 against 0.142. The low-income transport index, mostly public transport fares, responds less (0.196 against 0.300).[^why]
 
-The bottom-30% division indices, which the statistics authority publishes nationally from 2013, point to the same channel. Over 2013–2026, the twelve-month response of the poor's housing and utilities index, which includes cooking fuels, is 0.182 against 0.142 for all households, and that of their food index is 0.067 against 0.055. Their transport index, mostly fares, responds less (0.196 against 0.300).[^why] The poor pay more because the goods they buy within food and utilities become relatively more expensive, not because they buy more fuel.
+[^why]: These comparisons are exploratory: they were added after the first results and cover only the years for which low-income category indices exist.
 
-[^why]: These comparisons are exploratory: they were added after the first results and cover only the period for which bottom-30% division indices exist. Because item-level indices for the bottom 30% start in 2013, the 2008 episode cannot be decomposed by item.
+## 5.3 Does geography matter?
 
-## 5.5 Robustness
+The answer is yes, but not in the way poverty or diet would suggest (Fig. 4, Table 3). Six months after a 1% fuel shock, the response of the headline price level ranges from 0.058% in XII SOCCSKSARGEN to 0.110% in I Ilocos, and 17 of the 17 regional responses are significant at the 10% level. The Wald test of equation (14) rejects equal responses ($W$ = 55.3, *p* < 0.001). The gap varies more: from −0.0527 in VII Central Visayas to 0.0085 in XII SOCCSKSARGEN, with 2 of the 17 regions above zero. Equal gaps are rejected at the 5% level ($W$ = 27.7, *p* = 0.034; after twelve months, *p* = 0.038). The regressive effect is largest in VII Central Visayas, Cordillera Administrative Region, III Central Luzon.
 
-Table 4 and Fig. 4 report five checks on the gap. The result does not depend on any single region: leaving out each region in turn keeps the six-month gap between −0.0227 and −0.0203. It does not depend on 2008: excluding the shock dates of that year gives −0.0177 (0.0073). It survives a shock measured by a price set in world markets: with Dubai crude oil in pesos, the gap is −0.0116 (0.0050) after six months and −0.0103 (0.0049) after a year. The effect is, however, concentrated in the first half of the sample: −0.0541 (0.0197) for shock dates in 2001–2012, against −0.0091 (0.0064) in 2013–2026.
-
-*[Table 4 about here]*
+The regional differences are unrelated to the characteristics one might expect to drive them. Across the 17 regions, the correlation of the six-month gap with the 2018 poverty rate is 0.23, and with the food budget share 0.30; after twelve months both are close to zero (−0.04 and −0.03). Poorer and more food-dependent regions therefore do not systematically show larger gaps. Geography matters for how much prices rise after a fuel shock, and for how unequally, but regional poverty rates and food shares are not reliable guides to where low-income households are hit hardest.
 
 *[Figure 4 about here]*
 
-The fifth check qualifies the result. When the regression controls for the exchange rate, the policy rate and world food prices, the six-month gap falls to −0.0051 (0.0117); world food prices alone have the same effect (−0.0036, 0.0133). The poor's extra burden therefore moves with world food prices, and the data admit two readings. In the first, food is the channel through which fuel prices reach the poor: fuel is an input to growing, processing and moving food, and twelve-month changes in world food prices correlate at 0.56 with retail fuel prices and at 0.64 with crude oil in pesos over 2001–2026. Conditioning on a variable that the shock itself moves removes part of the effect being measured [@angrist_pischke_2009]. In the second reading, a common commodity cycle, such as a rise in global demand [@kilian_2009], raises oil and food prices together, and part of the gap reflects that cycle rather than fuel. Our data cannot separate the two readings. We therefore state the result as follows: fuel price shocks in the Philippines are not progressive, and the additional burden on the poor arrives together with, and plausibly through, food prices.
+*[Table 3 about here]*
 
-# 6. The 2026 oil shock
+## 5.4 Robustness
 
-## 6.1 An out-of-sample test
+Two checks address the main threats to these results (Table 4). The first concerns the shock itself. The retail fuel price is set at home and could respond to domestic conditions, such as the exchange rate or the strength of demand. Replacing it with the world crude price in pesos, which is set in world markets, the twelve-month response of the price level is 0.041% for all households and 0.051% for low-income households, about 41% of the retail estimate for all households, as expected when crude oil is one part of the pump price. The gap remains negative and significant: −0.0116 (0.0050) after six months and −0.0103 (0.0049) after a year. The second check concerns the panel. Leaving out each region in turn keeps the six-month gap between −0.0227 and −0.0203, and it remains significant in every case, so no single region drives the result.
 
-Between December 2025 and April 2026 retail fuel prices rose 53.7 log points. The responses estimated on data to December 2025 predict 2.62 of the 4.81-point rise in the all-household price level by August 2026 and 3.34 of the 5.98-point rise in the bottom-30% level, a little more than half in both cases (Table 5, Fig. 5). They also predict the direction and most of the size of the gap: −0.77 log points, with a 90% bootstrap band from −1.45 to −0.25 that excludes zero, against an actual −1.18. A model that never saw 2026 thus anticipated that the poor would pay more. The unexplained part of the surge is consistent with the observation that prices did not fall back when fuel prices eased in May and June.
+*[Table 4 about here]*
 
-*[Table 5 about here]*
+Two further results qualify the finding, and we report them for completeness. The gap is concentrated in the first half of the sample: −0.0541 (0.0197) for shock dates in 2001–2012, against −0.0091 (0.0064) in 2013–2026. And when the regression also controls for world food prices, the six-month gap falls to −0.0036 (0.0133). This second result admits two readings. Fuel is an input to growing, processing and moving food, and twelve-month changes in world food prices correlate at 0.56 with retail fuel prices; if food is the channel through which fuel reaches low-income households, controlling for food prices removes part of the effect being measured [@angrist_pischke_2009]. Alternatively, a common commodity cycle, such as a rise in global demand [@kilian_2009], may raise oil and food prices together. Our data cannot separate the two readings.
 
-*[Figure 5 about here]*
+# 6. Discussion
 
-## 6.2 The cost to poor families
+The results revise the cross-country conclusion in one direction. Budget shares alone make fuel price shocks progressive in the Philippines as elsewhere, but the official low-income index shows the opposite, because the goods that low-income households buy within food and utilities become relatively more expensive after a fuel shock. Measures of the burden of fuel prices that rely on spending shares, including the cross-country estimates of @kpodar_liu_2022 and incidence studies such as @dorband_etal_2019, may therefore overstate how progressive fuel price increases are wherever poorer households buy different goods within a category.
 
-For a family of five living at the poverty line, about PHP 14,714 a month at December 2025 prices, the fuel-driven rise in the bottom-30% price level implies an extra cost of PHP 499 a month by August 2026 (90% band PHP 331 to 719). About PHP 109 of it (band PHP 24 to 228) is the excess over what the same family would pay at the average household's inflation. Counting every price increase, not only the fuel-driven part, the extra cost was PHP 907. Across regions, applying the same responses to each region's fuel path, the fuel-driven cost ranges from PHP 390 in XII SOCCSKSARGEN to PHP 633 in the National Capital Region (Table 6). The burden is thus large for everyone, and about a quarter larger for the poor.
-
-*[Table 6 about here]*
-
-## 6.3 Which prices drove the gap
-
-A descriptive accounting of the 2026 episode identifies the items behind the gap. For a fixed-weight index, the contribution of item *k* to the change in group *g*'s index between December 2025 and August 2026 is $w^g_k (I^g_{k,m} - I^g_{k,0}) / I^g_0$, and the contributions add up to the change in the index. By this accounting, the bottom-30% index rose 6.16% and the all-household index 4.92%, a difference of +1.24 points (Fig. 6). Rice and other cereals contributed +1.67 points: cereal prices rose 18.3% in the poor's basket, where cereals weigh 19.6%, against 15.7% and 9.4% in the average basket. Fares added +0.15 and household fuels +0.13, while fuel for private vehicles (−0.38) and rent (−0.23) narrowed the gap. The 2026 rice increase also reflects fertiliser and freight costs and import policy [@usda_fas_2026]; the accounting describes the gap and does not attribute it to fuel.
-
-*[Figure 6 about here]*
-
-## 6.4 Implications for policy
-
-The results bear on the policy responses of 2026. Republic Act 12316 allows the President to suspend fuel excise taxes when world oil prices are high [@ra12316_2026]; the government suspended the excise on liquefied petroleum gas and kerosene but not on gasoline and diesel, subsidised transport drivers, and raised the policy rate three times. Relief on gasoline and diesel would mainly benefit households that own vehicles, since motor fuel is 2.39% of the average basket and 1.59% of the poor's. The suspension on liquefied petroleum gas saves a family about PHP 37 per 11-kg tank, roughly 7% of the fuel-driven monthly cost estimated above. Because the poor's extra burden arrives through food and fares, measures on rice supply and fares reach it more directly than fuel tax relief. Transfers can be sized with the bottom-30% index and the estimates of Section 6.2, and kept for at least a year, because prices did not fall when fuel prices eased.
+Three implications follow for policy. First, relief on gasoline and diesel taxes is poorly targeted: motor fuel is 2.39% of the budget of all households and 1.59% of that of low-income households, and most of the low-income response arrives through other prices. Second, the channels that matter for low-income households, food and fares, are reached more directly by food supply and fare measures than by fuel tax relief. Third, regional poverty rates are a poor guide to where low-income households are hit hardest; transfers indexed to each region's low-income price index would follow the actual burden.
 
 # 7. Conclusion
 
-We estimated the pass-through of retail fuel prices to the price level of poor and average households in a panel of 17 Philippine regions. Three findings stand out. First, pass-through is fast and lasting: a 10% rise in pump prices leaves consumer prices about 1.0% higher a year later, more than twice what crude prices imply. Second, the effect is regressive, contrary to cross-country evidence built on budget shares: the price level of the bottom 30% rises about a quarter more, and budget shares alone would predict the opposite sign. Third, responses estimated before 2026 predicted most of the poor's excess inflation during the 2026 shock.
+We estimated how retail fuel prices pass through to the price level of low-income households and of all households in a panel of 17 Philippine regions. Three findings stand out. First, pass-through is fast and lasting: a 10% rise in pump prices leaves consumer prices about 1.0% higher a year later. Second, low-income households pay about a quarter more, although their spending shares predict the opposite; the difference arises within spending categories, chiefly food. Third, the response differs significantly across regions, but the differences do not follow regional poverty or food shares.
 
-The study has limitations. The regressive gap moves with world food prices, and our data cannot separate a food channel from a common commodity cycle; an exogenous measure of oil supply shocks [@kilian_2009; @kanzig_2021] would sharpen the causal reading. The gap is concentrated in 2001–2012 and is small and imprecise after 2013. The comparison is between the bottom 30% and all households, which understates the difference between the poorest and the richest. The bottom-30% series before 2018 are back-calculated, and the decompositions are descriptive. Future work could use household survey data to separate net buyers from net sellers of rice, whose exposure to an oil shock differs.
+The study has limitations. The regressive gap is concentrated in 2001–2012 and moves with world food prices, and our data cannot separate a food channel from a common commodity cycle; an external measure of oil supply shocks [@kilian_2009] would sharpen the causal reading. The comparison is between the poorest 30% and all households, which understates the difference between the poorest and the richest. The low-income series before 2018 are back-calculated, and the budget-share calculation is descriptive. Indices for finer income groups, built from household survey spending shares and the detailed item prices of the statistics authority, would allow a sharper comparison and are a natural next step.
 
 # Declarations {-}
 
@@ -176,37 +218,15 @@ The study has limitations. The regressive gap moves with world food prices, and 
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 
-![Figure 1. Year-on-year inflation of all households and of the bottom 30% (a), the gap between them (b), and the retail fuel price index (c), Philippines, 2001–2026.](../output/figures/fig03_trends.png){width=88%}
+![Figure 1. Year-on-year inflation of all households and of low-income households, labelled "bottom 30% households" (a), the difference between them (b), and the retail fuel price index (c), Philippines, 2001–2026.](../output/figures/fig03_trends.png){width=88%}
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 
-Table: Table 1. Fuel price episodes: at least three months with retail fuel prices 15% or more above their level a year earlier
+Table: Table 1. Cumulative response of the price level to a 1% rise in retail fuel prices, 17-region panel
 
-| Episode | Months | Peak fuel price change, y/y (%) | Inflation, all (%) | Inflation, bottom 30% (%) | Gap, bottom 30% − all (pp) |
-|----------------|-------|-------------|----------|------------|-------------|
-| 2001-01 to 2001-03 | 3 | 22.8 | 5.83 | 5.90 | +0.07 |
-| 2004-06 to 2006-09 | 28 | 28.3 | 6.21 | 7.53 | +1.32 |
-| 2008-02 to 2008-10 | 9 | 40.3 | 8.50 | 14.68 | +6.17 |
-| 2010-01 to 2010-05 | 5 | 23.5 | 3.92 | 3.88 | −0.04 |
-| 2017-01 to 2017-03 | 3 | 24.6 | 2.88 | 2.12 | −0.76 |
-| 2017-09 to 2017-11 | 3 | 15.9 | 3.06 | 2.61 | −0.44 |
-| 2018-02 to 2018-11 | 10 | 33.5 | 5.42 | 6.22 | +0.81 |
-| 2021-04 to 2022-12 | 21 | 62.7 | 4.99 | 5.52 | +0.53 |
-| 2026-03 to 2026-08 | 6 | 76.3 | 6.14 | 7.58 | +1.44 |
-
-::: {custom-style="Table Note"}
-*Notes:* National series. Inflation is the average year-on-year rate during the episode.
-:::
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
-
-Table: Table 2. Cumulative response of the price level to a 1% rise in retail fuel prices, 17-region panel
-
-| Months after the shock (*h*) | All households | Bottom 30% | Gap (all − bottom 30%) |
+| Months after the shock (*h*) | All households | Low-income households | Gap (all − low-income) |
 |-------------|------------------|------------------|-------------------|
 | 0 | 0.047*** (0.006) | 0.046*** (0.008) | −0.0006 (0.0032) |
 | 1 | 0.080*** (0.012) | 0.086*** (0.017) | −0.0082 (0.0057) |
@@ -216,28 +236,28 @@ Table: Table 2. Cumulative response of the price level to a 1% rise in retail fu
 | 12 | 0.102*** (0.016) | 0.116*** (0.023) | −0.0173** (0.0085) |
 
 ::: {custom-style="Table Note"}
-*Notes:* Percentage change in the price level (gap: percentage points) *h* months after the shock; equation (3), shock dates January 2001–August 2026, region fixed effects; Driscoll–Kraay standard errors in parentheses. \* *p* < 0.10, \*\* *p* < 0.05, \*\*\* *p* < 0.01.
+*Notes:* Percentage change in the price level (gap: percentage points) *h* months after the shock; equation (12), shock dates January 2001–August 2026, region fixed effects; Driscoll–Kraay standard errors in parentheses. \* *p* < 0.10, \*\* *p* < 0.05, \*\*\* *p* < 0.01.
 :::
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 
-![Figure 2. Cumulative response of the price level of all households and of the bottom 30% to a 1% rise in retail fuel prices, with 90% bands (17-region panel).](../output/figures/figP1_passthrough.png){width=72%}
+![Figure 2. Cumulative response of the price level of all households and of low-income households to a 1% rise in retail fuel prices, with 90% bands (17-region panel).](../output/figures/figP1_passthrough.png){width=72%}
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 
-![Figure 3. Cumulative response of the gap 100 × ln(CPI all households / CPI bottom 30%) to a 1% rise in retail fuel prices, with 90% band (17-region panel). Values below zero mean that the prices of the bottom 30% rise more.](../output/figures/figP2_gap.png){width=72%}
+![Figure 3. Cumulative response of the gap 100 × ln(headline index / low-income index) to a 1% rise in retail fuel prices, with 90% band (17-region panel). Values below zero mean that low-income households' prices rise more.](../output/figures/figP2_gap.png){width=72%}
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 
-Table: Table 3. The gap implied by budget shares alone, twelve months after a 1% rise in retail fuel prices
+Table: Table 2. The gap implied by spending shares alone, twelve months after a 1% rise in retail fuel prices
 
-| CPI division | Weight, all (%) | Weight, bottom 30% (%) | Response, 12 months | Contribution to the gap |
+| Spending category | Budget share, all (%) | Budget share, low-income (%) | Response, 12 months | Contribution to the gap |
 |------------------------------|---------|----------|---------------|--------------|
 | Food and non-alcoholic beverages | 37.7 | 54.9 | 0.072** (0.033) | −0.0124 |
 | Housing, water, electricity, gas and other fuels | 21.4 | 15.5 | 0.158*** (0.015) | +0.0092 |
@@ -249,90 +269,57 @@ Table: Table 3. The gap implied by budget shares alone, twelve months after a 1%
 | (c) Within-category part, (b) − (a) |  |  |  | −0.0274 |
 
 ::: {custom-style="Table Note"}
-*Notes:* Descriptive calculation, equation (4). Response: cumulative twelve-month response of the national all-household division index (Newey–West standard errors in parentheses). Contribution = response × (weight, all − weight, bottom 30%) ÷ 100; positive values push toward a progressive gap. Weights: 2018 baskets.
+*Notes:* Descriptive calculation, equation (15). Response: twelve-month cumulative response of the national headline index of each category (Newey–West standard errors in parentheses). Contribution = response × (budget share, all households − budget share, low-income households) ÷ 100; positive values push toward a progressive gap. Budget shares: 2018.
 :::
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 
-Table: Table 4. Robustness of the gap
+![Figure 4. Region-specific cumulative responses six months after a 1% rise in retail fuel prices, with 90% confidence intervals: (a) price level of all households; (b) gap between all households and low-income households. Dashed lines: pooled estimates. Regions are ordered by the gap.](../output/figures/figP5_regions.png){width=95%}
 
-| Specification | Gap, 6 months | Gap, 12 months |
-|---------------------------------|------------------|------------------|
-| Baseline | −0.0214** (0.0084) | −0.0173** (0.0085) |
-| One region left out (range over 17 regions) | −0.0227 to −0.0203 | −0.0189 to −0.0156 |
-| Excluding 2008 | −0.0177** (0.0073) | −0.0135 (0.0092) |
-| Shock dates 2001–2012 | −0.0541*** (0.0197) | −0.0369** (0.0147) |
-| Shock dates 2013–2026 | −0.0091 (0.0064) | −0.0063 (0.0075) |
-| Shock: Dubai crude oil in pesos | −0.0116** (0.0050) | −0.0103** (0.0049) |
-| Controls: exchange rate, policy rate, world food prices | −0.0051 (0.0117) | 0.0057 (0.0138) |
-| Control: world food prices only | −0.0036 (0.0133) | 0.0115 (0.0182) |
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+Table: Table 3. Region-specific responses six months after a 1% rise in retail fuel prices
+
+| Region | Poverty 2018 (%) | Food share (%) | Pass-through, all households | Gap (all − low-income) |
+|--------------------------|---------|---------|----------------|----------------|
+| VII Central Visayas | 16.1 | 37.9 | 0.089*** (0.016) | −0.0527** (0.0221) |
+| Cordillera Administrative Region | 12.0 | 35.8 | 0.107*** (0.016) | −0.0477*** (0.0183) |
+| III Central Luzon | 7.0 | 36.5 | 0.091*** (0.020) | −0.0452** (0.0185) |
+| II Cagayan Valley | 16.3 | 43.9 | 0.096*** (0.023) | −0.0298** (0.0127) |
+| XIII Caraga | 30.5 | 46.7 | 0.087*** (0.025) | −0.0267* (0.0140) |
+| V Bicol | 27.0 | 45.6 | 0.080*** (0.021) | −0.0243** (0.0104) |
+| IX Zamboanga Peninsula | 32.7 | 49.6 | 0.103*** (0.020) | −0.0221 (0.0155) |
+| National Capital Region | 2.2 | 29.5 | 0.058*** (0.020) | −0.0196** (0.0099) |
+| VIII Eastern Visayas | 30.7 | 47.4 | 0.100*** (0.024) | −0.0192 (0.0175) |
+| VI Western Visayas | 14.2 | 42.6 | 0.088*** (0.023) | −0.0190 (0.0177) |
+| XI Davao | 19.1 | 43.0 | 0.083*** (0.026) | −0.0173 (0.0169) |
+| IV-A CALABARZON | 7.1 | 33.0 | 0.076*** (0.018) | −0.0164 (0.0135) |
+| Bangsamoro Autonomous Region in Muslim Mindanao | 60.4 | 59.4 | 0.089*** (0.032) | −0.0134 (0.0185) |
+| MIMAROPA | 15.1 | 46.4 | 0.063*** (0.022) | −0.0086 (0.0153) |
+| I Ilocos | 9.9 | 38.4 | 0.110*** (0.017) | −0.0013 (0.0151) |
+| X Northern Mindanao | 23.1 | 43.1 | 0.071*** (0.017) | 0.0026 (0.0267) |
+| XII SOCCSKSARGEN | 27.3 | 45.7 | 0.058** (0.029) | 0.0085 (0.0146) |
 
 ::: {custom-style="Table Note"}
-*Notes:* Cumulative response of the gap per 1% shock, 17-region panel; Driscoll–Kraay standard errors in parentheses. Controls enter with their current value and twelve lags. \* *p* < 0.10, \*\* *p* < 0.05, \*\*\* *p* < 0.01.
+*Notes:* Equation (12) with the interactions of equation (13); region fixed effects; Driscoll–Kraay standard errors in parentheses. Poverty: 2018 poverty incidence among the population. Food share: 2018 food budget share of all households in the region. \* *p* < 0.10, \*\* *p* < 0.05, \*\*\* *p* < 0.01.
 :::
 
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
 
-![Figure 4. Robustness of the six-month gap, with 90% confidence intervals. The bar at the bottom spans the estimates obtained when each region is left out in turn.](../output/figures/figP3_robustness.png){width=82%}
+Table: Table 4. Robustness checks
 
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
-
-Table: Table 5. The 2026 shock: predicted and actual change in the price level, December 2025 to August 2026 (100 × log points)
-
-| Price index | Predicted from fuel | 90% bootstrap band | Actual | Share predicted (%) |
-|------------------|-------------|---------------|---------|------------|
-| All households | 2.62 | [1.92, 3.52] | 4.81 | 54 |
-| Bottom 30% | 3.34 | [2.22, 4.77] | 5.98 | 56 |
-| Gap (all − bottom 30%) | −0.77 | [−1.45, −0.25] | −1.18 | 65 |
+| Specification | All households, 12 months | Low-income, 12 months | Gap, 6 months | Gap, 12 months |
+|-------------------------|---------------|---------------|---------------|---------------|
+| Baseline (retail fuel price) | 0.102*** (0.016) | 0.116*** (0.023) | −0.0214** (0.0084) | −0.0173** (0.0085) |
+| Shock: world crude price (Dubai, in pesos) | 0.041*** (0.009) | 0.051*** (0.013) | −0.0116** (0.0050) | −0.0103** (0.0049) |
+| One region left out (range over 17 regions) |  |  | −0.0227 to −0.0203 | −0.0189 to −0.0156 |
 
 ::: {custom-style="Table Note"}
-*Notes:* Prediction from equation (5) with panel responses estimated on shock dates January 2001–December 2025, applied to the national fuel path; actual change in the national indices. Bands: moving-block bootstrap, 999 replications, blocks of 12 months.
+*Notes:* Cumulative responses per 1% shock, 17-region panel, region fixed effects; Driscoll–Kraay standard errors in parentheses. Crude oil: Dubai benchmark in pesos. \* *p* < 0.10, \*\* *p* < 0.05, \*\*\* *p* < 0.01.
 :::
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
-
-![Figure 5. Actual change since December 2025 and the change predicted from fuel prices by responses estimated on data to December 2025, with 90% bootstrap bands: (a) all households; (b) bottom 30%; (c) the gap.](../output/figures/figP4_2026.png){width=95%}
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
-
-Table: Table 6. The 2026 shock by region, December 2025 to August 2026
-
-| Region | Poverty 2018 (%) | Fuel price change (%) | Bottom 30%: predicted | Bottom 30%: actual | Cost (PHP/month) |
-|-------------------------|---------|----------|------------|------------|----------|
-| National Capital Region | 2.2 | 34.5 | 3.68 | 3.47 | 633 |
-| III Central Luzon | 7.0 | 33.9 | 3.50 | 6.00 | 605 |
-| IV-A CALABARZON | 7.1 | 34.6 | 3.52 | 4.96 | 596 |
-| I Ilocos | 9.9 | 36.3 | 3.68 | 3.82 | 571 |
-| II Cagayan Valley | 16.3 | 34.1 | 3.47 | 4.64 | 503 |
-| V Bicol | 27.0 | 33.9 | 3.30 | 6.21 | 503 |
-| VI Western Visayas† | 14.2 | 31.6 | 3.20 | 7.48 | 478 |
-| X Northern Mindanao | 23.1 | 31.7 | 3.17 | 5.30 | 474 |
-| Cordillera Administrative Region | 12.0 | 30.7 | 3.30 | 6.36 | 470 |
-| IX Zamboanga Peninsula | 32.7 | 29.4 | 3.07 | 7.07 | 457 |
-| Bangsamoro Autonomous Region in Muslim Mindanao† | 60.4 | 33.5 | 3.30 | 7.88 | 444 |
-| MIMAROPA | 15.1 | 30.9 | 3.13 | 6.44 | 425 |
-| VII Central Visayas† | 16.1 | 25.9 | 2.65 | 5.90 | 419 |
-| XI Davao | 19.1 | 29.3 | 2.97 | 8.52 | 417 |
-| VIII Eastern Visayas | 30.7 | 27.4 | 2.85 | 6.80 | 410 |
-| XIII Caraga | 30.5 | 31.1 | 3.11 | 7.10 | 409 |
-| XII SOCCSKSARGEN† | 27.3 | 29.6 | 3.00 | 6.10 | 390 |
-
-::: {custom-style="Table Note"}
-*Notes:* Predicted: change in 100 × ln of the region's bottom-30% index implied by equation (5) and the region's fuel path. Cost: extra monthly spending of a family of five at the region's official poverty line. †Boundary changed in 2024; 2026 months extended with the new map.
-:::
-
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
-
-![Figure 6. Contribution of each item group to the difference between the bottom-30% and all-household price changes, December 2025 to August 2026 (percentage points).](../output/figures/fig08_rq3_decomposition.png){width=80%}

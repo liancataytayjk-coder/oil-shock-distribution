@@ -103,6 +103,19 @@ ROB,crude in pesos,d_cpi_all,d_dubai_php,9,0.03901607645,0.008165763933,5083
 ROB,crude in pesos,d_cpi_all,d_dubai_php,10,0.04137155377,0.009565279913,5066
 ROB,crude in pesos,d_cpi_all,d_dubai_php,11,0.04159158649,0.009582463615,5049
 ROB,crude in pesos,d_cpi_all,d_dubai_php,12,0.04120813362,0.008845408242,5032
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,0,0.01221074223,0.003620928257,5219
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,1,0.02814069128,0.008754207677,5202
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,2,0.02296101042,0.009100345276,5185
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,3,0.02613271467,0.008206911688,5168
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,4,0.03478454619,0.009573219397,5151
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,5,0.04240558872,0.009969502288,5134
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,6,0.04156557992,0.009633199782,5117
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,7,0.0486815955,0.01047139851,5100
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,8,0.05068068199,0.01175885949,5083
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,9,0.05002164896,0.01252765898,5066
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,10,0.05173243033,0.01422159229,5049
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,11,0.05281158557,0.01448188881,5032
+ROB,crude in pesos,d_cpi_b30,d_dubai_php,12,0.05067928268,0.01296208132,5015
 ROB,macro and food controls,d_ratio,d_fuel,0,0.002874548286,0.002353639345,5219
 ROB,macro and food controls,d_ratio,d_fuel,1,-0.00126105623,0.005109200541,5202
 ROB,macro and food controls,d_ratio,d_fuel,2,0.001569057044,0.006930141937,5185

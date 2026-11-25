@@ -274,7 +274,7 @@ def figure_regions(geo, est):
         ax.axvline(pooled[y].beta, color=BLACK, linestyle="--", linewidth=0.8)
         ax.axvline(0, color=BLACK, linewidth=0.6)
         ax.set_title(title, loc="left", fontsize=9)
-        ax.set_xlabel(f"Cumulative response after 6 months ({xl})")
+        ax.set_xlabel(f"Response after 6 months\n({xl})")
     axes[0].set_yticks(np.arange(len(order)), [labels[r] for r in order], fontsize=7)
     fig.tight_layout()
     save(fig, "figP5_regions")
@@ -289,7 +289,7 @@ def figures(est, path):
     ax.plot(b.h, b.hi, color=BLACK, linestyle=":", linewidth=0.8)
     ax.plot(a.h, a.beta, color=BLACK, marker="o", markersize=3.5, label="All households (90% band shaded)")
     ax.plot(b.h, b.beta, color=BLACK, linestyle="--", marker="s", markersize=3.5, markerfacecolor="white",
-            label="Bottom 30% (90% band dotted)")
+            label="Low-income households (90% band dotted)")
     ax.axhline(0, color=BLACK, linewidth=0.6)
     ax.set_xticks(range(0, 13, 2))
     ax.set_xlabel("Months after the shock")
@@ -304,7 +304,7 @@ def figures(est, path):
     ax.set_xticks(range(0, 13, 2))
     ax.set_xlabel("Months after the shock")
     ax.set_ylabel("Cumulative response (pp per 1% fuel)")
-    ax.text(0.2, gap.lo.min() * 0.98, "Below zero: the bottom 30%'s prices rise more", fontsize=8)
+    ax.text(0.2, gap.lo.min() * 0.98, "Below zero: low-income households' prices rise more", fontsize=8)
     save(fig, "figP2_gap")
 
     h6 = est[est.h == 6]
@@ -326,7 +326,7 @@ def figures(est, path):
     save(fig, "figP3_robustness")
 
     fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.7))
-    titles = {"d_cpi_all": "(a) All households", "d_cpi_b30": "(b) Bottom 30%", "d_ratio": "(c) Gap, all − bottom 30%"}
+    titles = {"d_cpi_all": "(a) All households", "d_cpi_b30": "(b) Low-income households", "d_ratio": "(c) Gap, all − low-income"}
     for ax, (y, t) in zip(axes, titles.items()):
         q = path[path.series == y]
         x = range(len(q))
