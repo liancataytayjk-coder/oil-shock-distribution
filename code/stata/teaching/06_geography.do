@@ -62,7 +62,7 @@ postclose `G'
 postclose `T'
 
 * 6.3 How do the regional responses relate to poverty and food spending?
-import delimited "$CLEAN/region_info.csv", clear varnames(1) case(preserve) stringcols(1 2)
+import delimited "$DATA/region_info.csv", clear varnames(1) case(preserve) stringcols(1 2)
 keep region region_name poverty_2018 food_share_2018
 tempfile info
 save `info'
@@ -83,4 +83,4 @@ foreach y in d_cpi_all d_ratio {
 
 * 6.4 Read it: regions differ, significantly, in how much their prices rise and in how
 *     unequally; but the differences do not follow poverty or food shares.
-display as text "Next: do code/stata/teaching/07_robustness.do"
+display as text "Next: do ${PFX}07_robustness.do"

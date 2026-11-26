@@ -84,4 +84,4 @@ graph export "$TOUT/step03_passthrough.png", replace width(1600)
 * 3.5 Read it: about half of the one-year effect arrives in the month of the shock
 *     (0.047 of 0.102). A 10% rise in pump prices leaves prices about 1% higher a year
 *     later. The bottom 30%'s price level rises more from the third month on.
-display as text "Next: do code/stata/teaching/04_gap.do"
+display as text "Next: do ${PFX}04_gap.do"

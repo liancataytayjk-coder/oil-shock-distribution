@@ -42,4 +42,4 @@ display as result "B_6 = " %7.4f _b[d_fuel] "  s.e. = " %6.4f _se[d_fuel] "  N =
 * 2.5 Read it: a 1% fuel price rise raises the all-household price level by about
 *     0.086% six months later; a 10% rise, by about 0.86%. The point estimate is the
 *     same in 2.3 and 2.4; only the standard error changes.
-display as text "Next: do code/stata/teaching/03_pass_through.do"
+display as text "Next: do ${PFX}03_pass_through.do"

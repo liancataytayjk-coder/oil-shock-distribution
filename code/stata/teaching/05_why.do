@@ -14,7 +14,7 @@
 * =============================================================================
 
 * 5.1 Twelve-month responses of the 13 divisions (national series, Newey-West errors).
-import delimited "$CLEAN/national_monthly.csv", clear varnames(1) case(preserve) ///
+import delimited "$DATA/national_monthly.csv", clear varnames(1) case(preserve) ///
     stringcols(1 2) bindquote(strict)
 generate mdate = monthly(date_str, "YM")
 format mdate %tm
@@ -36,7 +36,7 @@ forvalues c = 1/13 {
 postclose `D'
 
 * 5.2 The 2018 budget shares of the two baskets.
-import delimited "$CLEAN/weights_2018.csv", clear varnames(1) case(preserve) stringcols(1 2 3 4 5)
+import delimited "$DATA/weights_2018.csv", clear varnames(1) case(preserve) stringcols(1 2 3 4 5)
 keep if geo_code == "old" & region == "PH" & strlen(coicop) == 2
 keep basket coicop item weight
 reshape wide weight, i(coicop item) j(basket) string
@@ -57,4 +57,4 @@ save "$TOUT/step05.dta", replace
 *     budget on it against 38%; housing and transport push it the other way. On budget
 *     shares alone the rich should lose more. The estimated gap (step 4) is regressive,
 *     so prices must rise faster WITHIN the categories the poor buy.
-display as text "Next: do code/stata/teaching/06_geography.do"
+display as text "Next: do ${PFX}06_geography.do"

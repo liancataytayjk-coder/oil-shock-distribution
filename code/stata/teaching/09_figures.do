@@ -13,7 +13,7 @@ set scheme s1mono
 graph set window fontface "Times New Roman"
 
 * ---------------------------------------------------------------- Figure 1: trends
-import delimited "$CLEAN/national_monthly.csv", clear varnames(1) case(preserve) ///
+import delimited "$DATA/national_monthly.csv", clear varnames(1) case(preserve) ///
     stringcols(1 2) bindquote(strict)
 generate mdate = monthly(date_str, "YM")
 format mdate %tm
@@ -74,7 +74,7 @@ quietly summarize beta if h == 6
 local pooled_gap = r(mean)
 
 * region names
-import delimited "$CLEAN/region_info.csv", clear varnames(1) case(preserve) stringcols(1 2)
+import delimited "$DATA/region_info.csv", clear varnames(1) case(preserve) stringcols(1 2)
 keep region region_name
 tempfile names
 save `names'

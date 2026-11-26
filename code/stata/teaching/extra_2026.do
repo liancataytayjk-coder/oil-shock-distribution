@@ -13,7 +13,7 @@
 * =============================================================================
 
 * 7.0 The national 2026 fuel path, the national price changes and the poverty line.
-import delimited "$CLEAN/national_monthly.csv", clear varnames(1) case(preserve) ///
+import delimited "$DATA/national_monthly.csv", clear varnames(1) case(preserve) ///
     stringcols(1 2) bindquote(strict)
 generate mdate = monthly(date_str, "YM")
 format mdate %tm
@@ -32,7 +32,7 @@ scalar act_ratio = act_cpi_all - act_cpi_b30
 quietly summarize cpi_b30 if inrange(mdate, tm(2023m1), tm(2023m12))
 scalar cpi23 = r(mean)
 preserve
-import delimited "$CLEAN/region_info.csv", clear varnames(1) case(preserve) stringcols(1 2)
+import delimited "$DATA/region_info.csv", clear varnames(1) case(preserve) stringcols(1 2)
 quietly summarize threshold_2023 if region == "PH"
 scalar thr = r(mean)
 restore

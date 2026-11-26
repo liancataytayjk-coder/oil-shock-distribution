@@ -52,7 +52,7 @@ document) is archived unchanged in `archive/v1_full/` and still runs on its own.
 `code/python/01_extract_excel.py` → `02_build_clean.py` → `03_descriptive.py` →
 `04_estimate.py` → `05_policy_2026.py` → `06_figures.py` → `07_papers.py` →
 `08_codebook.py` → `09_pitch.py` (short national proposal, `paper/proposal_pitch.*`) → `10_panel_study.py`
-→ `11_manuscript.py` (the AEJ manuscript, `paper/manuscript*.*`) → tutorial,
+→ `11_manuscript.py` (the AEJ manuscript, `paper/manuscript*.*`) → `12_stata_data.py` (data for the Stata teaching sequence, `code/stata/teaching/data/`, and `study_kit/stata_pack.zip`) → tutorial,
 booklet (`tutorial/`) and study kit (`study_kit/`) → pytest; `handoff/build_handoff.py` builds the guide and zips. `00_download.py` refetches PSA tables. The Stata 17
 version is `code/stata/` (to be run by the author; `00_master.do`). Estimator:
 `code/python/lp.py`; settings: `code/python/config.py`; sources and results map:

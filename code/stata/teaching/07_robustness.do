@@ -47,4 +47,4 @@ generate double hi = beta + 1.645 * se
 list spec outcome beta se lo hi if inlist(h, 6, 12) & substr(spec, 1, 5) != "drop ", noobs clean abbreviate(20)
 quietly summarize beta if h == 6 & substr(spec, 1, 5) == "drop "
 display as result "leave one region out, h = 6: " %7.4f r(min) " to " %7.4f r(max) "   Python: -0.0227 to -0.0203"
-display as text "Next: do code/stata/teaching/08_check.do"
+display as text "Next: do ${PFX}08_check.do"

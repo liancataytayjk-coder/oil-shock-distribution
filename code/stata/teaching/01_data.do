@@ -7,7 +7,7 @@
 * =============================================================================
 
 * 1.1 Read the panel. One row = one region in one month.
-import delimited "$CLEAN/regional_panel.csv", clear varnames(1) case(preserve) ///
+import delimited "$DATA/regional_panel.csv", clear varnames(1) case(preserve) ///
     stringcols(1 2 3 4) bindquote(strict)
 describe, short
 list region date_str cpi_all cpi_b30 fuel d_cpi_all d_cpi_b30 d_fuel d_ratio in 1/3, noobs clean
@@ -21,7 +21,7 @@ list region date_str cpi_all cpi_b30 fuel d_cpi_all d_cpi_b30 d_fuel d_ratio in 
 * 1.2 Add the national monthly series used in the robustness checks. They are the same
 *     for every region in a given month, so they are merged by month.
 preserve
-import delimited "$CLEAN/national_monthly.csv", clear varnames(1) case(preserve) ///
+import delimited "$DATA/national_monthly.csv", clear varnames(1) case(preserve) ///
     stringcols(1 2) bindquote(strict)
 keep date_str d_dubai_php d_php_usd d_policy_rate d_ffpi
 tempfile nat
@@ -67,4 +67,4 @@ tabstat d_fuel d_cpi_all d_cpi_b30 d_ratio if s01, statistics(n mean sd min max)
 
 label data "Regional panel for the teaching sequence"
 save "$TOUT/panel.dta", replace
-display as text "Saved. Next: do code/stata/teaching/02_one_horizon.do"
+display as text "Saved. Next: do ${PFX}02_one_horizon.do"

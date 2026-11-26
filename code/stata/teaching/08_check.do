@@ -26,7 +26,7 @@ display as result "estimates differing by more than 1e-6: " r(N)
 list spec outcome h beta beta_py if _merge == 3 & diff > 1e-6, noobs clean
 
 * 8.2 The budget-share calculation (step 5)
-import delimited "$ROOT/output/tables/rq2_weights_decomposition.csv", clear varnames(1) ///
+import delimited "$DATA/rq2_weights_decomposition.csv", clear varnames(1) ///
     case(preserve) stringcols(1)
 keep coicop contrib_gap
 merge 1:1 coicop using "$TOUT/step05.dta", nogenerate
@@ -57,4 +57,4 @@ if !_rc {
     list series fuel_driven fd_py diff, noobs clean
 }
 display as text _n "Done. If every difference is below 1e-6, Stata reproduces the study."
-display as text "Next: do code/stata/teaching/09_figures.do"
+display as text "Next: do ${PFX}09_figures.do"

@@ -6,7 +6,13 @@ These do-files rebuild every result of the manuscript (`paper/manuscript.pdf`) i
 at a time, so that you can run and read each part of the analysis yourself. Each file explains what it
 does, prints the value Python obtained next to yours, and saves its results; step 8 checks them all.
 
-Run them in order, in one Stata session, from the repository's top folder:
+**The data** are in `data/` next to the do-files: four CSV files that Stata reads, Python's budget-share
+calculation for the check in step 8, and `stata_data.xlsx` (the same tables in Excel, with a sheet `dictionary`
+that explains every variable). They are written by `code/python/12_stata_data.py`; do not edit or re-save them.
+The same folder, with the tutorial, is packed as `study_kit/stata_pack.zip`: unzip it, `cd` into `stata_pack`,
+and run `do 00_setup.do`, `do 01_data.do`, ... (results go to `stata_pack/output/`).
+
+From the repository, run them in order, in one Stata session, from the top folder:
 
 ```stata
 cd "C:/path/to/oil-shock-distribution"
@@ -38,7 +44,7 @@ do code/stata/teaching/extra_2026.do
 | 9 | Draw the manuscript's figures: trends, pass-through, gap, regions | four PNG files |
 | extra | The 2026 shock out of sample, peso cost, block bootstrap (not in the manuscript) | gap −0.77 [−1.45, −0.25] vs actual −1.18 |
 
-Outputs go to `output/stata_teaching/`. Steps 6 and 7 take a few minutes each; the optional 2026 extra includes a
+Outputs go to `output/stata_teaching/` (or `output/` inside the pack). Steps 6 and 7 take a few minutes each; the optional 2026 extra includes a
 bootstrap (set `local REPS 0` there to skip it).
 
 **Status:** written for Stata 17 but not yet run in Stata. If a step stops with an error, the message

@@ -44,4 +44,4 @@ twoway (rarea lo hi h, color(gs13)) (connected beta h, lcolor(black) mcolor(blac
     yline(0, lcolor(black)) xlabel(0(2)12) xtitle("Months after the shock") ///
     ytitle("Cumulative response (pp per 1% fuel)") legend(off) scheme(s1mono)
 graph export "$TOUT/step04_gap.png", replace width(1600)
-display as text "Next: do code/stata/teaching/05_why.do"
+display as text "Next: do ${PFX}05_why.do"
